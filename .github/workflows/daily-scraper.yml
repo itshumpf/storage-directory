@@ -1,0 +1,38 @@
+name: Daily Storage Scraper
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 6am CST (11am UTC) every day
+  workflow_dispatch:       # allows manual trigger from GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run scraper
+        run: python daily_scraper.py
+
+      - name: Check output
+        run: |
+          echo "Stores scraped:"
+          python -c "import json; data=json.load(open('enriched_locations.json')); print(f'{len(data)} stores, {sum(1 for s in data if s[\"units\"])} with pricing')"
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add enriched_locations.json
+          git diff --staged --quiet || git commit -m "Daily update: $(date +'%Y-%m-%d')"
+          git push
