@@ -12,13 +12,15 @@ HEADERS = {
 }
 BASE = "https://www.publicstorage.com"
 PRICING_API = BASE + "/on/demandware.store/Sites-publicstorage-Site/default/AP-GetSoostonePromo?sites={}"
-SITEMAP_URL = BASE + "/site-map-states"
+CATEGORY_SITEMAP = BASE + "/sitemap_1-category.xml"   # every city landing page
+PRODUCT_SITEMAP  = BASE + "/sitemap_0-product.xml"    # store pages (excludes delisted/full stores)
 SEARCH_URL  = BASE + "/self-storage-search?location={}"
 OUTPUT_FILE = "enriched_locations.json"
 BACKUP_FILE = "enriched_locations_backup.json"
 BATCH_SIZE  = 20
 DELAY       = 0.4
-MIN_STORES  = 3000   # safety floor
+MIN_STORES  = 3300   # safety floor
+ENRICH_CAP  = 400    # max store pages fetched per run to backfill missing site numbers
 
 ZIP_CODES = list(dict.fromkeys([
     "35203","35401","36104","99501","99701","85001","85201","85301","85701","86001","86301",
@@ -52,12 +54,22 @@ ZIP_CODES = list(dict.fromkeys([
 ]))
 
 
-def get_sitemap_state_urls():
-    r = requests.get(SITEMAP_URL, headers=HEADERS, timeout=15)
+def get_city_page_urls():
+    """Every city landing page from the category XML sitemap. City pages embed
+    googleMapMarkerData for nearby stores INCLUDING full/delisted ones, which the
+    product sitemap omits — this is the primary discovery source."""
+    r = requests.get(CATEGORY_SITEMAP, headers=HEADERS, timeout=30)
     r.raise_for_status()
-    soup = BeautifulSoup(r.text, "html.parser")
-    return list({(a["href"] if a["href"].startswith("http") else BASE+a["href"])
-                 for a in soup.find_all("a", href=True) if "site-map-states-" in a["href"]})
+    urls = re.findall(r"<loc>(https://www\.publicstorage\.com/self-storage-[a-z]{2}-[a-z0-9-]+)</loc>", r.text)
+    return sorted(set(urls))
+
+
+def get_product_store_urls():
+    """Store page URLs from the product XML sitemap (supplemental)."""
+    r = requests.get(PRODUCT_SITEMAP, headers=HEADERS, timeout=30)
+    r.raise_for_status()
+    return sorted(set(re.findall(
+        r"<loc>(https://www\.publicstorage\.com/self-storage-([a-z]{2})-([a-z0-9-]+)/(\d{4,6})\.html)</loc>", r.text)))
 
 
 def parse_stores(html):
@@ -116,68 +128,77 @@ def main():
     print("STORAGE DIRECTORY — DAILY SCRAPER")
     print("="*60)
 
-    # Load existing as fallback
-    existing_count = 0
+    # Load existing as fallback and carry-forward source
+    existing_data = []
     if os.path.exists(OUTPUT_FILE):
         try:
             with open(OUTPUT_FILE) as f:
-                existing_count = len(json.load(f))
-            print(f"\nExisting data: {existing_count} stores (safety fallback)")
+                existing_data = json.load(f)
+            print(f"\nExisting data: {len(existing_data)} stores (safety fallback)")
         except (json.JSONDecodeError, OSError) as e:
             print(f"\nWARNING: couldn't read existing {OUTPUT_FILE}: {e}")
+    existing_count = len(existing_data)
 
-    # Phase 1 — Sitemap
-    print("\n[1/4] Fetching state sitemaps...")
+    # Phase 1 — City pages (primary discovery; markers include full/delisted stores)
+    print("\n[1/7] Fetching city pages from category sitemap...")
     try:
-        state_urls = get_sitemap_state_urls()
-        print(f"      {len(state_urls)} states found")
+        city_urls = get_city_page_urls()
+        print(f"      {len(city_urls)} city pages found")
     except Exception as e:
         print(f"      FAILED: {e} — aborting, keeping existing data")
         sys.exit(1)
 
     all_stores = {}
-    for i, url in enumerate(sorted(state_urls)):
-        name = url.split("site-map-states-")[-1].replace("-"," ").title()
+    for i, url in enumerate(city_urls):
         try:
             r = requests.get(url, headers=HEADERS, timeout=15)
-            soup = BeautifulSoup(r.text, "html.parser")
-            new_count = 0
-            for a in soup.find_all("a", href=True):
-                href = a["href"]
-                m2 = re.search(r"/self-storage-([a-z]{2})-([a-z0-9-]+)/(\d{4,6})\.html$", href)
-                if m2:
-                    sid = m2.group(3)
-                    if sid not in all_stores:
-                        label = a.get_text(strip=True)
-                        am = re.search(r"Self Storage Near (.+?) in ", label, re.IGNORECASE)
-                        all_stores[sid] = {
-                            "store_id": sid, "site_number": None,
-                            "address": am.group(1).strip() if am else "",
-                            "city": m2.group(2).replace("-"," ").title(),
-                            "state": m2.group(1).upper(),
-                            "zip": "", "phone": "", "lat": None, "lng": None,
-                            "url": href if href.startswith("http") else BASE+href,
-                            "units": []
-                        }
-                        new_count += 1
-            print(f"      [{i+1}/{len(state_urls)}] {name}: {new_count} new ({len(all_stores)} total)")
+            for s in parse_stores(r.text):
+                if s["store_id"] and s["store_id"] not in all_stores:
+                    all_stores[s["store_id"]] = s
         except Exception as e:
-            print(f"      [{i+1}/{len(state_urls)}] {name}: ERROR {e}")
+            print(f"      {url}: ERROR {e}")
+        if (i + 1) % 100 == 0:
+            print(f"      [{i+1}/{len(city_urls)}] city pages scanned, {len(all_stores)} stores")
         time.sleep(DELAY)
 
-    print(f"\n      After sitemaps: {len(all_stores)} stores")
+    print(f"\n      After city pages: {len(all_stores)} stores")
 
-    # Phase 2 — Zip sweep
-    print(f"\n[2/4] Zip code sweep ({len(ZIP_CODES)} zips)...")
+    # Phase 2 — Product sitemap (stub records for anything the markers missed)
+    print("\n[2/7] Checking product sitemap...")
+    try:
+        added = 0
+        for url, st, city, sid in get_product_store_urls():
+            if sid not in all_stores:
+                all_stores[sid] = {
+                    "store_id": sid, "site_number": None, "address": "",
+                    "city": city.replace("-", " ").title(), "state": st.upper(),
+                    "zip": "", "phone": "", "lat": None, "lng": None,
+                    "url": url, "units": []
+                }
+                added += 1
+        print(f"      {added} new stub stores ({len(all_stores)} total)")
+    except Exception as e:
+        print(f"      WARNING: product sitemap failed: {e}")
+
+    # Phase 3 — Zip sweep (gap filler; also merges fields into sparse records)
+    print(f"\n[3/7] Zip code sweep ({len(ZIP_CODES)} zips)...")
     new_found = 0
     for i, z in enumerate(ZIP_CODES):
         try:
             r = requests.get(SEARCH_URL.format(z), headers=HEADERS, timeout=15)
             for s in parse_stores(r.text):
-                if s["store_id"] and s["store_id"] not in all_stores:
-                    all_stores[s["store_id"]] = s
+                sid = s["store_id"]
+                if not sid:
+                    continue
+                if sid not in all_stores:
+                    all_stores[sid] = s
                     new_found += 1
                     print(f"      NEW: Site#{s.get('site_number','?')} {s['address']}, {s['city']}, {s['state']}")
+                else:
+                    ex = all_stores[sid]
+                    for k, v in s.items():
+                        if v not in (None, "", []) and ex.get(k) in (None, "", []):
+                            ex[k] = v
         except Exception as e:
             print(f"      ZIP {z}: ERROR {e}")
         if i % 50 == 0:
@@ -185,6 +206,62 @@ def main():
         time.sleep(DELAY)
 
     print(f"\n      Total after sweep: {len(all_stores)} stores")
+
+    # Phase 4 — Backfill missing site numbers from individual store pages.
+    # The 5-digit site code is the core datum of the directory, so sparse
+    # records earn a direct page fetch (capped per run; the rest catch up
+    # on subsequent daily runs).
+    missing = [s for s in all_stores.values()
+               if not s.get("site_number") and s.get("url") and s["url"] != BASE]
+    todo = missing[:ENRICH_CAP]
+    print(f"\n[4/7] Backfilling site numbers: {len(missing)} missing, fetching {len(todo)}...")
+    filled = 0
+    for i, s in enumerate(todo):
+        try:
+            r = requests.get(s["url"], headers=HEADERS, timeout=15)
+            for p in parse_stores(r.text):
+                if p["store_id"] == s["store_id"]:
+                    for k, v in p.items():
+                        if v not in (None, "", []) and s.get(k) in (None, "", []):
+                            s[k] = v
+                    if s.get("site_number"):
+                        filled += 1
+                    break
+        except Exception as e:
+            print(f"      store {s['store_id']}: ERROR {e}")
+        if (i + 1) % 50 == 0:
+            print(f"      [{i+1}/{len(todo)}] fetched, {filled} filled")
+        time.sleep(DELAY)
+    print(f"      Backfilled {filled} site numbers")
+
+    # Phase 5 — Carry forward previously known stores that discovery missed.
+    # City pages cap at ~10 markers, so delisted (often sold-out) stores in
+    # dense metros can evade every discovery pass. If a store we knew about
+    # still has a live page, it stays in the directory; only 404s drop out.
+    lost = [s for s in existing_data if str(s.get("store_id")) not in all_stores]
+    print(f"\n[5/7] Carry-forward check: {len(lost)} previously known stores not rediscovered...")
+    kept, dropped = 0, 0
+    for s in lost:
+        sid = str(s.get("store_id"))
+        url = s.get("url", "")
+        if not sid or not url or not url.startswith("http"):
+            continue
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=15)
+            if r.status_code == 200:
+                fresh = next((p for p in parse_stores(r.text) if p["store_id"] == sid), None)
+                all_stores[sid] = fresh if fresh else {**s, "units": []}
+                kept += 1
+            else:
+                print(f"      DROPPED ({r.status_code}): Site#{s.get('site_number','?')} {s.get('address')}, {s.get('city')}, {s.get('state')}")
+                dropped += 1
+        except Exception as e:
+            # network hiccup — keep the store rather than lose it
+            all_stores[sid] = {**s, "units": []}
+            kept += 1
+            print(f"      store {sid}: ERROR {e} — carried forward anyway")
+        time.sleep(DELAY)
+    print(f"      Carried forward {kept}, dropped {dropped}")
 
     # Safety checks
     if len(all_stores) < MIN_STORES:
@@ -197,17 +274,19 @@ def main():
         print(f"   Drop >10% detected. Keeping existing data.")
         sys.exit(1)
 
-    # Phase 3 — Pricing
-    print(f"\n[3/4] Fetching pricing...")
+    # Phase 6 — Pricing
+    print(f"\n[6/7] Fetching pricing...")
     store_list = list(all_stores.values())
     pricing = fetch_pricing([s["store_id"] for s in store_list])
     for s in store_list:
         s["units"] = pricing.get(s["store_id"], [])
     priced = sum(1 for s in store_list if s["units"])
+    coded = sum(1 for s in store_list if s.get("site_number"))
     print(f"      {priced}/{len(store_list)} stores have pricing")
+    print(f"      {coded}/{len(store_list)} stores have a site number")
 
-    # Phase 4 — Save
-    print(f"\n[4/4] Saving...")
+    # Phase 7 — Save
+    print(f"\n[7/7] Saving...")
     if os.path.exists(OUTPUT_FILE):
         shutil.copy(OUTPUT_FILE, BACKUP_FILE)
         print(f"      Backed up existing → {BACKUP_FILE}")

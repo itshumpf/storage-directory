@@ -4,6 +4,7 @@
 # Build artifacts / local data
 storage.db
 enriched_locations_backup.json
+scrape_run.log
 
 # Python
 __pycache__/
