@@ -19,7 +19,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: pip install -r requirements.txt
 
       - name: Run scraper
         run: python daily_scraper.py
@@ -29,10 +29,15 @@ jobs:
           echo "Stores scraped:"
           python -c "import json; data=json.load(open('enriched_locations.json')); print(f'{len(data)} stores, {sum(1 for s in data if s[\"units\"])} with pricing')"
 
+      - name: Rebuild insights report
+        run: |
+          python analysis/load_storage.py enriched_locations.json
+          python analysis/analyze_storage.py
+
       - name: Commit and push updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add enriched_locations.json
-          git diff --staged --quiet || git commit -m "Daily update: $(date +'%Y-%m-%d')"
+          git add enriched_locations.json insights.html
+          git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
           git push
