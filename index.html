@@ -107,6 +107,7 @@
   .badge-site { background: rgba(232,82,10,0.15); color: var(--orange); }
   .badge-id { background: rgba(136,133,128,0.12); color: var(--muted); }
   .badge-avail-yes { background: rgba(76,175,125,0.15); color: var(--green); }
+  .badge-avail-low { background: rgba(245,200,66,0.15); color: var(--yellow); }
   .badge-avail-no { background: rgba(136,133,128,0.1); color: var(--muted); }
   .badge-dist { background: rgba(74,158,255,0.12); color: var(--blue); }
   .card-address { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; line-height: 1.3; }
@@ -257,6 +258,7 @@
     <div class="chip" onclick="setFilter('available',this)">Available Only</div>
     <div class="chip" onclick="setFilter('promo',this)">Has Promo</div>
     <div class="chip" onclick="setFilter('cheap',this)">Under $50/mo</div>
+    <div class="chip" onclick="setFilter('almostfull',this)">Almost Full</div>
     <div style="flex:1"></div>
     <div class="view-toggle">
       <button class="view-btn active" id="btn-grid" onclick="setView('grid')">⊞ Cards</button>
@@ -498,6 +500,7 @@ function handleSearch() {
     if (activeFilter==='available') matchChip = s.units.some(u=>u.available);
     if (activeFilter==='promo') matchChip = s.units.some(u=>u.promo);
     if (activeFilter==='cheap') matchChip = s.units.some(u=>u.available&&u.price<50);
+    if (activeFilter==='almostfull') matchChip = s.units.reduce((t,u)=>t+(u.available?(u.count||0):0),0) < 10;
     // Distance filter
     let matchDist = true;
     if (distCenter && s.lat && s.lng) {
@@ -620,6 +623,7 @@ function renderPage(page) {
 
 function renderCard(store) {
   const avail = store.units.filter(u=>u.available);
+  const unitsLeft = avail.reduce((t,u)=>t+(u.count||0),0);
   // Deduplicate by size — keep cheapest available, fall back to cheapest unavailable
   const bySize = {};
   for (const u of store.units) {
@@ -658,7 +662,7 @@ function renderCard(store) {
         <span class="badge badge-id">ID: ${store.store_id}</span>
         ${distBadge}
       </div>
-      <span class="badge ${avail.length?'badge-avail-yes':'badge-avail-no'}">${avail.length?`${avail.length} sizes avail.`:'Check site'}</span>
+      <span class="badge ${avail.length?(unitsLeft<10?'badge-avail-low':'badge-avail-yes'):'badge-avail-no'}">${avail.length?(unitsLeft<10?`Almost full — ${unitsLeft} left`:`${avail.length} sizes · ${unitsLeft} units`):'Check site'}</span>
     </div>
     <div class="card-address">${store.address||'—'}</div>
     <div class="card-location">${store.city}, ${store.state} ${store.zip||''}</div>

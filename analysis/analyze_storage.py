@@ -142,6 +142,23 @@ def main():
         "usually invisible to renters until they start calling around.",
         cols, rows, "")
 
+    under = {t: db.execute("""
+        SELECT COUNT(*) FROM (
+            SELECT s.store_id, COALESCE(SUM(u.unit_count),0) avail
+            FROM stores s LEFT JOIN units u ON u.store_id=s.store_id
+            GROUP BY s.store_id) WHERE avail < ?""", (t,)).fetchone()[0]
+        for t in (5, 10, 20)}
+    cols, rows = q(db, """
+        SELECT s.address, s.city, s.state, COALESCE(SUM(u.unit_count),0) units_left
+        FROM stores s LEFT JOIN units u ON u.store_id=s.store_id
+        GROUP BY s.store_id HAVING units_left > 0
+        ORDER BY units_left ASC, s.state LIMIT 15""")
+    S["inv_low"] = ("Nearly full — stores running out of space",
+        f"Store-level scarcity: {under[5]} facilities have fewer than 5 rentable units left, "
+        f"{under[10]} fewer than 10, and {under[20]} ({100*under[20]/total:.0f}% of the network) fewer "
+        "than 20. These are the last-unit stores — the directory flags them with an 'Almost Full' badge.",
+        cols, rows, "")
+
     cols, rows = q(db, """
         SELECT s.name, s.address, s.city, s.state
         FROM stores s WHERE NOT EXISTS (SELECT 1 FROM units u WHERE u.store_id=s.store_id)
