@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storage Locator — Unit Pricing Directory</title>
+<title>FindStorage — Self-Storage Unit Pricing Directory</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JDQXEMRFHS"></script>
 <script>
@@ -30,8 +30,10 @@
   header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 1000; }
   .logo { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; }
   .logo-icon { width: 36px; height: 36px; background: var(--orange); border-radius: 8px; display: grid; place-items: center; font-size: 1.1rem; }
-  .header-stats { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); display: flex; gap: 2rem; }
+  .header-stats { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); display: flex; gap: 2rem; align-items: center; }
   .stat-val { color: var(--orange-light); font-weight: 500; }
+  .header-link { color: var(--orange-light); text-decoration: none; font-weight: 500; letter-spacing: 0.05em; }
+  .header-link:hover { color: var(--text); }
 
   /* HERO */
   .hero { padding: 3rem 2rem 1.5rem; max-width: 1400px; margin: 0 auto; }
@@ -212,17 +214,18 @@
 </div>
 
 <header>
-  <div class="logo"><div class="logo-icon">🏢</div><span>Storage Locator</span></div>
+  <div class="logo"><div class="logo-icon">🏢</div><span>FindStorage</span></div>
   <div class="header-stats">
     <span>STORES <span class="stat-val" id="hdr-stores">—</span></span>
     <span>STATES <span class="stat-val" id="hdr-states">—</span></span>
     <span>UPDATED <span class="stat-val" id="hdr-updated">—</span></span>
+    <a href="insights.html" class="header-link">INSIGHTS →</a>
   </div>
 </header>
 
 <div class="hero">
   <h1>Storage Unit<br><span>Locator & Pricing</span></h1>
-  <p>3,500+ U.S. storage locations — site numbers, addresses, phone numbers, and live unit pricing.</p>
+  <p>3,000+ U.S. storage locations — site numbers, addresses, phone numbers, and live unit pricing.</p>
 
   <!-- UNIFIED SMART SEARCH BAR -->
   <div class="search-bar">
