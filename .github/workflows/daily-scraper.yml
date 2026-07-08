@@ -2,8 +2,14 @@ name: Daily Storage Scraper
 
 on:
   schedule:
-    - cron: '0 11 * * *'  # 6am CST (11am UTC) every day
-  workflow_dispatch:       # allows manual trigger from GitHub UI
+    - cron: '0 11 * * 1-6'  # 6am CST (11am UTC) Mon-Sat
+    - cron: '0 11 * * 0'    # Sundays: adds the exhaustive store-ID probe
+  workflow_dispatch:         # allows manual trigger from GitHub UI
+    inputs:
+      deep:
+        description: 'Run exhaustive store-ID probe'
+        type: boolean
+        default: false
 
 jobs:
   scrape:
@@ -22,7 +28,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run scraper
-        run: python daily_scraper.py
+        run: python daily_scraper.py ${{ (github.event.schedule == '0 11 * * 0' || inputs.deep == true) && '--deep' || '' }}
 
       - name: Check output
         run: |
