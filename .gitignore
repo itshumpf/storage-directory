@@ -1,0 +1,10 @@
+# Local Netlify folder
+.netlify/
+
+# Build artifacts / local data
+storage.db
+enriched_locations_backup.json
+
+# Python
+__pycache__/
+*.pyc
