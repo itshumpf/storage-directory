@@ -6,7 +6,8 @@ Usage (from the repo root):
 
 Creates storage.db with two tables:
     stores(store_id, name, address, city, state, zip, lat, lng, phone)
-    units(store_id, size, width, length, sqft, price, promo_price, promo_name, unit_count)
+    units(store_id, size, width, length, sqft, price, promo_name, promo2,
+          available, unit_count)
 
 The loader is defensive: it discovers whatever keys the JSON actually has,
 prints them, and maps the common ones. Missing fields are stored as NULL.
@@ -69,7 +70,8 @@ def main():
         );
         CREATE TABLE units (
             store_id TEXT, size TEXT, width REAL, length REAL, sqft REAL,
-            price REAL, promo_price REAL, promo_name TEXT, unit_count INTEGER
+            price REAL, promo_name TEXT, promo2 TEXT,
+            available INTEGER, unit_count INTEGER
         );
         CREATE INDEX idx_units_store ON units(store_id);
         CREATE INDEX idx_units_size  ON units(size);
@@ -106,14 +108,16 @@ def main():
                 continue
             size = first(u, "size", "unit_size", "dimensions")
             w, l, sqft = parse_size(size)
+            count = first(u, "unit_count", "count")
             db.execute(
-                "INSERT INTO units VALUES (?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO units VALUES (?,?,?,?,?,?,?,?,?,?)",
                 (
                     sid, size, w, l, sqft,
                     to_float(first(u, "price", "rate", "monthly_rate", "web_rate")),
-                    to_float(first(u, "promo_price", "discounted_price", "sale_price")),
                     first(u, "promo_name", "promo", "special", "discount"),
-                    first(u, "unit_count", "available", "count"),
+                    first(u, "promo2"),
+                    1 if u.get("available") else 0,
+                    int(count) if isinstance(count, (int, float)) else None,
                 ),
             )
             n_units += 1

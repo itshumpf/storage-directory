@@ -8,14 +8,38 @@ Does three things:
   1. Data quality audit (console) — stores with no units, missing prices,
      missing coordinates/state.
   2. Market analysis (console) — state pricing, price per sqft, local
-     variance, promotions, size mix, saturation, outliers.
+     variance, live inventory, promotions and true move-in cost, geography,
+     vehicle storage, size mix, saturation.
   3. Generates insights.html — a self-contained report page served alongside
      the directory. Pure stdlib, no dependencies.
 """
-import sqlite3, html, datetime, sys
+import sqlite3, html, datetime, math, sys
 
 DB = "storage.db"
 OUT = "insights.html"
+
+# 2024 state population estimates, millions (US Census Bureau)
+STATE_POP = {
+    "AL": 5.16, "AK": 0.74, "AZ": 7.58, "AR": 3.09, "CA": 39.43, "CO": 5.96,
+    "CT": 3.68, "DE": 1.05, "DC": 0.70, "FL": 23.00, "GA": 11.18, "HI": 1.45,
+    "ID": 2.00, "IL": 12.71, "IN": 6.92, "IA": 3.24, "KS": 2.97, "KY": 4.59,
+    "LA": 4.60, "ME": 1.41, "MD": 6.26, "MA": 7.14, "MI": 10.14, "MN": 5.79,
+    "MS": 2.94, "MO": 6.22, "MT": 1.14, "NE": 2.00, "NV": 3.27, "NH": 1.41,
+    "NJ": 9.50, "NM": 2.13, "NY": 19.87, "NC": 11.05, "ND": 0.80, "OH": 11.88,
+    "OK": 4.09, "OR": 4.27, "PA": 13.08, "RI": 1.11, "SC": 5.46, "SD": 0.93,
+    "TN": 7.23, "TX": 31.29, "UT": 3.50, "VT": 0.65, "VA": 8.81, "WA": 7.96,
+    "WV": 1.77, "WI": 5.96, "WY": 0.59,
+}
+
+# Effective monthly cost over the first 3 months, given the advertised promos
+EFFECTIVE_3MO = """
+    CASE
+        WHEN u.promo_name = '$1 first month rent' THEN (1.0 + 2*u.price) / 3
+        WHEN u.promo_name = 'First month 50% off' THEN 2.5 * u.price / 3
+        WHEN u.promo_name = '2nd Month Free'      THEN 2.0 * u.price / 3
+        ELSE u.price
+    END
+"""
 
 def q(db, sql):
     cur = db.execute(sql)
@@ -38,19 +62,36 @@ def table_html(cols, rows, limit=15):
         h += "<tr>" + "".join(f"<td>{html.escape(str(v if v is not None else '—'))}</td>" for v in r) + "</tr>"
     return h + "</tbody></table>"
 
-def bars_html(rows, label_i, value_i, prefix="$"):
+def bars_html(rows, label_i, value_i, prefix="$", limit=10):
     """CSS bar chart from rows: label col index, numeric col index."""
-    rows = [r for r in rows if r[value_i] is not None][:10]
+    rows = [r for r in rows if r[value_i] is not None][:limit]
     if not rows:
         return ""
     mx = max(float(r[value_i]) for r in rows) or 1
     out = "<div class='bars'>"
     for r in rows:
         pct = 100.0 * float(r[value_i]) / mx
+        val = float(r[value_i])
+        shown = f"{prefix}{val:,.2f}" if val < 10 and prefix == "$" else f"{prefix}{val:,.0f}"
         out += (f"<div class='bar-row'><span class='bar-label'>{html.escape(str(r[label_i]))}</span>"
                 f"<span class='bar-track'><span class='bar-fill' style='width:{pct:.1f}%'></span></span>"
-                f"<span class='bar-val'>{prefix}{float(r[value_i]):,.0f}</span></div>")
+                f"<span class='bar-val'>{shown}</span></div>")
     return out + "</div>"
+
+def haversine(lat1, lng1, lat2, lng2):
+    """Distance in miles."""
+    r = 3958.8
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = math.radians(lat2 - lat1), math.radians(lng2 - lng1)
+    a = math.sin(dp/2)**2 + math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
+    return 2 * r * math.asin(math.sqrt(a))
+
+def median(vals):
+    vals = sorted(vals)
+    n = len(vals)
+    if not n:
+        return None
+    return vals[n//2] if n % 2 else (vals[n//2 - 1] + vals[n//2]) / 2
 
 def main():
     try:
@@ -63,26 +104,52 @@ def main():
 
     S = {}  # sections: key -> (title, note, cols, rows, bars_html_or_empty)
 
-    # ============ 1. DATA QUALITY AUDIT ============
+    # ============ KPIs ============
     kpi = {}
     kpi["stores"] = total
     kpi["units"] = db.execute("SELECT COUNT(*) FROM units").fetchone()[0]
-    kpi["priced"] = db.execute("SELECT COUNT(*) FROM units WHERE price IS NOT NULL").fetchone()[0]
+    kpi["inventory"] = db.execute("SELECT SUM(unit_count) FROM units").fetchone()[0] or 0
     kpi["no_units"] = db.execute(
         "SELECT COUNT(*) FROM stores s WHERE NOT EXISTS (SELECT 1 FROM units u WHERE u.store_id=s.store_id)"
     ).fetchone()[0]
     kpi["no_coords"] = db.execute("SELECT COUNT(*) FROM stores WHERE lat IS NULL OR lng IS NULL").fetchone()[0]
     kpi["no_state"] = db.execute("SELECT COUNT(*) FROM stores WHERE state IS NULL OR state=''").fetchone()[0]
+    med_rows = db.execute("SELECT price FROM units WHERE sqft=100 AND price IS NOT NULL").fetchall()
+    kpi["median_10x10"] = median([r[0] for r in med_rows])
+
+    # ============ 1. LIVE INVENTORY & SCARCITY ============
+    cols, rows = q(db, """
+        SELECT s.city, s.state, SUM(u.unit_count) units_available, COUNT(DISTINCT s.store_id) stores
+        FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE s.city IS NOT NULL AND u.unit_count IS NOT NULL
+        GROUP BY s.city, s.state HAVING COUNT(DISTINCT s.store_id) >= 3
+        ORDER BY units_available DESC LIMIT 15""")
+    S["inv_deep"] = ("Deepest inventory — where storage is easiest to get",
+        f"The pricing feed reports how many units of each size are actually rentable right now — "
+        f"{kpi['inventory']:,} units nationwide at last scrape. These metros have the most open doors.",
+        cols, rows, bars_html(rows, 0, 2, prefix=""))
 
     cols, rows = q(db, """
-        SELECT s.state, COUNT(*) AS stores_without_units
-        FROM stores s
-        WHERE NOT EXISTS (SELECT 1 FROM units u WHERE u.store_id = s.store_id)
-          AND s.state IS NOT NULL
-        GROUP BY s.state ORDER BY stores_without_units DESC LIMIT 15""")
-    S["audit"] = ("Data gaps — stores with no unit listings",
-        "These facilities returned no pricing data. Either the scraper needs a retry pass on them, "
-        "or they genuinely list no availability online — both are worth knowing. This is the re-scrape fix list.",
+        SELECT s.city, s.state, SUM(u.unit_count) units_available,
+               COUNT(DISTINCT s.store_id) stores,
+               ROUND(1.0*SUM(u.unit_count)/COUNT(DISTINCT s.store_id),1) units_per_store
+        FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE s.city IS NOT NULL AND u.unit_count IS NOT NULL
+        GROUP BY s.city, s.state HAVING COUNT(DISTINCT s.store_id) >= 5
+        ORDER BY units_per_store ASC LIMIT 15""")
+    S["inv_tight"] = ("Tightest markets — where storage is scarce",
+        "Fewest available units per store among cities with 5+ facilities. Scarcity like this is "
+        "usually invisible to renters until they start calling around.",
+        cols, rows, "")
+
+    cols, rows = q(db, """
+        SELECT s.name, s.address, s.city, s.state
+        FROM stores s WHERE NOT EXISTS (SELECT 1 FROM units u WHERE u.store_id=s.store_id)
+        ORDER BY s.state, s.city""")
+    S["soldout"] = ("Completely sold out",
+        f"{kpi['no_units']} facilities currently advertise zero rentable units. Public Storage removes "
+        "these from its own sitemaps, but they're still operating stores — this directory keeps them "
+        "listed with their site numbers.",
         cols, rows, "")
 
     # ============ 2. STATE PRICING (10x10) ============
@@ -108,10 +175,48 @@ def main():
     S["variance"] = ("Local price variance — same unit, same city, wildly different price",
         "The gap between the cheapest and priciest 10x10 within a single city. In the top cities, "
         "picking the right facility saves renters serious money for an identical unit — and it shows "
-        "operators how loosely rates track location within a metro.",
+        "how loosely rates track location within a metro.",
         cols, rows, bars_html(rows, 0, 4))
 
-    # ============ 4. PRICE PER SQFT ============
+    # ============ 4. PROMO DECODER & TRUE MOVE-IN COST ============
+    cols, rows = q(db, f"""
+        SELECT COALESCE(u.promo_name,'(no promotion)') promotion,
+               COUNT(*) listings,
+               ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM units),1) pct_of_all,
+               ROUND(AVG(u.price),0) avg_advertised,
+               ROUND(AVG({EFFECTIVE_3MO}),0) avg_effective_3mo
+        FROM units u WHERE u.price IS NOT NULL
+        GROUP BY u.promo_name ORDER BY listings DESC""")
+    S["promo"] = ("The promo decoder — what the discounts are really worth",
+        "Public Storage runs exactly three promotions network-wide. Averaged over the first three "
+        "months, the famous '$1 first month' and '2nd Month Free' are near-identical (~33% off), while "
+        "'First month 50% off' is barely half the discount it sounds like (~17%). Notice the tiering: "
+        "the cheapest units get the '$1' offer, the priciest get '2nd Month Free' — the promo itself "
+        "signals the unit's price band. The effective column is true average monthly cost for months 1-3.",
+        cols, rows, "")
+
+    cols, rows = q(db, f"""
+        SELECT s.city, s.state, u.size, u.price advertised, u.promo_name,
+               ROUND({EFFECTIVE_3MO},0) effective_3mo
+        FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE u.sqft=100 AND u.price IS NOT NULL AND u.promo_name IS NOT NULL
+        ORDER BY {EFFECTIVE_3MO} ASC LIMIT 15""")
+    S["deals"] = ("The best real move-in deals in America (10x10)",
+        "Ranked by effective monthly cost over the first three months, promo included.",
+        cols, rows, "")
+
+    # ============ 5. BULK DISCOUNT CURVE ============
+    cols, rows = q(db, """
+        SELECT size, ROUND(AVG(price/sqft),2) avg_per_sqft, COUNT(*) listings
+        FROM units WHERE sqft > 0 AND price IS NOT NULL
+          AND size IN ('5x5','5x10','5x15','10x10','10x15','10x20','10x25','10x30')
+        GROUP BY size ORDER BY AVG(price/sqft) DESC""")
+    S["curve"] = ("The bulk discount curve — small units cost multiples more per square foot",
+        "Price per square foot falls steeply as units get bigger. A 5x5 renter pays roughly "
+        "double the rate per square foot of a 10x30 renter for the same building.",
+        cols, rows, bars_html(rows, 0, 1))
+
+    # ============ 6. PRICE PER SQFT MARKETS ============
     cols, rows = q(db, """
         SELECT s.city, s.state, ROUND(AVG(u.price/u.sqft),2) avg_per_sqft, COUNT(*) listings
         FROM units u JOIN stores s ON s.store_id=u.store_id
@@ -122,7 +227,7 @@ def main():
         "Normalizing by square footage makes markets directly comparable regardless of unit mix.",
         cols, rows, "")
 
-    # ============ 5. CHEAPEST MARKETS ============
+    # ============ 7. CHEAPEST MARKETS ============
     cols, rows = q(db, """
         SELECT s.city, s.state, ROUND(AVG(u.price),0) avg_10x10, COUNT(*) listings
         FROM units u JOIN stores s ON s.store_id=u.store_id
@@ -131,25 +236,86 @@ def main():
         ORDER BY avg_10x10 ASC LIMIT 15""")
     S["cheap"] = ("Cheapest markets for a 10x10", "", cols, rows, "")
 
-    # ============ 6. PROMO ANALYSIS ============
+    # ============ 8. EXTREME UNITS ============
     cols, rows = q(db, """
-        SELECT promo_name, COUNT(*) uses,
-               ROUND(AVG(100.0*(price-promo_price)/price),1) avg_pct_off
-        FROM units WHERE promo_name IS NOT NULL AND price>0 AND promo_price IS NOT NULL
-        GROUP BY promo_name ORDER BY uses DESC LIMIT 12""")
-    S["promo"] = ("Promotion strategy — which discounts run, and how deep",
-        "Advertised promotional pricing across the network: which offers are deployed most, "
-        "and the real average percentage off.",
-        cols, rows, "")
+        SELECT u.size, u.price, s.address, s.city, s.state
+        FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE u.price IS NOT NULL AND u.sqft >= 25
+        ORDER BY u.price ASC LIMIT 10""")
+    S["cheapest_units"] = ("The 10 cheapest storage units in America",
+        "Real, currently listed units (5x5 or larger).", cols, rows, "")
 
-    # ============ 7. SIZE MIX ============
+    cols, rows = q(db, """
+        SELECT u.size, u.price, s.address, s.city, s.state
+        FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE u.price IS NOT NULL
+        ORDER BY u.price DESC LIMIT 10""")
+    S["priciest_units"] = ("...and the 10 most expensive",
+        "The other end of the market.", cols, rows, "")
+
+    # ============ 9. STORES PER CAPITA ============
+    _, srows = q(db, "SELECT state, COUNT(*) FROM stores WHERE state IS NOT NULL GROUP BY state")
+    percap = []
+    for st, n in srows:
+        pop = STATE_POP.get(st)
+        if pop and n >= 5:
+            percap.append((st, n, pop, round(n / pop, 1)))
+    percap.sort(key=lambda r: -r[3])
+    cols = ["state", "stores", "pop_millions", "stores_per_million"]
+    S["percap"] = ("Storage saturation per capita",
+        "Facilities per million residents. Sun-belt states dominate — a mix of population growth, "
+        "cheap land, and a car-first culture that generates overflow stuff.",
+        cols, percap[:15], bars_html(percap[:15], 0, 3, prefix=""))
+
+    # ============ 10. NEAREST-NEIGHBOR CLUSTERING ============
+    _, crows = q(db, """
+        SELECT city, state, store_id, lat, lng FROM stores
+        WHERE city IS NOT NULL AND lat IS NOT NULL AND lng IS NOT NULL""")
+    by_city = {}
+    for city, st, sid, lat, lng in crows:
+        by_city.setdefault((city, st), []).append((lat, lng))
+    clusters = []
+    for (city, st), pts in by_city.items():
+        if len(pts) < 8:
+            continue
+        dists = []
+        for i, (la, ln) in enumerate(pts):
+            nearest = min(haversine(la, ln, lb, lm) for j, (lb, lm) in enumerate(pts) if j != i)
+            dists.append(nearest)
+        clusters.append((city, st, len(pts), round(sum(dists) / len(dists), 2)))
+    clusters.sort(key=lambda r: r[3])
+    cols = ["city", "state", "stores", "avg_miles_to_nearest"]
+    S["cluster"] = ("Elbow-to-elbow — average distance to the next Public Storage",
+        "For cities with 8+ facilities: how far is each store from its nearest sibling, on average? "
+        "In the tightest metros, the same brand competes with itself just blocks apart.",
+        cols, clusters[:15], "")
+
+    # ============ 11. VEHICLE / RV / PARKING ============
+    cols, rows = q(db, """
+        SELECT s.state, COUNT(*) listings, ROUND(AVG(u.price),0) avg_parking,
+               MIN(u.price) cheapest
+        FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE u.size='Parking' AND u.price IS NOT NULL AND s.state IS NOT NULL
+        GROUP BY s.state HAVING COUNT(*)>=10 ORDER BY avg_parking DESC LIMIT 15""")
+    pk_stores = db.execute("SELECT COUNT(DISTINCT store_id) FROM units WHERE size='Parking'").fetchone()[0]
+    pk_ratio = db.execute("""
+        SELECT ROUND(100.0*AVG(CASE WHEN size='Parking' THEN price END) /
+                     AVG(CASE WHEN sqft=100 THEN price END), 0) FROM units WHERE price IS NOT NULL
+    """).fetchone()[0]
+    S["parking"] = ("The vehicle storage market",
+        f"{pk_stores:,} facilities rent uncovered vehicle/RV/boat spaces. Nationally a parking spot "
+        f"advertises at about {pk_ratio:.0f}% of a 10x10's rate — driveway arbitrage for anyone with "
+        "a project car and an HOA.",
+        cols, rows, bars_html(rows, 0, 2))
+
+    # ============ 12. SIZE MIX ============
     cols, rows = q(db, """
         SELECT size, COUNT(*) listings, ROUND(AVG(price),0) avg_price
         FROM units WHERE size IS NOT NULL AND price IS NOT NULL
         GROUP BY size ORDER BY listings DESC LIMIT 12""")
     S["mix"] = ("Unit size mix", "What the network actually stocks, by listing volume.", cols, rows, "")
 
-    # ============ 8. SATURATION ============
+    # ============ 13. SATURATION ============
     cols, rows = q(db, """
         SELECT city, state, COUNT(*) stores FROM stores
         WHERE city IS NOT NULL GROUP BY city, state
@@ -157,10 +323,23 @@ def main():
     S["sat"] = ("Most saturated metros", "Facility count by city — where the footprint concentrates.",
         cols, rows, bars_html(rows, 0, 2, prefix=""))
 
+    # ============ 14. DATA GAPS (audit) ============
+    cols, rows = q(db, """
+        SELECT s.state, COUNT(*) AS stores_without_units
+        FROM stores s
+        WHERE NOT EXISTS (SELECT 1 FROM units u WHERE u.store_id = s.store_id)
+          AND s.state IS NOT NULL
+        GROUP BY s.state ORDER BY stores_without_units DESC LIMIT 15""")
+    S["audit"] = ("Data notes",
+        "Stores with no unit listings (they're fully sold out — see the scarcity section) and any "
+        "records with missing fields surface here so the pipeline's health is visible.",
+        cols, rows, "")
+
     # ---- console output ----
-    print(f"\nDATASET: {kpi['stores']:,} stores · {kpi['units']:,} unit listings "
-          f"({kpi['priced']:,} priced) · {kpi['no_units']:,} stores with NO units · "
-          f"{kpi['no_coords']:,} missing coords · {kpi['no_state']:,} missing state")
+    print(f"\nDATASET: {kpi['stores']:,} stores · {kpi['units']:,} unit listings · "
+          f"{kpi['inventory']:,} units available now · median 10x10 ${kpi['median_10x10']:,.0f} · "
+          f"{kpi['no_units']:,} stores sold out · {kpi['no_coords']:,} missing coords · "
+          f"{kpi['no_state']:,} missing state")
     for key in S:
         t, note, cols, rows, _ = S[key]
         console(t, cols, rows)
@@ -178,7 +357,7 @@ def main():
     page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Self-Storage Pricing Insights — FindStorage</title>
-<meta name="description" content="Original analysis of {kpi['stores']:,} self-storage facilities: state pricing, local variance, promotions, and market saturation.">
+<meta name="description" content="Original analysis of {kpi['stores']:,} self-storage facilities: live inventory, true promo cost, state pricing, local variance, and market saturation.">
 <style>
 :root{{--bg:#101418;--card:#161c22;--line:#232c35;--txt:#e8edf2;--dim:#8fa0af;--acc:#f0a44b;--bar:#2b3a47}}
 *{{margin:0;padding:0;box-sizing:border-box}}
@@ -218,8 +397,9 @@ footer a{{color:var(--acc);text-decoration:none}}
 <div class="kpis">
 <div class="kpi"><div class="n">{kpi['stores']:,}</div><div class="l">facilities</div></div>
 <div class="kpi"><div class="n">{kpi['units']:,}</div><div class="l">unit listings</div></div>
-<div class="kpi"><div class="n">{kpi['priced']:,}</div><div class="l">with live pricing</div></div>
-<div class="kpi"><div class="n">{kpi['no_units']:,}</div><div class="l">no listings (gaps)</div></div>
+<div class="kpi"><div class="n">{kpi['inventory']:,}</div><div class="l">units available now</div></div>
+<div class="kpi"><div class="n">${kpi['median_10x10']:,.0f}</div><div class="l">median 10x10 / mo</div></div>
+<div class="kpi"><div class="n">{kpi['no_units']:,}</div><div class="l">stores sold out</div></div>
 </div></div></header>
 <main class="wrap">{secs}</main>
 <footer><div class="wrap">Data collected from publicly advertised rates. Part of
