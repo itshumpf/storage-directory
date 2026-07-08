@@ -1,6 +1,8 @@
 # FindStorage
 
-A self-storage directory and pricing-analysis project covering **3,000+ U.S. Public Storage facilities** with unit-level pricing, updated daily by an automated pipeline.
+A self-storage directory and pricing-analysis project covering **~3,500 U.S. Public Storage facilities** — over 98% of the company's reported footprint — with unit-level pricing, updated daily by an automated pipeline.
+
+A defining goal: the directory lists **every** store with its 5-digit site number, *including sold-out locations*. Public Storage removes full stores from its own sitemaps (~900 stores are missing from them), so the pipeline recovers those through city-page map markers, per-store page fetches, and a carry-forward check against the previous dataset.
 
 **Live site:** https://findstorage.netlify.app
 **Pricing analysis:** https://findstorage.netlify.app/insights.html
@@ -14,7 +16,7 @@ A self-storage directory and pricing-analysis project covering **3,000+ U.S. Pub
 ## Architecture
 
 ```
-publicstorage.com (sitemaps + pricing API)
+publicstorage.com (city pages + XML sitemaps + pricing API)
         │
         ▼
 daily_scraper.py ──────────► enriched_locations.json
@@ -27,6 +29,15 @@ analysis/load_storage.py ──► storage.db
 analysis/analyze_storage.py ──► insights.html (published report)
 ```
 
+Discovery runs in layered passes, because no single source is complete:
+
+1. **City pages** (~1,370 from the category sitemap) — embedded map-marker data is the primary source and the only one that reliably includes delisted/sold-out stores.
+2. **Product sitemap** — stub records for anything the markers missed.
+3. **Zip-code sweep** — search-results gap filler that also merges missing fields into sparse records.
+4. **Site-number backfill** — stores still missing their 5-digit code get their own page fetched.
+5. **Carry-forward** — previously known stores that discovery missed stay in the dataset as long as their page is still live; only 404s drop out.
+6. **Pricing** — batched lookups against the pricing API for all stores.
+
 The scraper has safety rails: it aborts without writing if it finds fewer than a floor count of stores, or more than a 10% drop from the previous run, so a partial scrape can never clobber good data. Requests are rate-limited (0.4s delay, batched pricing lookups).
 
 ## Project structure
@@ -35,7 +46,7 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 |---|---|
 | `index.html` | The directory frontend (single file, no build step) |
 | `daily_scraper.py` | Production scraper run daily by GitHub Actions |
-| `enriched_locations.json` | The dataset: 3,092 facilities with unit-level pricing |
+| `enriched_locations.json` | The dataset: ~3,500 facilities with unit-level pricing |
 | `analysis/load_storage.py` | Loads the dataset into a normalized SQLite database |
 | `analysis/run_queries.py` | Core analysis query set (run all, or one by number) |
 | `analysis/analyze_storage.py` | Data-quality audit + full analysis + report generator |
