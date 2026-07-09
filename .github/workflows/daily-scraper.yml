@@ -35,15 +35,17 @@ jobs:
           echo "Stores scraped:"
           python -c "import json; data=json.load(open('enriched_locations.json')); print(f'{len(data)} stores, {sum(1 for s in data if s[\"units\"])} with pricing')"
 
-      - name: Rebuild insights report
+      - name: Rebuild insights and trends reports
         run: |
           python analysis/load_storage.py enriched_locations.json
           python analysis/analyze_storage.py
+          python analysis/update_history.py
+          python analysis/build_trends.py
 
       - name: Commit and push updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add enriched_locations.json insights.html
+          git add enriched_locations.json insights.html trends.html history/
           git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
           git push

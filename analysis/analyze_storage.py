@@ -410,7 +410,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 </style></head><body>
 <header><div class="wrap">
 <h1>Self-Storage Pricing Insights<br><span>{kpi['stores']:,} facilities, analyzed</span></h1>
-<p class="meta">Original research built on the FindStorage dataset · updated {today} · analysis by Braeden Keena · <a href="/">back to the directory</a></p>
+<p class="meta">Original research built on the FindStorage dataset · updated {today} · analysis by Braeden Keena · <a href="/">directory</a> · <a href="/trends.html">daily trends</a></p>
 <div class="kpis">
 <div class="kpi"><div class="n">{kpi['stores']:,}</div><div class="l">facilities</div></div>
 <div class="kpi"><div class="n">{kpi['units']:,}</div><div class="l">unit listings</div></div>

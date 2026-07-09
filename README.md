@@ -6,12 +6,14 @@ A defining goal: the directory lists **every** store with its 5-digit site numbe
 
 **Live site:** https://findstorage.netlify.app
 **Pricing analysis:** https://findstorage.netlify.app/insights.html
+**Daily trends:** https://findstorage.netlify.app/trends.html
 
 ## What it does
 
 - **Directory** — searchable, filterable card/map views of every facility: address, phone, site number, and current advertised unit prices with promotions. Location-aware search (city/state/zip/radius) plus free-text search, built with vanilla JavaScript and Leaflet marker clustering.
 - **Daily data pipeline** — a scheduled GitHub Actions job re-scrapes the full dataset every morning, rebuilds the SQLite analysis database, regenerates the insights report, and commits the results. Netlify redeploys automatically on push.
-- **Market analysis** — a SQL analysis suite over the dataset: state-by-state 10x10 pricing, price per square foot, in-city price variance, promotion frequency and depth, unit size mix, market saturation, and price outliers. Results are published as a self-contained report page.
+- **Market analysis** — a SQL analysis suite over the dataset: state-by-state 10x10 pricing, price per square foot, in-city price variance, live inventory and scarcity, true promotional move-in cost, store clustering, per-capita saturation, and the vehicle-storage market. Results are published as a self-contained report page.
+- **Time series** — every daily run appends per-store aggregates (advertised availability, cheapest 10x10, median price) to an append-only history log, and regenerates a trends page: national inventory and price charts, the fastest-renting stores, and the biggest price hikes and cuts. History was backfilled from git snapshots of the dataset, so the series starts April 29, 2026.
 
 ## Architecture
 
@@ -51,6 +53,9 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 | `analysis/load_storage.py` | Loads the dataset into a normalized SQLite database |
 | `analysis/run_queries.py` | Core analysis query set (run all, or one by number) |
 | `analysis/analyze_storage.py` | Data-quality audit + full analysis + report generator |
+| `analysis/update_history.py` | Appends per-store daily aggregates to `history/YYYY-MM.csv` |
+| `analysis/build_trends.py` | Generates the daily trends page from the history log |
+| `history/` | Append-only time series, one row per store per day |
 | `legacy/` | One-off Colab scripts used to bootstrap the original dataset |
 | `daily_update.bat`, `setup_task.ps1` | Optional local Windows Task Scheduler alternative to CI |
 
