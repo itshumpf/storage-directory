@@ -8,6 +8,9 @@ Usage (from the repo root, after a scrape):
 Appends one row per store to history/YYYY-MM.csv:
     date, store_id, units_avail, cheapest_10x10, median_price, listings
 
+(The advertised min-max price "range" is not logged: it is mechanically
+price ±20% for every unit, so it carries no information beyond the price.)
+
 units_avail is the count of units advertised as rentable on the website —
 revenue management typically holds back part of the physically vacant
 inventory, so this tracks marketed availability, not occupancy.
@@ -56,7 +59,8 @@ def main():
     with open(out, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         if new_file:
-            w.writerow(["date", "store_id", "units_avail", "cheapest_10x10", "median_price", "listings"])
+            w.writerow(["date", "store_id", "units_avail", "cheapest_10x10",
+                        "median_price", "listings"])
         w.writerows(rows)
     print(f"Logged {len(rows)} stores for {date} -> {out}")
 

@@ -7,7 +7,11 @@ Usage (from the repo root):
 Creates storage.db with two tables:
     stores(store_id, name, address, city, state, zip, lat, lng, phone)
     units(store_id, size, width, length, sqft, price, promo_name, promo2,
-          available, unit_count)
+          available, unit_count, attrs, price_min, price_max)
+
+attrs is the unit's physical description (climate control, floor, access);
+price_min/price_max is the advertised range the revenue-management system
+prices within — the current price is one point inside it.
 
 The loader is defensive: it discovers whatever keys the JSON actually has,
 prints them, and maps the common ones. Missing fields are stored as NULL.
@@ -71,7 +75,8 @@ def main():
         CREATE TABLE units (
             store_id TEXT, size TEXT, width REAL, length REAL, sqft REAL,
             price REAL, promo_name TEXT, promo2 TEXT,
-            available INTEGER, unit_count INTEGER
+            available INTEGER, unit_count INTEGER,
+            attrs TEXT, price_min REAL, price_max REAL
         );
         CREATE INDEX idx_units_store ON units(store_id);
         CREATE INDEX idx_units_size  ON units(size);
@@ -110,7 +115,7 @@ def main():
             w, l, sqft = parse_size(size)
             count = first(u, "unit_count", "count")
             db.execute(
-                "INSERT INTO units VALUES (?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO units VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     sid, size, w, l, sqft,
                     to_float(first(u, "price", "rate", "monthly_rate", "web_rate")),
@@ -118,6 +123,9 @@ def main():
                     first(u, "promo2"),
                     1 if u.get("available") else 0,
                     int(count) if isinstance(count, (int, float)) else None,
+                    first(u, "attrs"),
+                    to_float(first(u, "price_min")),
+                    to_float(first(u, "price_max")),
                 ),
             )
             n_units += 1

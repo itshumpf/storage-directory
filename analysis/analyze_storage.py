@@ -222,6 +222,70 @@ def main():
         "Ranked by effective monthly cost over the first three months, promo included.",
         cols, rows, "")
 
+    # ============ 4b. THE PRICING MODEL ============
+    # Feature premiums: same store, same footprint, different attributes.
+    # The drive-up comparison excludes climate-controlled units on both sides,
+    # otherwise the climate premium contaminates it.
+    prem_rows = []
+    for label, yes_cond, no_cond in [
+        ("Climate control",
+         "attrs LIKE '%Climate%'", "attrs NOT LIKE '%Climate%'"),
+        ("Ground/1st floor (vs upstairs)",
+         "attrs LIKE '%1st Floor%'", "attrs LIKE '%Upstairs%'"),
+        ("Drive-up access (vs inside, non-climate)",
+         "attrs LIKE '%Drive%' AND attrs NOT LIKE '%Climate%'",
+         "attrs LIKE '%Inside%' AND attrs NOT LIKE '%Climate%'"),
+    ]:
+        r = db.execute(f"""
+            WITH g AS (
+                SELECT store_id, size,
+                       AVG(CASE WHEN {yes_cond} THEN price END) AS yes,
+                       AVG(CASE WHEN {no_cond} THEN price END) AS no
+                FROM units WHERE price IS NOT NULL AND attrs IS NOT NULL
+                GROUP BY store_id, size)
+            SELECT COUNT(*), ROUND(AVG(100.0*(yes-no)/no),1) FROM g
+            WHERE yes IS NOT NULL AND no IS NOT NULL AND no > 0""").fetchone()
+        if r[0]:
+            prem_rows.append((label, r[0], f"{r[1]:+.1f}%"))
+    S["premiums"] = ("What features actually cost — paired premiums",
+        "Each comparison pairs units of the SAME size at the SAME store that differ in one attribute, "
+        "so location and demand cancel out. This is the attribute pricing inside Public Storage's model.",
+        ["feature", "store-size pairs", "avg premium"], prem_rows, "")
+
+    # The advertised min-max "range": we tested whether it is a real pricing
+    # envelope. It is not — min and max are mechanically price*0.8 and
+    # price*1.2 for every unit, so the range moves with the price, not the
+    # other way around. Publish the falsification; it is the honest finding.
+    RANGED = "u.price IS NOT NULL AND u.price_max > u.price_min AND u.price >= u.price_min"
+    env = db.execute(f"""
+        SELECT COUNT(*),
+               SUM(CASE WHEN ABS(u.price - (u.price_min+u.price_max)/2.0) <= 1 THEN 1 ELSE 0 END)
+        FROM units u WHERE {RANGED}""").fetchone()
+    S["envelope"] = ("The ±20% illusion — what the advertised price range really is",
+        f"Every unit page shows a min-max price range that looks like a pricing band. We tested whether "
+        f"street rates move within it. They don't — across {env[0]:,} listings, {100.0*env[1]/env[0]:.1f}% "
+        "sit exactly at the midpoint, because the displayed range is mechanically today's price ±20% "
+        "(rounded). It's a disclaimer construct, not a revenue-management envelope: when the range "
+        "moves, that IS the price moving. Real rate movement is tracked on the daily trends page.",
+        [], [], "")
+
+    cols, rows = q(db, """
+        SELECT CASE WHEN u.unit_count <= 5 THEN '1-5 left'
+                    WHEN u.unit_count <= 20 THEN '6-20 left'
+                    WHEN u.unit_count <= 50 THEN '21-50 left'
+                    ELSE '51+ left' END AS units_remaining,
+               COUNT(*) listings,
+               ROUND(AVG(u.price),0) avg_10x10_price
+        FROM units u
+        WHERE u.sqft = 100 AND u.price IS NOT NULL AND u.unit_count IS NOT NULL
+        GROUP BY units_remaining ORDER BY MIN(u.unit_count)""")
+    S["scarcity_price"] = ("The scarcity dial — fewer units left, higher price",
+        "Same unit size (10x10 only), bucketed by how many are left at that store. The gradient is "
+        "steep and monotonic. Causality runs both ways — high prices slow sell-through, and low "
+        "availability pushes prices up — but the correlation is exactly what a demand-based "
+        "revenue-management system produces.",
+        cols, rows, bars_html(rows, 0, 2))
+
     # ============ 5. BULK DISCOUNT CURVE ============
     cols, rows = q(db, """
         SELECT size, ROUND(AVG(price/sqft),2) avg_per_sqft, COUNT(*) listings
@@ -369,7 +433,9 @@ def main():
         secs += f"<section><h2>{html.escape(t)}</h2>"
         if note: secs += f"<p class='note'>{html.escape(note)}</p>"
         if bars: secs += bars
-        secs += table_html(cols, rows) + "</section>"
+        if cols:  # prose-only sections carry their finding in the note
+            secs += table_html(cols, rows)
+        secs += "</section>"
 
     page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

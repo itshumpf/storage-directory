@@ -98,25 +98,64 @@ def parse_stores(html):
     return stores
 
 
+OFFER_RE = re.compile(
+    r'"price":"\$([\d,]+)(?:\s*-\s*\$([\d,]+))?"[^{]*"itemOffered":\{[^}]*?"name":"[^"]*"'
+    r'[^}]*?"description":"([^"]+)"[^}]*?"sku":"([^"]+)"')
+
+def fetch_unit_attrs(html_text):
+    """Parse a store page's JSON-LD offers into {sku: (attrs, price_min, price_max)}.
+
+    Each offer carries the unit's physical attributes (climate control, floor,
+    inside vs drive-up) and the advertised price RANGE — the envelope the
+    revenue-management system prices within. The pricing API only exposes the
+    current point price, so this is the only public source for both.
+    """
+    out = {}
+    for lo, hi, desc, sku in OFFER_RE.findall(html_text):
+        desc = desc.replace(" (Prices are not guaranteed)", "")
+        attrs = desc.split(" ", 1)[1] if " " in desc else desc  # drop leading size
+        pmin = int(lo.replace(",", ""))
+        pmax = int(hi.replace(",", "")) if hi else pmin
+        out[sku] = (attrs, pmin, pmax)
+    return out
+
+
 def fetch_pricing(store_ids):
     results = {}
     batches = [store_ids[i:i+BATCH_SIZE] for i in range(0,len(store_ids),BATCH_SIZE)]
+    consecutive_failures = 0
     for i, batch in enumerate(batches):
-        try:
-            r = requests.get(PRICING_API.format("%2C".join(batch)), headers=HEADERS, timeout=15)
-            r.raise_for_status()
-            for sd in r.json().get("promoInfoArr",[]):
-                sid = str(sd.get("storeID",""))
-                results[sid] = [{
-                    "size":      u.get("name",""),
-                    "price":     u.get("saleprice"),
-                    "available": u.get("availability", False),
-                    "count":     u.get("count", 0),
-                    "promo":     u.get("promotionName","") or "",
-                    "promo2":    u.get("promotionName2","") or "",
-                } for u in sd.get("info",[])]
-        except Exception as e:
-            print(f"  Pricing batch {i+1} error: {e}")
+        ok = False
+        for attempt in range(4):
+            try:
+                r = requests.get(PRICING_API.format("%2C".join(batch)), headers=HEADERS, timeout=25)
+                r.raise_for_status()
+                for sd in r.json().get("promoInfoArr",[]):
+                    sid = str(sd.get("storeID",""))
+                    results[sid] = [{
+                        "size":      u.get("name",""),
+                        "price":     u.get("saleprice"),
+                        "available": u.get("availability", False),
+                        "count":     u.get("count", 0),
+                        "promo":     u.get("promotionName","") or "",
+                        "promo2":    u.get("promotionName2","") or "",
+                        "sku":       u.get("id","") or "",
+                    } for u in sd.get("info",[])]
+                ok = True
+                break
+            except Exception as e:
+                if attempt == 3:
+                    print(f"  Pricing batch {i+1} failed after retries: {e}")
+                else:
+                    time.sleep(3 * (attempt + 1) ** 2)  # 3s, 12s, 27s
+        if ok:
+            consecutive_failures = 0
+        else:
+            consecutive_failures += 1
+            if consecutive_failures >= 25:
+                print(f"  ABORTING pricing after {consecutive_failures} consecutive failed batches "
+                      f"— endpoint appears down; keeping {len(results)} stores' pricing")
+                break
         if i % 25 == 0:
             print(f"      Pricing batch {i+1}/{len(batches)}...")
         time.sleep(DELAY)
@@ -140,7 +179,7 @@ def main():
     existing_count = len(existing_data)
 
     # Phase 1 — City pages (primary discovery; markers include full/delisted stores)
-    print("\n[1/7] Fetching city pages from category sitemap...")
+    print("\n[1/8] Fetching city pages from category sitemap...")
     try:
         city_urls = get_city_page_urls()
         print(f"      {len(city_urls)} city pages found")
@@ -164,7 +203,7 @@ def main():
     print(f"\n      After city pages: {len(all_stores)} stores")
 
     # Phase 2 — Product sitemap (stub records for anything the markers missed)
-    print("\n[2/7] Checking product sitemap...")
+    print("\n[2/8] Checking product sitemap...")
     try:
         added = 0
         for url, st, city, sid in get_product_store_urls():
@@ -181,7 +220,7 @@ def main():
         print(f"      WARNING: product sitemap failed: {e}")
 
     # Phase 3 — Zip sweep (gap filler; also merges fields into sparse records)
-    print(f"\n[3/7] Zip code sweep ({len(ZIP_CODES)} zips)...")
+    print(f"\n[3/8] Zip code sweep ({len(ZIP_CODES)} zips)...")
     new_found = 0
     for i, z in enumerate(ZIP_CODES):
         try:
@@ -214,7 +253,7 @@ def main():
     missing = [s for s in all_stores.values()
                if not s.get("site_number") and s.get("url") and s["url"] != BASE]
     todo = missing[:ENRICH_CAP]
-    print(f"\n[4/7] Backfilling site numbers: {len(missing)} missing, fetching {len(todo)}...")
+    print(f"\n[4/8] Backfilling site numbers: {len(missing)} missing, fetching {len(todo)}...")
     filled = 0
     for i, s in enumerate(todo):
         try:
@@ -239,7 +278,7 @@ def main():
     # dense metros can evade every discovery pass. If a store we knew about
     # still has a live page, it stays in the directory; only 404s drop out.
     lost = [s for s in existing_data if str(s.get("store_id")) not in all_stores]
-    print(f"\n[5/7] Carry-forward check: {len(lost)} previously known stores not rediscovered...")
+    print(f"\n[5/8] Carry-forward check: {len(lost)} previously known stores not rediscovered...")
     kept, dropped = 0, 0
     for s in lost:
         sid = str(s.get("store_id"))
@@ -307,7 +346,7 @@ def main():
         sys.exit(1)
 
     # Phase 6 — Pricing
-    print(f"\n[6/7] Fetching pricing...")
+    print(f"\n[6/8] Fetching pricing...")
     store_list = list(all_stores.values())
     pricing = fetch_pricing([s["store_id"] for s in store_list])
     for s in store_list:
@@ -317,8 +356,36 @@ def main():
     print(f"      {priced}/{len(store_list)} stores have pricing")
     print(f"      {coded}/{len(store_list)} stores have a site number")
 
-    # Phase 7 — Save
-    print(f"\n[7/7] Saving...")
+    # Phase 7 — Unit attributes & price ranges from store-page JSON-LD.
+    # Ties each SKU to its physical attributes (climate, floor, drive-up) and
+    # the advertised min-max price envelope the pricing algorithm works within.
+    print(f"\n[7/8] Fetching unit attributes & price ranges ({len(store_list)} store pages)...")
+    enriched = 0
+    for i, s in enumerate(store_list):
+        url = s.get("url", "")
+        if not s["units"] or not url or not url.startswith("http"):
+            continue
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=15)
+            if r.status_code == 200:
+                attrs = fetch_unit_attrs(r.text)
+                hit = False
+                for u in s["units"]:
+                    a = attrs.get(u.get("sku"))
+                    if a:
+                        u["attrs"], u["price_min"], u["price_max"] = a
+                        hit = True
+                if hit:
+                    enriched += 1
+        except Exception as e:
+            print(f"      store {s['store_id']}: ERROR {e}")
+        if (i + 1) % 250 == 0:
+            print(f"      [{i+1}/{len(store_list)}] pages fetched, {enriched} stores enriched")
+        time.sleep(DELAY)
+    print(f"      Attributes captured for {enriched} stores")
+
+    # Phase 8 — Save
+    print(f"\n[8/8] Saving...")
     if os.path.exists(OUTPUT_FILE):
         shutil.copy(OUTPUT_FILE, BACKUP_FILE)
         print(f"      Backed up existing → {BACKUP_FILE}")
