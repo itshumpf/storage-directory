@@ -101,6 +101,49 @@ def parse_stores(html):
 OFFER_RE = re.compile(
     r'"price":"\$([\d,]+)(?:\s*-\s*\$([\d,]+))?"[^{]*"itemOffered":\{[^}]*?"name":"[^"]*"'
     r'[^}]*?"description":"([^"]+)"[^}]*?"sku":"([^"]+)"')
+RATING_RE = re.compile(r'"aggregateRating":\{[^}]*?"ratingCount":"(\d+)","ratingValue":"([\d.]+)"')
+PIPELINE_FILE = "history/pipeline.csv"
+
+def fetch_store_rating(html_text):
+    """Store's aggregate review rating from page JSON-LD: (rating, count) or None."""
+    m = RATING_RE.search(html_text)
+    return (float(m.group(2)), int(m.group(1))) if m else None
+
+
+def update_pipeline(all_stores, candidates):
+    """Maintain the coming-soon store pipeline (history/pipeline.csv).
+
+    candidates: {store_id: (url, city, state)} — live store pages found by the
+    deep probe that don't confirm as operating stores yet (usually 'coming
+    soon' placeholders). Rows get first_seen on entry; when the store later
+    shows up in the operating dataset, opened is stamped — turning the file
+    into an openings timeline.
+    """
+    import csv
+    today = time.strftime("%Y-%m-%d")
+    rows, known = [], set()
+    if os.path.exists(PIPELINE_FILE):
+        with open(PIPELINE_FILE, newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                known.add(row["store_id"])
+                if not row["opened"] and row["store_id"] in all_stores:
+                    row["opened"] = today
+                    print(f"      OPENED: pipeline store {row['store_id']} ({row['city']}, {row['state']})")
+                rows.append(row)
+    added = 0
+    for sid, (url, city, state) in candidates.items():
+        if sid not in known and sid not in all_stores:
+            rows.append({"store_id": sid, "url": url, "city": city, "state": state,
+                         "first_seen": today, "opened": ""})
+            added += 1
+    os.makedirs("history", exist_ok=True)
+    with open(PIPELINE_FILE, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["store_id", "url", "city", "state", "first_seen", "opened"])
+        w.writeheader()
+        w.writerows(rows)
+    if added or rows:
+        pending = sum(1 for r in rows if not r["opened"])
+        print(f"      Pipeline: {added} new coming-soon stores, {pending} pending open")
 
 def fetch_unit_attrs(html_text):
     """Parse a store page's JSON-LD offers into {sku: (attrs, price_min, price_max)}.
@@ -307,18 +350,19 @@ def main():
     # canonical /self-storage-{st}-{city}/{id}.html URL; the store's own page
     # must then confirm it with a matching map marker, which filters out
     # coming-soon placeholders and closed stores whose redirects linger.
+    pipeline_candidates = {}
     if "--deep" in sys.argv:
         max_id = max((int(sid) for sid in all_stores if sid.isdigit()), default=7000)
         candidates = [i for i in range(1, max_id + 500) if str(i) not in all_stores]
         print(f"\n[deep] Probing {len(candidates)} unknown store IDs up to {max_id + 500}...")
-        canon = re.compile(r"(https://www\.publicstorage\.com/self-storage-[a-z]{2}-[a-z0-9-]+/(\d+)\.html)")
+        canon = re.compile(r"(https://www\.publicstorage\.com/self-storage-([a-z]{2})-([a-z0-9-]+)/(\d+)\.html)")
         deep_found = 0
         for n, i in enumerate(candidates):
             try:
                 r = requests.get(f"{BASE}/self-storage-zz-probe/{i}.html",
                                  headers=HEADERS, timeout=15, allow_redirects=False)
                 m = canon.match(r.headers.get("Location", ""))
-                if m and m.group(2) == str(i):
+                if m and m.group(4) == str(i):
                     rp = requests.get(m.group(1), headers=HEADERS, timeout=15)
                     fresh = next((p for p in parse_stores(rp.text) if p["store_id"] == str(i)),
                                  None) if rp.status_code == 200 else None
@@ -326,13 +370,20 @@ def main():
                         all_stores[str(i)] = fresh
                         deep_found += 1
                         print(f"      FOUND Site#{fresh.get('site_number','?')} {fresh.get('address')}, {fresh.get('city')}, {fresh.get('state')}")
+                    elif rp.status_code == 200:
+                        # live page, no confirming marker — usually a coming-soon store
+                        pipeline_candidates[str(i)] = (
+                            m.group(1), m.group(3).replace("-", " ").title(), m.group(2).upper())
                     time.sleep(DELAY)
             except Exception as e:
                 print(f"      id {i}: ERROR {e}")
             if (n + 1) % 500 == 0:
                 print(f"      [{n+1}/{len(candidates)}] probed, {deep_found} found")
             time.sleep(0.3)
-        print(f"      Deep probe complete: {deep_found} new stores")
+        print(f"      Deep probe complete: {deep_found} new stores, "
+              f"{len(pipeline_candidates)} coming-soon candidates")
+
+    update_pipeline(all_stores, pipeline_candidates)
 
     # Safety checks
     if len(all_stores) < MIN_STORES:
@@ -377,6 +428,9 @@ def main():
                         hit = True
                 if hit:
                     enriched += 1
+                rating = fetch_store_rating(r.text)
+                if rating:
+                    s["rating"], s["reviews"] = rating
         except Exception as e:
             print(f"      store {s['store_id']}: ERROR {e}")
         if (i + 1) % 250 == 0:

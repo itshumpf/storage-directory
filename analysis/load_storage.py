@@ -70,7 +70,8 @@ def main():
         DROP TABLE IF EXISTS units;
         CREATE TABLE stores (
             store_id TEXT PRIMARY KEY, name TEXT, address TEXT, city TEXT,
-            state TEXT, zip TEXT, lat REAL, lng REAL, phone TEXT
+            state TEXT, zip TEXT, lat REAL, lng REAL, phone TEXT,
+            rating REAL, reviews INTEGER
         );
         CREATE TABLE units (
             store_id TEXT, size TEXT, width REAL, length REAL, sqft REAL,
@@ -91,7 +92,7 @@ def main():
             continue  # duplicate record — keep the first, avoid double-counting units
         seen.add(sid)
         db.execute(
-            "INSERT OR REPLACE INTO stores VALUES (?,?,?,?,?,?,?,?,?)",
+            "INSERT OR REPLACE INTO stores VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (
                 sid,
                 first(s, "name", "store_name", "title"),
@@ -102,6 +103,8 @@ def main():
                 to_float(first(s, "lat", "latitude")),
                 to_float(first(s, "lng", "lon", "longitude")),
                 first(s, "phone", "phone_number"),
+                to_float(first(s, "rating")),
+                first(s, "reviews"),
             ),
         )
         # unit listings might live under several names

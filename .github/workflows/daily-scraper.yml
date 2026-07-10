@@ -40,6 +40,7 @@ jobs:
           python analysis/load_storage.py enriched_locations.json
           python analysis/analyze_storage.py
           python analysis/update_history.py
+          python analysis/update_rate_log.py
           python analysis/build_trends.py
 
       - name: Commit and push updated data

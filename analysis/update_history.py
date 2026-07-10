@@ -8,6 +8,10 @@ Usage (from the repo root, after a scrape):
 Appends one row per store to history/YYYY-MM.csv:
     date, store_id, units_avail, cheapest_10x10, median_price, listings
 
+Also appends state-by-size demand aggregates to history/sizes-YYYY-MM.csv:
+    date, state, size, listings, units_avail, median_price
+(~600 rows/day — the raw material for size-level demand curves over time.)
+
 (The advertised min-max price "range" is not logged: it is mechanically
 price ±20% for every unit, so it carries no information beyond the price.)
 
@@ -63,6 +67,33 @@ def main():
                         "median_price", "listings"])
         w.writerows(rows)
     print(f"Logged {len(rows)} stores for {date} -> {out}")
+
+    # state-by-size demand aggregates
+    agg = {}
+    seen2 = set()
+    for s in data:
+        sid = str(s.get("store_id", ""))
+        if not sid or sid in seen2:
+            continue
+        seen2.add(sid)
+        st = s.get("state") or ""
+        for u in s.get("units", []):
+            if not (u.get("available") and u.get("price") and u.get("size") and st):
+                continue
+            a = agg.setdefault((st, u["size"]), {"n": 0, "avail": 0, "prices": []})
+            a["n"] += 1
+            a["avail"] += int(u.get("count") or 0)
+            a["prices"].append(u["price"])
+    sout = hist / f"sizes-{date[:7]}.csv"
+    new_file = not sout.exists()
+    with open(sout, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if new_file:
+            w.writerow(["date", "state", "size", "listings", "units_avail", "median_price"])
+        for (st, size), a in sorted(agg.items()):
+            w.writerow([date, st, size, a["n"], a["avail"],
+                        round(statistics.median(a["prices"]), 2)])
+    print(f"Logged {len(agg)} state-size aggregates -> {sout}")
 
 if __name__ == "__main__":
     main()

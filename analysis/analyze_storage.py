@@ -286,6 +286,68 @@ def main():
         "revenue-management system produces.",
         cols, rows, bars_html(rows, 0, 2))
 
+    # ============ 4c. RATINGS vs PRICE ============
+    rated = db.execute("SELECT COUNT(*), ROUND(AVG(rating),2), SUM(reviews) FROM stores WHERE rating IS NOT NULL").fetchone()
+    if rated[0] and rated[0] > 100:
+        cols, rows = q(db, """
+            SELECT CASE WHEN s.rating < 4.0 THEN 'under 4.0'
+                        WHEN s.rating < 4.7 THEN '4.0 - 4.6'
+                        WHEN s.rating < 4.9 THEN '4.7 - 4.8'
+                        ELSE '4.9 - 5.0' END AS rating_band,
+                   COUNT(DISTINCT s.store_id) stores,
+                   ROUND(AVG(u.price),0) avg_10x10,
+                   ROUND(AVG(s.reviews),0) avg_reviews
+            FROM stores s JOIN units u ON u.store_id=s.store_id
+            WHERE s.rating IS NOT NULL AND u.sqft=100 AND u.price IS NOT NULL
+            GROUP BY rating_band ORDER BY MIN(s.rating)""")
+        S["ratings"] = ("Do better-rated stores charge more?",
+            f"Google-style review data from each store page: {rated[0]:,} rated stores, "
+            f"{rated[2]:,.0f} total reviews, {rated[1]} average. The bands compare each rating tier's "
+            "average 10x10 street rate.",
+            cols, rows, "")
+
+        cols, rows = q(db, """
+            SELECT s.address, s.city, s.state, s.rating, s.reviews
+            FROM stores s WHERE s.rating IS NOT NULL AND s.reviews >= 25
+            ORDER BY s.rating ASC LIMIT 10""")
+        S["worst_rated"] = ("Lowest-rated facilities (25+ reviews)",
+            "The bottom of the network by customer rating.", cols, rows, "")
+
+    # ============ 4d. AFFORDABILITY (IRS SOI income join) ============
+    try:
+        import csv as _csv
+        with open("data/zip_income.csv", newline="", encoding="utf-8") as f:
+            zinc = {r["zip"]: float(r["avg_income_per_return"]) for r in _csv.DictReader(f)}
+    except OSError:
+        zinc = {}
+    if zinc:
+        _, srows = q(db, """
+            SELECT s.city, s.state, s.zip, AVG(u.price)
+            FROM stores s JOIN units u ON u.store_id=s.store_id
+            WHERE u.sqft=100 AND u.price IS NOT NULL AND s.zip IS NOT NULL
+            GROUP BY s.store_id""")
+        agg = {}
+        for city, st, z, p in srows:
+            inc = zinc.get(str(z)[:5])
+            if inc and city:
+                a = agg.setdefault((city, st), [0, 0.0, 0.0])
+                a[0] += 1; a[1] += p; a[2] += inc
+        burden = []
+        for (city, st), (n, psum, isum) in agg.items():
+            if n >= 5:
+                price, inc = psum / n, isum / n
+                burden.append((city, st, n, round(price), f"${inc:,.0f}",
+                               round(100 * price / (inc / 12), 1)))
+        burden.sort(key=lambda r: -r[5])
+        cols = ["city", "state", "stores", "avg_10x10", "avg_income_per_return", "pct_of_monthly_income"]
+        nat = [b[5] for b in burden]
+        S["afford"] = ("The storage burden — price vs local income",
+            f"Average 10x10 rate as a share of average monthly income in the store's zip codes "
+            f"(income: IRS SOI 2022, AGI per tax return). Across {len(burden)} cities the median burden "
+            f"is {median(nat):.1f}% of a month's income — but the spread is enormous, and the most "
+            "burdened markets are rarely the richest ones.",
+            cols, burden[:15], "")
+
     # ============ 5. BULK DISCOUNT CURVE ============
     cols, rows = q(db, """
         SELECT size, ROUND(AVG(price/sqft),2) avg_per_sqft, COUNT(*) listings

@@ -15,6 +15,7 @@ A defining goal: the directory lists **every** store with its 5-digit site numbe
 - **Market analysis** — a SQL analysis suite over the dataset: state-by-state 10x10 pricing, price per square foot, in-city price variance, live inventory and scarcity, true promotional move-in cost, store clustering, per-capita saturation, and the vehicle-storage market. Results are published as a self-contained report page.
 - **Time series** — every daily run appends per-store aggregates (advertised availability, cheapest 10x10, median price) to an append-only history log, and regenerates a trends page: national inventory and price charts, the fastest-renting stores, and the biggest price hikes and cuts. History was backfilled from git snapshots of the dataset, so the series starts April 29, 2026.
 - **Pricing-model analysis** — the scraper captures each unit's physical attributes (climate control, floor, drive-up access) and advertised price range from store-page structured data. Pairing same-size units at the same store isolates what each attribute costs, and bucketing prices by remaining inventory exposes the scarcity gradient. One negative result worth reading: the advertised min-max "range" turned out to be mechanically price ±20% on every unit — a disclaimer construct, not a pricing envelope — so it is documented as such rather than tracked. Existing-tenant rate increases (ECRI) are not public and are explicitly out of scope; this models new-customer street rates only.
+- **Derived datasets** — beyond the directory itself, the pipeline maintains: a per-SKU **rate-change event log** (every street-rate move and promo switch, daily), **state-by-size demand aggregates** (size-level availability and pricing over time), a **coming-soon store pipeline** (openings tracker fed by the weekly ID probe), **store review ratings** (from page structured data), and an **affordability join** against IRS income data by zip.
 
 ## Architecture
 
@@ -54,9 +55,11 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 | `analysis/load_storage.py` | Loads the dataset into a normalized SQLite database |
 | `analysis/run_queries.py` | Core analysis query set (run all, or one by number) |
 | `analysis/analyze_storage.py` | Data-quality audit + full analysis + report generator |
-| `analysis/update_history.py` | Appends per-store daily aggregates to `history/YYYY-MM.csv` |
+| `analysis/update_history.py` | Appends per-store daily aggregates + state-size demand aggregates |
+| `analysis/update_rate_log.py` | Appends per-SKU price/promo change events to `history/rate_changes.csv` |
 | `analysis/build_trends.py` | Generates the daily trends page from the history log |
-| `history/` | Append-only time series, one row per store per day |
+| `history/` | Append-only time series: store aggregates, size demand, rate-change events, and the coming-soon store pipeline |
+| `data/zip_income.csv` | IRS SOI 2022 average income per tax return, for the affordability analysis |
 | `legacy/` | One-off Colab scripts used to bootstrap the original dataset |
 | `daily_update.bat`, `setup_task.ps1` | Optional local Windows Task Scheduler alternative to CI |
 

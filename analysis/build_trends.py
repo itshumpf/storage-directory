@@ -13,15 +13,22 @@ import csv
 import datetime
 import html
 import json
+import re
 import statistics
 import sys
 from pathlib import Path
 
 OUT = "trends.html"
 
+# Only the monthly per-store aggregate files (YYYY-MM.csv). Other history
+# files (pipeline.csv, sizes-*.csv, rate_changes.csv) have different schemas.
+MONTH_CSV = re.compile(r"^\d{4}-\d{2}\.csv$")
+
 def load_history():
     snaps = {}  # date -> {sid: dict}
     for p in sorted(Path("history").glob("*.csv")):
+        if not MONTH_CSV.match(p.name):
+            continue
         with open(p, newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 d = row["date"]
