@@ -4,10 +4,17 @@ load_storage.py — Load the FindStorage location dataset into SQLite.
 Usage (from the repo root):
     python analysis/load_storage.py enriched_locations.json
 
-Creates storage.db with two tables:
+Creates storage.db with the current snapshot:
     stores(store_id, name, address, city, state, zip, lat, lng, phone)
     units(store_id, size, width, length, sqft, price, promo_name, promo2,
           available, unit_count, attrs, price_min, price_max)
+
+plus the accumulated time series (loaded from history/*.csv), so temporal
+questions are plain SQL instead of CSV munging:
+    store_daily(date, store_id, units_avail, cheapest_10x10, median_price, listings)
+    state_size_daily(date, state, size, listings, units_avail, median_price)
+    rate_events(date, store_id, site_number, size, sku, field, old, new)
+    pipeline(store_id, url, city, state, first_seen, opened)
 
 attrs is the unit's physical description (climate control, floor, access);
 price_min/price_max is the advertised range the revenue-management system
@@ -134,9 +141,67 @@ def main():
             n_units += 1
 
     db.commit()
+
+    # ---- time-series tables from history/ ----
+    import csv
+    import re as _re
+    db.executescript("""
+        DROP TABLE IF EXISTS store_daily;
+        DROP TABLE IF EXISTS state_size_daily;
+        DROP TABLE IF EXISTS rate_events;
+        DROP TABLE IF EXISTS pipeline;
+        CREATE TABLE store_daily (date TEXT, store_id TEXT, units_avail INTEGER,
+            cheapest_10x10 REAL, median_price REAL, listings INTEGER);
+        CREATE TABLE state_size_daily (date TEXT, state TEXT, size TEXT,
+            listings INTEGER, units_avail INTEGER, median_price REAL);
+        CREATE TABLE rate_events (date TEXT, store_id TEXT, site_number TEXT,
+            size TEXT, sku TEXT, field TEXT, old TEXT, new TEXT);
+        CREATE TABLE pipeline (store_id TEXT, url TEXT, city TEXT, state TEXT,
+            first_seen TEXT, opened TEXT);
+        CREATE INDEX idx_sd_date ON store_daily(date);
+        CREATE INDEX idx_sd_store ON store_daily(store_id);
+        CREATE INDEX idx_re_date ON rate_events(date);
+    """)
+    hist = Path("history")
+    n_hist = {"store_daily": 0, "state_size_daily": 0, "rate_events": 0, "pipeline": 0}
+    if hist.is_dir():
+        def rows(p):
+            with open(p, newline="", encoding="utf-8") as f:
+                yield from csv.DictReader(f)
+        for p in sorted(hist.glob("*.csv")):
+            if _re.match(r"^\d{4}-\d{2}\.csv$", p.name):
+                for r in rows(p):
+                    db.execute("INSERT INTO store_daily VALUES (?,?,?,?,?,?)",
+                               (r["date"], r["store_id"], int(r["units_avail"] or 0),
+                                float(r["cheapest_10x10"]) if r["cheapest_10x10"] else None,
+                                float(r["median_price"]) if r["median_price"] else None,
+                                int(r["listings"] or 0)))
+                    n_hist["store_daily"] += 1
+            elif p.name.startswith("sizes-"):
+                for r in rows(p):
+                    db.execute("INSERT INTO state_size_daily VALUES (?,?,?,?,?,?)",
+                               (r["date"], r["state"], r["size"], int(r["listings"] or 0),
+                                int(r["units_avail"] or 0),
+                                float(r["median_price"]) if r["median_price"] else None))
+                    n_hist["state_size_daily"] += 1
+            elif p.name == "rate_changes.csv":
+                for r in rows(p):
+                    db.execute("INSERT INTO rate_events VALUES (?,?,?,?,?,?,?,?)",
+                               (r["date"], r["store_id"], r["site_number"], r["size"],
+                                r["sku"], r["field"], r["old"], r["new"]))
+                    n_hist["rate_events"] += 1
+            elif p.name == "pipeline.csv":
+                for r in rows(p):
+                    db.execute("INSERT INTO pipeline VALUES (?,?,?,?,?,?)",
+                               (r["store_id"], r["url"], r["city"], r["state"],
+                                r["first_seen"], r["opened"]))
+                    n_hist["pipeline"] += 1
+        db.commit()
+
     stores = db.execute("SELECT COUNT(*) FROM stores").fetchone()[0]
     priced = db.execute("SELECT COUNT(*) FROM units WHERE price IS NOT NULL").fetchone()[0]
     print(f"Done: {stores} stores, {n_units} unit listings ({priced} with prices) -> storage.db")
+    print("History: " + ", ".join(f"{v:,} {k}" for k, v in n_hist.items()))
     print("\nNext: python analysis/run_queries.py")
 
 if __name__ == "__main__":

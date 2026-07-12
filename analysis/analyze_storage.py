@@ -14,9 +14,18 @@ Does three things:
      the directory. Pure stdlib, no dependencies.
 """
 import sqlite3, html, datetime, math, sys
+import viz
 
 DB = "storage.db"
 OUT = "insights.html"
+
+def pctile(vals, p):
+    """Linear-interpolated percentile of a sorted list."""
+    if not vals:
+        return None
+    k = (len(vals) - 1) * p / 100
+    f = math.floor(k)
+    return vals[f] + (vals[min(f + 1, len(vals) - 1)] - vals[f]) * (k - f)
 
 # 2024 state population estimates, millions (US Census Bureau)
 STATE_POP = {
@@ -117,6 +126,23 @@ def main():
     med_rows = db.execute("SELECT price FROM units WHERE sqft=100 AND price IS NOT NULL").fetchall()
     kpi["median_10x10"] = median([r[0] for r in med_rows])
 
+    # ============ 0. THE SHAPE OF THE MARKET (distribution) ============
+    tens = sorted(r[0] for r in db.execute(
+        "SELECT price FROM units WHERE sqft=100 AND price IS NOT NULL"))
+    if tens:
+        mean10 = sum(tens) / len(tens)
+        p10, p25, p50, p75, p90 = (pctile(tens, p) for p in (10, 25, 50, 75, 90))
+        fig = "<div class='fig'>" + viz.histogram(
+            tens, 20, markers={"P10": p10, "median": p50, "P90": p90}) + "</div>"
+        S["dist"] = ("The shape of the market — what a 10x10 costs in America",
+            f"Every 10x10 listing in the network ({len(tens):,} units), binned at $20. The "
+            f"distribution is strongly right-skewed: mean ${mean10:,.0f} sits well above the median "
+            f"${p50:,.0f} because a long expensive tail (P90 ${p90:,.0f}) pulls it up. Half of all "
+            f"units rent between ${p25:,.0f} and ${p75:,.0f} (the interquartile range); a renter at "
+            f"P10 pays ${p10:,.0f}. Averages flatter the expensive coasts — the median is the honest "
+            "middle of this market.",
+            [], [], fig)
+
     # ============ 1. LIVE INVENTORY & SCARCITY ============
     cols, rows = q(db, """
         SELECT s.city, s.state, SUM(u.unit_count) units_available, COUNT(DISTINCT s.store_id) stores
@@ -169,31 +195,58 @@ def main():
         "listed with their site numbers.",
         cols, rows, "")
 
-    # ============ 2. STATE PRICING (10x10) ============
-    cols, rows = q(db, """
-        SELECT s.state, COUNT(*) listings, ROUND(AVG(u.price),0) avg_10x10,
-               MIN(u.price) cheapest, MAX(u.price) priciest
-        FROM units u JOIN stores s ON s.store_id=u.store_id
-        WHERE u.sqft=100 AND u.price IS NOT NULL AND s.state IS NOT NULL
-        GROUP BY s.state HAVING COUNT(*)>=10 ORDER BY avg_10x10 DESC""")
-    S["state"] = ("What a 10x10 costs, by state",
-        "Average advertised monthly rate for a standard 10x10 unit. Coastal and dense metros predictably "
-        "top the chart — the interesting part is the spread between neighbors.",
-        cols, rows, bars_html(rows, 0, 2))
+    # ============ 2. STATE PRICING — indexed to national (10x10) ============
+    by_state = {}
+    for st, p in db.execute("""
+        SELECT s.state, u.price FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE u.sqft=100 AND u.price IS NOT NULL AND s.state IS NOT NULL"""):
+        by_state.setdefault(st, []).append(p)
+    nat_med = pctile(tens, 50) if tens else 1
+    st_rows = []
+    for st, prices in by_state.items():
+        if len(prices) < 10:
+            continue
+        prices.sort()
+        med = pctile(prices, 50)
+        st_rows.append((st, len(prices), round(med),
+                        round(pctile(prices, 25)), round(pctile(prices, 75)),
+                        round(100 * med / nat_med)))
+    st_rows.sort(key=lambda r: -r[5])
+    idx = [(r[0], r[5] - 100) for r in st_rows]
+    div = ("<div class='fig'>" +
+           viz.diverging(idx[:10] + idx[-10:], fmt="{:+.0f}", suffix="") + "</div>")
+    S["state"] = ("The state price index — a 10x10 vs the national median",
+        f"Each state's median 10x10, indexed so the national median (${nat_med:,.0f}) = 100. The "
+        "chart shows the ten states furthest above and below that line: 0 means 'exactly national'; "
+        "+80 means renters pay 80% over the national median. Medians and quartiles are used instead "
+        "of averages so a few extreme facilities can't move a state. The absolute level of a state is "
+        "mostly geography — the index makes the relative premium comparable at a glance.",
+        ["state", "listings", "median_10x10", "p25", "p75", "index_vs_national"],
+        st_rows, div)
 
-    # ============ 3. LOCAL PRICE VARIANCE ============
-    cols, rows = q(db, """
-        SELECT s.city, s.state, MIN(u.price) low, MAX(u.price) high,
-               MAX(u.price)-MIN(u.price) spread, COUNT(*) listings
-        FROM units u JOIN stores s ON s.store_id=u.store_id
-        WHERE u.sqft=100 AND u.price IS NOT NULL AND s.city IS NOT NULL
-        GROUP BY s.city, s.state HAVING COUNT(*)>=8
-        ORDER BY spread DESC LIMIT 15""")
-    S["variance"] = ("Local price variance — same unit, same city, wildly different price",
-        "The gap between the cheapest and priciest 10x10 within a single city. In the top cities, "
-        "picking the right facility saves renters serious money for an identical unit — and it shows "
-        "how loosely rates track location within a metro.",
-        cols, rows, bars_html(rows, 0, 4))
+    # ============ 3. LOCAL DISPERSION (coefficient of variation) ============
+    by_city = {}
+    for city, st, p in db.execute("""
+        SELECT s.city, s.state, u.price FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE u.sqft=100 AND u.price IS NOT NULL AND s.city IS NOT NULL"""):
+        by_city.setdefault((city, st), []).append(p)
+    cv_rows = []
+    for (city, st), prices in by_city.items():
+        if len(prices) < 8:
+            continue
+        m = sum(prices) / len(prices)
+        sd = math.sqrt(sum((p - m) ** 2 for p in prices) / (len(prices) - 1))
+        cv_rows.append((city, st, len(prices), round(min(prices)), round(max(prices)),
+                        round(max(prices) - min(prices)), round(100 * sd / m, 1)))
+    cv_rows.sort(key=lambda r: -r[6])
+    S["variance"] = ("Price chaos — cities where the same unit has wildly different prices",
+        "Coefficient of variation (standard deviation as % of the mean) of 10x10 rates within one "
+        "city — a scale-free chaos score, so a $60 market and a $300 market compare fairly. In the "
+        "top cities the spread between cheapest and priciest facility is severalfold for an identical "
+        "unit: picking the right building matters more than picking the right city. High CV marks "
+        "markets where revenue management is working hardest — or where renters shop least.",
+        ["city", "state", "listings", "low", "high", "spread", "cv_pct"],
+        cv_rows[:15], bars_html(cv_rows, 0, 6, prefix="", limit=12))
 
     # ============ 4. PROMO DECODER & TRUE MOVE-IN COST ============
     cols, rows = q(db, f"""
@@ -300,10 +353,40 @@ def main():
             FROM stores s JOIN units u ON u.store_id=s.store_id
             WHERE s.rating IS NOT NULL AND u.sqft=100 AND u.price IS NOT NULL
             GROUP BY rating_band ORDER BY MIN(s.rating)""")
+        # Spearman rho of rating vs price RELATIVE to the store's own metro —
+        # raw rating-vs-price mostly re-measures geography; this doesn't.
+        store10 = {}
+        for sid, city, st, p in db.execute("""
+            SELECT s.store_id, s.city, s.state, MIN(u.price)
+            FROM stores s JOIN units u ON u.store_id=s.store_id
+            WHERE u.sqft=100 AND u.price IS NOT NULL AND s.city IS NOT NULL
+            GROUP BY s.store_id"""):
+            store10[sid] = (city, st, p)
+        metro10 = {}
+        for city, st, p in store10.values():
+            metro10.setdefault((city, st), []).append(p)
+        metro_med = {k: median(v) for k, v in metro10.items() if len(v) >= 5}
+        pairs = []
+        for sid, rating in db.execute("SELECT store_id, rating FROM stores WHERE rating IS NOT NULL"):
+            rec = store10.get(sid)
+            if rec and (rec[0], rec[1]) in metro_med:
+                pairs.append((rating, rec[2] / metro_med[(rec[0], rec[1])]))
+        sp = viz.spearman(pairs)
+        rho_note = ""
+        if sp:
+            rho, n_sp = sp
+            strength = ("essentially no" if abs(rho) < 0.05 else
+                        "a weak" if abs(rho) < 0.2 else
+                        "a moderate" if abs(rho) < 0.4 else "a strong")
+            rho_note = (f" Controlling for location — each store's 10x10 compared with its own metro's "
+                        f"median — Spearman ρ = {rho:+.2f} (n = {n_sp:,} stores): {strength} "
+                        f"{'positive' if rho > 0 else 'negative'} link between customer rating and "
+                        "charging above the local market. Raw rating-vs-price comparisons mostly "
+                        "re-measure geography; this one doesn't.")
         S["ratings"] = ("Do better-rated stores charge more?",
             f"Google-style review data from each store page: {rated[0]:,} rated stores, "
             f"{rated[2]:,.0f} total reviews, {rated[1]} average. The bands compare each rating tier's "
-            "average 10x10 street rate.",
+            "average 10x10 street rate." + rho_note,
             cols, rows, "")
 
         cols, rows = q(db, """
@@ -347,6 +430,29 @@ def main():
             f"is {median(nat):.1f}% of a month's income — but the spread is enormous, and the most "
             "burdened markets are rarely the richest ones.",
             cols, burden[:15], "")
+
+        # ---- 4e. income elasticity of storage (log-log OLS across metros) ----
+        pts = [(isum / n, psum / n, f"{city}, {st} · {n} stores")
+               for (city, st), (n, psum, isum) in agg.items() if n >= 5]
+        ll = viz.ols([(math.log(x), math.log(y)) for x, y, _ in pts])
+        if ll:
+            b_el, a_el, r2, n_el = ll
+            xs_ = sorted(x for x, _, _ in pts)
+            curve = [(x, math.exp(a_el) * x ** b_el) for x in xs_]
+            fig = ("<div class='fig'>" + viz.scatter(
+                [(x / 1000, y, f"{t}: ${y:,.0f} · ${x/1000:,.0f}k income") for x, y, t in pts],
+                fit_pts=[(x / 1000, y) for x, y in curve],
+                x_fmt="${:,.0f}k", y_fmt="${:,.0f}",
+                annot=f"elasticity β = {b_el:.2f} · R² = {r2:.2f} · n = {n_el} metros") + "</div>")
+            S["elasticity"] = ("The income elasticity of storage",
+                f"Each dot is a metro (5+ stores): average 10x10 rate against average income per tax "
+                f"return in its zip codes, with a power-law fit (OLS on logs). The elasticity is "
+                f"{b_el:.2f} — when a market is 10% richer, storage advertises about {10*b_el:.1f}% "
+                f"higher — and income alone explains {100*r2:.0f}% of the metro-to-metro price "
+                "variation. Storage is a normal good priced to the neighborhood, but the unexplained "
+                f"{100*(1-r2):.0f}% is where the interesting markets hide: land cost, supply, and "
+                "how hard the local revenue-management dial is being turned.",
+                [], [], fig)
 
     # ============ 5. BULK DISCOUNT CURVE ============
     cols, rows = q(db, """
@@ -528,10 +634,11 @@ tr:hover td{{background:var(--card)}}
 .bars{{margin:14px 0 20px}}
 .bar-row{{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:.85rem}}
 .bar-label{{flex:0 0 130px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}}
-.bar-track{{flex:1;height:16px;background:var(--bar);border-radius:3px;overflow:hidden}}
-.bar-fill{{display:block;height:100%;background:var(--acc)}}
+.bar-track{{flex:1;height:14px;background:var(--bar);border-radius:0 4px 4px 0}}
+.bar-fill{{display:block;height:100%;background:var(--acc);border-radius:0 4px 4px 0}}
 .bar-val{{flex:0 0 70px;color:var(--txt)}}
 .empty{{color:var(--dim);font-style:italic}}
+{viz.CSS}
 footer{{padding:34px 0 50px;color:var(--dim);font-size:.85rem}}
 footer a{{color:var(--acc);text-decoration:none}}
 @media(max-width:600px){{.bar-label{{flex-basis:90px}}table{{font-size:.78rem}}td,th{{padding:6px}}}}

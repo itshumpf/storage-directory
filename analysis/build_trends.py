@@ -1,13 +1,22 @@
 """
-build_trends.py — Generate trends.html from the daily history log.
+build_trends.py — Generate trends.html from the daily history logs.
 
-Run after update_history.py (from the repo root):
+Run after update_history.py + update_rate_log.py (from the repo root):
     python analysis/build_trends.py
 
-Reads history/*.csv and the current enriched_locations.json, then writes a
-daily-changing report: national inventory and price trend charts, the
-fastest-renting stores, restocks, the biggest price hikes and cuts, and
-tracking-coverage changes. Pure stdlib.
+Reads history/*.csv (per-store snapshots), history/rate_changes.csv (per-SKU
+repricing events) and the current enriched_locations.json, then writes the
+daily trends report:
+
+  · yesterday's repricing (hikes vs cuts, magnitudes, promo switches)
+  · net repricing pressure by unit size
+  · a chain-linked national price index (robust to coverage changes:
+    each day-over-day link uses only stores present in both snapshots)
+  · mavericks — stores moving against their own metro
+  · momentum streaks (auto-unlocks once enough consecutive snapshots exist)
+  · fastest-renting stores, restocks, biggest 10x10 moves, coverage
+
+Pure stdlib. Charts come from viz.py (validated palette, see that file).
 """
 import csv
 import datetime
@@ -18,11 +27,11 @@ import statistics
 import sys
 from pathlib import Path
 
-OUT = "trends.html"
+import viz
 
-# Only the monthly per-store aggregate files (YYYY-MM.csv). Other history
-# files (pipeline.csv, sizes-*.csv, rate_changes.csv) have different schemas.
+OUT = "trends.html"
 MONTH_CSV = re.compile(r"^\d{4}-\d{2}\.csv$")
+MAX_LINK_GAP = 3  # days; snapshot pairs further apart than this break streaks
 
 def load_history():
     snaps = {}  # date -> {sid: dict}
@@ -39,29 +48,46 @@ def load_history():
                 }
     return dict(sorted(snaps.items()))
 
-def svg_line(series, fmt="{:,.0f}", prefix=""):
-    """series: [(date, value)] -> responsive SVG line chart."""
-    if not series:
-        return "<p class='empty'>No data yet.</p>"
-    W, H, PAD = 760, 170, 34
-    vals = [v for _, v in series]
-    lo, hi = min(vals), max(vals)
-    span = (hi - lo) or 1
-    n = len(series)
-    def x(i): return PAD + (W - 2 * PAD) * (i / max(n - 1, 1))
-    def y(v): return H - PAD - (H - 2 * PAD) * ((v - lo) / span)
-    pts = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, (_, v) in enumerate(series))
-    dots = "".join(f"<circle cx='{x(i):.1f}' cy='{y(v):.1f}' r='3.5' fill='#f0a44b'/>"
-                   for i, (_, v) in enumerate(series))
-    first_d, last_d = series[0][0], series[-1][0]
-    return f"""<svg viewBox="0 0 {W} {H}" role="img" style="width:100%;height:auto">
-<line x1="{PAD}" y1="{H-PAD}" x2="{W-PAD}" y2="{H-PAD}" stroke="#232c35"/>
-<polyline points="{pts}" fill="none" stroke="#f0a44b" stroke-width="2.5"/>{dots}
-<text x="{PAD}" y="16" fill="#8fa0af" font-size="12">{prefix}{fmt.format(hi)}</text>
-<text x="{PAD}" y="{H-PAD+16}" fill="#8fa0af" font-size="12">{first_d}</text>
-<text x="{W-PAD}" y="{H-PAD+16}" fill="#8fa0af" font-size="12" text-anchor="end">{last_d}</text>
-<text x="{PAD}" y="{H-PAD-6}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(lo)}</text>
-</svg>"""
+def load_rate_events():
+    """date -> {'hikes': [pct..], 'cuts': [pct..], 'promo': n, 'by_size': {}}"""
+    p = Path("history/rate_changes.csv")
+    days = {}
+    if not p.exists():
+        return days
+    with open(p, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            d = days.setdefault(r["date"], {"hikes": [], "cuts": [], "promo": 0,
+                                            "by_size": {}})
+            if r["field"] == "promo":
+                d["promo"] += 1
+                continue
+            try:
+                old, new = float(r["old"]), float(r["new"])
+            except ValueError:
+                continue
+            if not old:
+                continue
+            pct = 100.0 * (new - old) / old
+            (d["hikes"] if pct > 0 else d["cuts"]).append(pct)
+            d["by_size"].setdefault(r["size"] or "?", []).append(pct)
+    return dict(sorted(days.items()))
+
+def gap_days(d1, d2):
+    return (datetime.date.fromisoformat(d2) - datetime.date.fromisoformat(d1)).days
+
+def chained_index(snaps, key):
+    """Chain-linked index (first date = 100). Each link is the median ratio
+    across stores present in BOTH snapshots, so coverage growth can't move it."""
+    dates = list(snaps)
+    series, idx = [(dates[0], 100.0)], 100.0
+    for d1, d2 in zip(dates, dates[1:]):
+        a, b = snaps[d1], snaps[d2]
+        ratios = [b[s][key] / a[s][key] for s in set(a) & set(b)
+                  if a[s][key] and b[s][key]]
+        if ratios:
+            idx *= statistics.median(ratios)
+        series.append((d2, round(idx, 2)))
+    return series
 
 def table(cols, rows, limit=15):
     if not rows:
@@ -75,73 +101,203 @@ def main():
     snaps = load_history()
     if not snaps:
         sys.exit("No history found — run analysis/update_history.py first.")
+    events = load_rate_events()
     dates = list(snaps)
     latest = dates[-1]
-
-    # baseline: most recent snapshot at least 7 days older than latest, else oldest
     lat_d = datetime.date.fromisoformat(latest)
-    base = next((d for d in reversed(dates[:-1])
-                 if (lat_d - datetime.date.fromisoformat(d)).days >= 7), dates[0] if len(dates) > 1 else None)
 
     meta = {}
     for s in json.loads(Path("enriched_locations.json").read_text(encoding="utf-8")):
         meta[str(s["store_id"])] = (s.get("site_number") or "?", s.get("address") or "",
                                     s.get("city") or "", s.get("state") or "")
 
-    # national series
-    units_series, price_series = [], []
-    for d, stores in snaps.items():
-        units_series.append((d, sum(v["units"] for v in stores.values())))
-        tens = [v["ten"] for v in stores.values() if v["ten"]]
-        if tens:
-            price_series.append((d, statistics.median(tens)))
+    # ---------------- rate-event analytics (the daily heartbeat) ----------------
+    ev_secs = ""
+    kpi_extra = ""
+    if events:
+        ed = list(events)[-1]                       # latest event date
+        e = events[ed]
+        n_re = len(e["hikes"]) + len(e["cuts"])
+        med_h = statistics.median(e["hikes"]) if e["hikes"] else 0
+        med_c = statistics.median(e["cuts"]) if e["cuts"] else 0
+        kpi_extra = (
+            f"<div class='kpi'><div class='n'>{n_re:,}</div><div class='l'>units repriced ({ed})</div></div>"
+            f"<div class='kpi'><div class='n'>{len(e['hikes']):,} <span class='d up'>↑</span> "
+            f"{len(e['cuts']):,} <span class='d down'>↓</span></div><div class='l'>hikes vs cuts</div></div>")
 
-    movers = hikes = cuts = restock = []
+        # 2 series: cuts (down) = blue slot 1; hikes (up) wear the diverging red
+        day_series = [("cuts", [(d, len(v["cuts"])) for d, v in events.items()]),
+                      ("hikes", [(d, len(v["hikes"])) for d, v in events.items()])]
+        chart = viz.multiline(day_series, fmt="{:,.0f}").replace(viz.SERIES[1], viz.POS)
+
+        ev_secs += f"""
+<section><h2>The daily repricing pulse</h2>
+<p class='note'>Every street-rate move the network made, caught by diffing consecutive daily
+scrapes SKU by SKU. On {html.escape(ed)}: {n_re:,} units repriced — {len(e['hikes']):,} hikes
+(median {med_h:+.1f}%) against {len(e['cuts']):,} cuts (median {med_c:+.1f}%), plus
+{e['promo']:,} promotion switches. Cuts outnumber hikes but hikes run steeper — the signature
+of algorithmic yield management: trim soft inventory broadly, squeeze scarce units hard.
+This series gets a point every scrape day.</p>
+<div class='fig'>{chart}</div></section>"""
+
+        sizes = {}
+        for v in events.values():
+            for sz, pcts in v["by_size"].items():
+                sizes.setdefault(sz, []).extend(pcts)
+        sz_rows = [(sz, round(statistics.median(p), 1)) for sz, p in sizes.items()
+                   if len(p) >= 30 and re.match(r"^\d+x\d+$", sz)]
+        sz_rows.sort(key=lambda r: r[1])
+        if sz_rows:
+            ev_secs += f"""
+<section><h2>Repricing pressure by unit size</h2>
+<p class='note'>Median percentage move among repriced units of each size (sizes with 30+
+events, all days pooled). Where the bar points down, the network is discounting that size;
+up, it's squeezing. Watch small units drift up when demand tightens — they're the scarcest
+inventory.</p>
+<div class='fig'>{viz.diverging(sz_rows, fmt="{:+.1f}", suffix="%")}</div></section>"""
+
+    # ---------------- chained national price index ----------------
+    idx10 = chained_index(snaps, "ten")
+    idxmed = chained_index(snaps, "med")
+    long_links = sum(1 for d1, d2 in zip(dates, dates[1:]) if gap_days(d1, d2) > MAX_LINK_GAP)
+    idx_note = ""
+    if long_links:
+        idx_note = (f" {long_links} link{'s' if long_links > 1 else ''} in this chain spans a "
+                    "multi-week gap in the record (the pipeline wasn't running daily yet) — "
+                    "treat the early segment as two endpoints, not a path.")
+    index_chart = viz.multiline([("cheapest 10x10", idx10), ("store median", idxmed)],
+                                fmt="{:,.1f}")
+
+    # ---------------- divergence: stores vs their metro ----------------
+    div_rows, div_period = [], ""
+    if len(dates) >= 2:
+        d1, d2 = dates[-2], dates[-1]
+        div_period = f"{d1} → {d2}"
+        a, b = snaps[d1], snaps[d2]
+        changes = {}
+        for sid in set(a) & set(b):
+            if a[sid]["med"] and b[sid]["med"]:
+                changes[sid] = 100.0 * (b[sid]["med"] / a[sid]["med"] - 1)
+        metro_ch = {}
+        for sid, ch in changes.items():
+            m = meta.get(sid)
+            if m and m[2]:
+                metro_ch.setdefault((m[2], m[3]), []).append(ch)
+        metro_med = {k: statistics.median(v) for k, v in metro_ch.items() if len(v) >= 5}
+        for sid, ch in changes.items():
+            m = meta.get(sid)
+            key = (m[2], m[3]) if m else None
+            if key in metro_med:
+                div_rows.append((f"#{m[0]}", m[1], m[2], m[3],
+                                 f"{ch:+.1f}%", f"{metro_med[key]:+.1f}%",
+                                 ch - metro_med[key]))
+        div_rows.sort(key=lambda r: -abs(r[6]))
+        div_rows = [r[:6] + (f"{r[6]:+.1f}pp",) for r in div_rows if abs(r[6]) >= 1][:12]
+
+    # ---------------- momentum streaks (unlocks with consecutive days) ----------------
+    pair_ok = [gap_days(d1, d2) <= MAX_LINK_GAP for d1, d2 in zip(dates, dates[1:])]
+    run = best_run = 0
+    for ok in pair_ok:
+        run = run + 1 if ok else 0
+        best_run = max(best_run, run)
+    streak_rows = []
+    if best_run >= 2:
+        for sid in snaps[latest]:
+            streak, direction, start = 0, 0, None
+            for i, ((d1, d2), ok) in enumerate(zip(zip(dates, dates[1:]), pair_ok)):
+                s1, s2 = snaps[d1].get(sid), snaps[d2].get(sid)
+                if not ok or not s1 or not s2 or not s1["med"] or not s2["med"] or s1["med"] == s2["med"]:
+                    streak, direction, start = 0, 0, None
+                    continue
+                sgn = 1 if s2["med"] > s1["med"] else -1
+                if sgn == direction:
+                    streak += 1
+                else:
+                    streak, start = 1, d1
+                direction = sgn
+            if streak >= 2 and start:
+                m = meta.get(sid, ("?", "", "", ""))
+                total = 100.0 * (snaps[latest][sid]["med"] / snaps[start][sid]["med"] - 1)
+                streak_rows.append((f"#{m[0]}", m[1], m[2], m[3],
+                                    f"{streak} moves {'↑' if direction > 0 else '↓'}",
+                                    f"{total:+.1f}%"))
+        streak_rows.sort(key=lambda r: (-int(r[4].split()[0]), r[3]))
+        momentum_html = table(["site #", "address", "city", "state", "streak", "total move"],
+                              streak_rows[:12])
+        momentum_note = ("Stores whose median price moved the same direction on consecutive "
+                         "scrape days. Persistence separates deliberate repricing from daily "
+                         "algorithmic wobble.")
+    else:
+        have = best_run + 1
+        momentum_html = (f"<div class='unlock'>🔒 Unlocks at 3 consecutive daily snapshots — "
+                         f"{have} banked so far. The daily pipeline fills this in automatically; "
+                         "streaks of same-direction price moves will appear here.</div>")
+        momentum_note = ("The section that needs a streak of its own: day-over-day persistence "
+                         "can't be computed until several uninterrupted daily snapshots exist.")
+
+    # ---------------- movers / hikes / cuts / coverage (period tables) ----------------
+    base = next((d for d in reversed(dates[:-1])
+                 if (lat_d - datetime.date.fromisoformat(d)).days >= 7), dates[0] if len(dates) > 1 else None)
+    movers = restock = hikes = cuts = []
     added = removed = []
     period = ""
     if base:
         b, l = snaps[base], snaps[latest]
-        days = (lat_d - datetime.date.fromisoformat(base)).days
-        period = f"{base} → {latest} ({days} days)"
+        period = f"{base} → {latest} ({gap_days(base, latest)} days)"
         common = set(b) & set(l)
-        deltas = []
-        for sid in common:
-            du = b[sid]["units"] - l[sid]["units"]  # positive = units rented away
-            deltas.append((sid, b[sid], l[sid], du))
-        def row(sid, bv, lv, val):
+        def row(sid, val):
             m = meta.get(sid, ("?", "", "", ""))
             return (f"#{m[0]}", m[1], m[2], m[3], val)
-        movers = [row(s, b_, l_, f"{b_['units']} → {l_['units']}  (−{d})")
-                  for s, b_, l_, d in sorted(deltas, key=lambda t: -t[3]) if d > 0][:15]
-        restock = [row(s, b_, l_, f"{b_['units']} → {l_['units']}  (+{-d})")
-                   for s, b_, l_, d in sorted(deltas, key=lambda t: t[3]) if d < 0][:10]
+        deltas = sorted(((sid, b[sid]["units"] - l[sid]["units"]) for sid in common),
+                        key=lambda t: -t[1])
+        movers = [row(s, f"{b[s]['units']} → {l[s]['units']}  (−{d})") for s, d in deltas if d > 0][:15]
+        restock = [row(s, f"{b[s]['units']} → {l[s]['units']}  (+{-d})")
+                   for s, d in sorted(deltas, key=lambda t: t[1]) if d < 0][:10]
         pdeltas = [(s, b[s]["ten"], l[s]["ten"], l[s]["ten"] - b[s]["ten"])
                    for s in common if b[s]["ten"] and l[s]["ten"] and l[s]["ten"] != b[s]["ten"]]
-        hikes = [row(s, None, None, f"${o:,.0f} → ${n:,.0f}  (+${d:,.0f})")
+        hikes = [row(s, f"${o:,.0f} → ${n:,.0f}  (+${d:,.0f})")
                  for s, o, n, d in sorted(pdeltas, key=lambda t: -t[3]) if d > 0][:10]
-        cuts = [row(s, None, None, f"${o:,.0f} → ${n:,.0f}  (−${-d:,.0f})")
+        cuts = [row(s, f"${o:,.0f} → ${n:,.0f}  (−${-d:,.0f})")
                 for s, o, n, d in sorted(pdeltas, key=lambda t: t[3]) if d < 0][:10]
         added = sorted(set(l) - set(b), key=int)
         removed = sorted(set(b) - set(l), key=int)
 
+    units_series = [(d, sum(v["units"] for v in s.values())) for d, s in snaps.items()]
+
     mover_cols = ["site #", "address", "city", "state", "available units"]
     price_cols = ["site #", "address", "city", "state", "cheapest 10x10"]
+    div_cols = ["site #", "address", "city", "state", "store Δ", "metro Δ", "divergence"]
 
     today = datetime.date.today().strftime("%B %d, %Y")
     total_now = units_series[-1][1]
-    med_now = price_series[-1][1] if price_series else 0
+    tens_now = [v["ten"] for v in snaps[latest].values() if v["ten"]]
+    med_now = statistics.median(tens_now) if tens_now else 0
 
-    sections = f"""
+    sections = ev_secs + f"""
+<section><h2>The national price index</h2>
+<p class='note'>Advertised price level indexed to the first snapshot = 100. Each day-over-day
+link uses only stores present in both snapshots (median ratio), so the index measures price
+movement — not the tracker's own coverage growing from 3,092 to {len(snaps[latest]):,}
+stores.{html.escape(idx_note)}</p>
+<div class='fig'>{index_chart}</div></section>
+
 <section><h2>National advertised inventory</h2>
-<p class='note'>Total units marked rentable across the network, per snapshot. Counts are what the
-website advertises — revenue management holds back part of the physically vacant inventory, so a
-store with several hundred empty units may advertise far fewer. Trends here track marketed
-availability, which moves with real demand.</p>
-{svg_line(units_series)}</section>
+<p class='note'>Total units marked rentable across the network, per snapshot. Counts are what
+the website advertises — revenue management holds back part of the physically vacant
+inventory. This is the raw total, so coverage growth shows up in it; the price index above is
+the coverage-corrected series.</p>
+<div class='fig'>{viz.multiline([("units available", units_series)], fmt="{:,.0f}")}</div></section>
 
-<section><h2>National median 10x10 price</h2>
-<p class='note'>Median of each store's cheapest available 10x10, per snapshot.</p>
-{svg_line(price_series, fmt="{:,.0f}", prefix="$")}</section>
+<section><h2>Mavericks — stores moving against their market</h2>
+<p class='note'>Stores whose median price moved differently from their own metro's median move
+({html.escape(div_period)}, metros with 5+ tracked stores, divergence ≥ 1 percentage point).
+A store hiking while its market cuts is the most information-dense row in this dataset:
+something changed at that address.</p>
+{table(div_cols, div_rows, 12)}</section>
+
+<section><h2>Momentum — multi-day repricing streaks</h2>
+<p class='note'>{momentum_note}</p>
+{momentum_html}</section>
 
 <section><h2>Renting the fastest</h2>
 <p class='note'>Biggest drop in advertised available units over the period {html.escape(period)}.
@@ -170,7 +326,7 @@ the baseline stabilizes.</p></section>
     page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daily Trends — FindStorage</title>
-<meta name="description" content="Daily-updated self-storage trends: national inventory, median pricing, fastest-renting stores, and the biggest price moves.">
+<meta name="description" content="Daily-updated self-storage trends: every price move in the network, a chain-linked price index, repricing pressure by size, and stores moving against their market.">
 <style>
 :root{{--bg:#101418;--card:#161c22;--line:#232c35;--txt:#e8edf2;--dim:#8fa0af;--acc:#f0a44b}}
 *{{margin:0;padding:0;box-sizing:border-box}}
@@ -196,6 +352,7 @@ tr:hover td{{background:var(--card)}}
 .empty{{color:var(--dim);font-style:italic}}
 footer{{padding:34px 0 50px;color:var(--dim);font-size:.85rem}}
 footer a{{color:var(--acc);text-decoration:none}}
+{viz.CSS}
 @media(max-width:600px){{table{{font-size:.75rem}}td,th{{padding:6px}}}}
 </style></head><body>
 <header><div class="wrap">
@@ -206,6 +363,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 <div class="kpi"><div class="n">{total_now:,}</div><div class="l">units available now</div></div>
 <div class="kpi"><div class="n">${med_now:,.0f}</div><div class="l">median 10x10 / mo</div></div>
 <div class="kpi"><div class="n">{len(snaps[latest]):,}</div><div class="l">stores tracked</div></div>
+{kpi_extra}
 </div></div></header>
 <main class="wrap">{sections}</main>
 <footer><div class="wrap">History begins April 29, 2026; snapshots accumulate daily. Part of
@@ -214,7 +372,8 @@ Built with Python + SQLite.</div></footer>
 </body></html>"""
 
     Path(OUT).write_text(page, encoding="utf-8")
-    print(f"Wrote {OUT} ({len(dates)} snapshots, period: {period or 'n/a'})")
+    print(f"Wrote {OUT} ({len(dates)} snapshots, {len(events)} event days, "
+          f"{len(div_rows)} mavericks, momentum {'live' if streak_rows else 'locked'})")
 
 if __name__ == "__main__":
     main()
