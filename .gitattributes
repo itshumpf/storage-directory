@@ -1,0 +1,16 @@
+# The history CSVs are appended to from both Windows (local runs) and Linux
+# (GitHub Actions). Two rules keep a one-row append from becoming a
+# whole-file diff:
+#
+#   1. The writers all pass lineterminator="\n" so new rows are LF.
+#   2. Git is told NOT to convert line endings on these files (-text), so the
+#      bytes already committed are left exactly as they are. Existing rows keep
+#      whatever ending they were written with and are never rewritten.
+#
+# `diff` is set explicitly so Git still diffs them as text.
+*.csv -text diff
+
+# Source files are LF everywhere already; keep them that way.
+*.py  text eol=lf
+*.yml text eol=lf
+*.md  text eol=lf

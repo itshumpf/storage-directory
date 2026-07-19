@@ -14,6 +14,15 @@ Does three things:
      the directory. Pure stdlib, no dependencies.
 """
 import sqlite3, html, datetime, math, sys
+from collections import defaultdict
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+SIZE_ORDER = ["Locker", "5x5", "5x10", "5x15", "10x10", "10x15", "10x20", "10x25", "10x30", "Parking"]
+
+def size_key(sz):
+    return SIZE_ORDER.index(sz) if sz in SIZE_ORDER else len(SIZE_ORDER)
 
 DB = "storage.db"
 OUT = "insights.html"
@@ -117,6 +126,56 @@ def main():
     med_rows = db.execute("SELECT price FROM units WHERE sqft=100 AND price IS NOT NULL").fetchall()
     kpi["median_10x10"] = median([r[0] for r in med_rows])
 
+    # ============ HEADLINE: FEATURE-PREMIUM ANALYSIS ============
+    # Matched pairs: same store, same size, differing in exactly one attribute.
+    # Pairing this way cancels out location and local demand, isolating what
+    # each physical feature is actually worth in dollars — the strongest
+    # causal claim this dataset supports. Broken out by size wherever a
+    # feature has enough same-store, same-size pairs at that size to be
+    # meaningful (>= MIN_PAIRS); smaller cells are pooled into "All sizes"
+    # only, rather than published as noisy per-size numbers.
+    MIN_PAIRS = 15
+    prem_rows = []
+    for label, yes_cond, no_cond in [
+        ("Climate control",
+         "attrs LIKE '%Climate%'", "attrs NOT LIKE '%Climate%'"),
+        ("Ground/1st floor (vs upstairs)",
+         "attrs LIKE '%1st Floor%'", "attrs LIKE '%Upstairs%'"),
+        ("Drive-up access (vs inside, non-climate)",
+         "attrs LIKE '%Drive%' AND attrs NOT LIKE '%Climate%'",
+         "attrs LIKE '%Inside%' AND attrs NOT LIKE '%Climate%'"),
+    ]:
+        r = db.execute(f"""
+            WITH g AS (
+                SELECT store_id, size,
+                       AVG(CASE WHEN {yes_cond} THEN price END) AS yes,
+                       AVG(CASE WHEN {no_cond} THEN price END) AS no
+                FROM units WHERE price IS NOT NULL AND attrs IS NOT NULL
+                GROUP BY store_id, size)
+            SELECT COUNT(*), ROUND(AVG(100.0*(yes-no)/no),1) FROM g
+            WHERE yes IS NOT NULL AND no IS NOT NULL AND no > 0""").fetchone()
+        if r[0]:
+            prem_rows.append((label, "All sizes", r[0], f"{r[1]:+.1f}%"))
+        by_size = db.execute(f"""
+            WITH g AS (
+                SELECT store_id, size,
+                       AVG(CASE WHEN {yes_cond} THEN price END) AS yes,
+                       AVG(CASE WHEN {no_cond} THEN price END) AS no
+                FROM units WHERE price IS NOT NULL AND attrs IS NOT NULL
+                GROUP BY store_id, size)
+            SELECT size, COUNT(*), ROUND(AVG(100.0*(yes-no)/no),1) FROM g
+            WHERE yes IS NOT NULL AND no IS NOT NULL AND no > 0
+            GROUP BY size HAVING COUNT(*) >= {MIN_PAIRS} ORDER BY size""").fetchall()
+        for size, n, pct in by_size:
+            prem_rows.append((label, size, n, f"{pct:+.1f}%"))
+    S["premiums"] = ("What features actually cost — paired premiums",
+        f"Each comparison pairs units of the SAME size at the SAME store that differ in exactly one "
+        f"attribute — climate control, floor, or drive-up access — so location and local demand cancel "
+        f"out. What's left is the dollar value the pricing model assigns to that one feature. 'All sizes' "
+        f"pools every matched pair for that feature; rows below it break the premium out by size wherever "
+        f"a size has {MIN_PAIRS}+ matched pairs on its own.",
+        ["feature", "size", "store-size pairs", "avg premium"], prem_rows, "")
+
     # ============ 1. LIVE INVENTORY & SCARCITY ============
     cols, rows = q(db, """
         SELECT s.city, s.state, SUM(u.unit_count) units_available, COUNT(DISTINCT s.store_id) stores
@@ -138,8 +197,8 @@ def main():
         GROUP BY s.city, s.state HAVING COUNT(DISTINCT s.store_id) >= 5
         ORDER BY units_per_store ASC LIMIT 15""")
     S["inv_tight"] = ("Tightest markets — where storage is scarce",
-        "Fewest available units per store among cities with 5+ facilities. Scarcity like this is "
-        "usually invisible to renters until they start calling around.",
+        "Fewest available units per store among cities with 5+ facilities. This kind of scarcity is "
+        "hard to gauge without checking multiple stores directly, which is what this table does at a glance.",
         cols, rows, "")
 
     under = {t: db.execute("""
@@ -164,9 +223,9 @@ def main():
         FROM stores s WHERE NOT EXISTS (SELECT 1 FROM units u WHERE u.store_id=s.store_id)
         ORDER BY s.state, s.city""")
     S["soldout"] = ("Completely sold out",
-        f"{kpi['no_units']} facilities currently advertise zero rentable units. Public Storage removes "
-        "these from its own sitemaps, but they're still operating stores — this directory keeps them "
-        "listed with their site numbers.",
+        f"{kpi['no_units']} facilities currently advertise zero rentable units. These stores are typically "
+        "left off the operator's own sitemaps once full, but they're still operating stores — this "
+        "directory keeps them listed with their site numbers.",
         cols, rows, "")
 
     # ============ 2. STATE PRICING (10x10) ============
@@ -223,34 +282,8 @@ def main():
         cols, rows, "")
 
     # ============ 4b. THE PRICING MODEL ============
-    # Feature premiums: same store, same footprint, different attributes.
-    # The drive-up comparison excludes climate-controlled units on both sides,
-    # otherwise the climate premium contaminates it.
-    prem_rows = []
-    for label, yes_cond, no_cond in [
-        ("Climate control",
-         "attrs LIKE '%Climate%'", "attrs NOT LIKE '%Climate%'"),
-        ("Ground/1st floor (vs upstairs)",
-         "attrs LIKE '%1st Floor%'", "attrs LIKE '%Upstairs%'"),
-        ("Drive-up access (vs inside, non-climate)",
-         "attrs LIKE '%Drive%' AND attrs NOT LIKE '%Climate%'",
-         "attrs LIKE '%Inside%' AND attrs NOT LIKE '%Climate%'"),
-    ]:
-        r = db.execute(f"""
-            WITH g AS (
-                SELECT store_id, size,
-                       AVG(CASE WHEN {yes_cond} THEN price END) AS yes,
-                       AVG(CASE WHEN {no_cond} THEN price END) AS no
-                FROM units WHERE price IS NOT NULL AND attrs IS NOT NULL
-                GROUP BY store_id, size)
-            SELECT COUNT(*), ROUND(AVG(100.0*(yes-no)/no),1) FROM g
-            WHERE yes IS NOT NULL AND no IS NOT NULL AND no > 0""").fetchone()
-        if r[0]:
-            prem_rows.append((label, r[0], f"{r[1]:+.1f}%"))
-    S["premiums"] = ("What features actually cost — paired premiums",
-        "Each comparison pairs units of the SAME size at the SAME store that differ in one attribute, "
-        "so location and demand cancel out. This is the attribute pricing inside Public Storage's model.",
-        ["feature", "store-size pairs", "avg premium"], prem_rows, "")
+    # (Feature-premium paired analysis now runs as a headline section right
+    # after the KPIs — see "HEADLINE: FEATURE-PREMIUM ANALYSIS" above.)
 
     # The advertised min-max "range": we tested whether it is a real pricing
     # envelope. It is not — min and max are mechanically price*0.8 and
@@ -261,12 +294,13 @@ def main():
         SELECT COUNT(*),
                SUM(CASE WHEN ABS(u.price - (u.price_min+u.price_max)/2.0) <= 1 THEN 1 ELSE 0 END)
         FROM units u WHERE {RANGED}""").fetchone()
-    S["envelope"] = ("The ±20% illusion — what the advertised price range really is",
+    S["envelope"] = ("What the advertised price range represents",
         f"Every unit page shows a min-max price range that looks like a pricing band. We tested whether "
         f"street rates move within it. They don't — across {env[0]:,} listings, {100.0*env[1]/env[0]:.1f}% "
         "sit exactly at the midpoint, because the displayed range is mechanically today's price ±20% "
-        "(rounded). It's a disclaimer construct, not a revenue-management envelope: when the range "
-        "moves, that IS the price moving. Real rate movement is tracked on the daily trends page.",
+        "(rounded). It's best read as a disclaimer construct rather than an independent pricing signal: "
+        "when the range moves, that reflects the price moving. Real rate movement is tracked on the "
+        "daily trends page.",
         [], [], "")
 
     cols, rows = q(db, """
@@ -358,6 +392,47 @@ def main():
         "Price per square foot falls steeply as units get bigger. A 5x5 renter pays roughly "
         "double the rate per square foot of a 10x30 renter for the same building.",
         cols, rows, bars_html(rows, 0, 1))
+
+    # ============ 5b. MEDIAN PRICE BY SIZE ============
+    size_raw = db.execute(
+        "SELECT size, price FROM units WHERE price IS NOT NULL AND size IS NOT NULL").fetchall()
+    by_size = defaultdict(list)
+    for sz, p in size_raw:
+        by_size[sz].append(p)
+    size_rows = []
+    for sz in sorted(by_size, key=size_key):
+        prices = by_size[sz]
+        if len(prices) < 10:
+            continue
+        size_rows.append((sz, len(prices), f"${median(prices):,.0f}",
+                          f"${sum(prices)/len(prices):,.0f}"))
+    S["size_median"] = ("Median price by size (national)",
+        "The middle price for each size, nationwide — a steadier read than the average when a few "
+        "outlier markets skew things.",
+        ["size", "listings", "median", "average"], size_rows, "")
+
+    state_size_raw = db.execute("""
+        SELECT s.state, u.size, u.price FROM units u JOIN stores s ON s.store_id=u.store_id
+        WHERE u.price IS NOT NULL AND u.size IS NOT NULL AND s.state IS NOT NULL""").fetchall()
+    by_state_size = defaultdict(lambda: defaultdict(list))
+    for st, sz, p in state_size_raw:
+        by_state_size[st][sz].append(p)
+    matrix_sizes = [sz for sz in SIZE_ORDER if len(by_size.get(sz, [])) >= 50]
+    matrix_rows = []
+    for st in sorted(by_state_size):
+        total_n = sum(len(v) for v in by_state_size[st].values())
+        if total_n < 20:
+            continue
+        row = [st]
+        for sz in matrix_sizes:
+            prices = by_state_size[st].get(sz, [])
+            row.append(f"${median(prices):,.0f}" if len(prices) >= 5 else "—")
+        matrix_rows.append(tuple(row))
+    matrix_cols = ["state"] + matrix_sizes
+    S["size_by_state"] = ("Median price by size, by state",
+        "Same idea, split by state. Cells with fewer than 5 listings for that state/size combo are "
+        "left blank rather than published as a misleading median.",
+        [], [], table_html(matrix_cols, matrix_rows, limit=len(matrix_rows)))
 
     # ============ 6. PRICE PER SQFT MARKETS ============
     cols, rows = q(db, """
@@ -538,7 +613,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 </style></head><body>
 <header><div class="wrap">
 <h1>Self-Storage Pricing Insights<br><span>{kpi['stores']:,} facilities, analyzed</span></h1>
-<p class="meta">Original research built on the FindStorage dataset · updated {today} · analysis by Braeden Keena · <a href="/">directory</a> · <a href="/trends.html">daily trends</a></p>
+<p class="meta">Original research built on the FindStorage dataset · updated {today} · analysis by Braeden Keena · <a href="/">directory</a> · <a href="/trends.html">daily trends</a> · <a href="/markets.html">metro markets</a></p>
 <div class="kpis">
 <div class="kpi"><div class="n">{kpi['stores']:,}</div><div class="l">facilities</div></div>
 <div class="kpi"><div class="n">{kpi['units']:,}</div><div class="l">unit listings</div></div>

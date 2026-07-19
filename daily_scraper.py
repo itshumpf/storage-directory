@@ -318,8 +318,8 @@ def main():
 
     # Phase 5 — Carry forward previously known stores that discovery missed.
     # City pages cap at ~10 markers, so delisted (often sold-out) stores in
-    # dense metros can evade every discovery pass. If a store we knew about
-    # still has a live page, it stays in the directory; only 404s drop out.
+    # dense metros can be missed by every discovery pass. If a store we knew
+    # about still has a live page, it stays in the directory; only 404s drop out.
     lost = [s for s in existing_data if str(s.get("store_id")) not in all_stores]
     print(f"\n[5/8] Carry-forward check: {len(lost)} previously known stores not rediscovered...")
     kept, dropped = 0, 0

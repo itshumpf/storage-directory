@@ -18,13 +18,22 @@ header p.meta a{color:var(--acc);text-decoration:none}
 .kpi .l{font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
 section{padding:34px 0;border-bottom:1px solid var(--line)}
 h2{font-size:1.25rem;margin-bottom:8px}
+h3.sub{font-size:.95rem;margin:18px 0 8px;color:var(--txt)}
 .note{color:var(--dim);font-size:.93rem;max-width:640px;margin-bottom:16px}
 table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:6px}
 th{text-align:left;color:var(--dim);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);
 text-transform:uppercase;font-size:.7rem;letter-spacing:.08em}
 td{padding:8px 10px;border-bottom:1px solid var(--line)}
 tr:hover td{background:var(--card)}
-.empty{color:var(--dim);font-style:italic}
+.empty{color:var(--dim);font-style:italic;max-width:640px}
+.empty code{font-family:'DM Mono',monospace,monospace;font-size:.9em;color:var(--acc);font-style:normal}
+.alert{background:#2a1d12;border:1px solid #6b4423;border-left:4px solid var(--acc);border-radius:8px;
+padding:16px 18px;margin:28px 0 0;font-size:.92rem;color:#f3dcc4;max-width:760px}
+.alert b{color:var(--acc)}
+#size-picker{background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--txt);
+padding:8px 12px;font-family:inherit;font-size:.88rem;margin-bottom:12px}
+.chart-pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.chart-pair{grid-template-columns:1fr}}
 footer{padding:34px 0 50px;color:var(--dim);font-size:.85rem}
 footer a{color:var(--acc);text-decoration:none}
 @media(max-width:600px){table{font-size:.75rem}td,th{padding:6px}}
@@ -32,7 +41,7 @@ footer a{color:var(--acc);text-decoration:none}
 <header><div class="wrap">
 <h1>Daily Trends<br><span>what moved in the storage market</span></h1>
 <p class="meta">Updated July 19, 2026 from 11 snapshots ·
-<a href="/">directory</a> · <a href="/insights.html">insights</a></p>
+<a href="/">directory</a> · <a href="/insights.html">insights</a> · <a href="/markets.html">metro markets</a></p>
 <div class="kpis">
 <div class="kpi"><div class="n">215,777</div><div class="l">units available now</div></div>
 <div class="kpi"><div class="n">$105</div><div class="l">median 10x10 / mo</div></div>
@@ -40,10 +49,10 @@ footer a{color:var(--acc);text-decoration:none}
 </div></div></header>
 <main class="wrap">
 <section><h2>National advertised inventory</h2>
-<p class='note'>Total units marked rentable across the network, per snapshot. Counts are what the
-website advertises — revenue management holds back part of the physically vacant inventory, so a
-store with several hundred empty units may advertise far fewer. Trends here track marketed
-availability, which moves with real demand.</p>
+<p class='note'>Total units marked rentable across the network, per snapshot. This reflects advertised
+availability — units published as rentable — which may differ from physical vacancy; the two aren't
+directly comparable from public data. Read this as a measure of what is being advertised over time,
+not as an occupancy figure.</p>
 <svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
 <line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
 <polyline points="34.0,111.9 103.2,34.0 172.4,70.0 241.6,81.4 310.8,90.6 380.0,115.4 449.2,104.4 518.4,118.3 587.6,125.3 656.8,130.1 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='111.9' r='3.5' fill='#f0a44b'/><circle cx='103.2' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='172.4' cy='70.0' r='3.5' fill='#f0a44b'/><circle cx='241.6' cy='81.4' r='3.5' fill='#f0a44b'/><circle cx='310.8' cy='90.6' r='3.5' fill='#f0a44b'/><circle cx='380.0' cy='115.4' r='3.5' fill='#f0a44b'/><circle cx='449.2' cy='104.4' r='3.5' fill='#f0a44b'/><circle cx='518.4' cy='118.3' r='3.5' fill='#f0a44b'/><circle cx='587.6' cy='125.3' r='3.5' fill='#f0a44b'/><circle cx='656.8' cy='130.1' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
@@ -64,22 +73,227 @@ availability, which moves with real demand.</p>
 <text x="34" y="130" fill="#8fa0af" font-size="12">$100</text>
 </svg></section>
 
-<section><h2>Renting the fastest</h2>
-<p class='note'>Biggest drop in advertised available units over the period 2026-07-12 → 2026-07-19 (7 days).
-A shrinking count means units are being rented (or pulled from marketing) faster than they're freed up.</p>
+<section><h2>Largest declines in advertised availability</h2>
+<p class='note'>Stores whose count of units listed as available fell the most over the period
+2026-07-12 → 2026-07-19 (7 days). This measures what the website advertised on two dates and nothing more:
+a smaller number means fewer units were listed as available on the later date. Advertised
+availability is not a physical vacancy count, and a change in it can arise from many ordinary
+causes — rentals, listing and pricing updates, unit reclassification, or site changes — which
+public data cannot distinguish between.</p>
 <table><thead><tr><th>site #</th><th>address</th><th>city</th><th>state</th><th>available units</th></tr></thead><tbody><tr><td>#78005</td><td>260 W Owens Ave</td><td>Las Vegas</td><td>NV</td><td>696 → 498  (−198)</td></tr><tr><td>#77796</td><td>9480 E Stockton Bl</td><td>Elk Grove</td><td>CA</td><td>428 → 254  (−174)</td></tr><tr><td>#77961</td><td>29250 W 187th Terr</td><td>Gardner</td><td>KS</td><td>419 → 284  (−135)</td></tr><tr><td>#78042</td><td>3065 Bees Ferry Rd</td><td>Charleston</td><td>SC</td><td>580 → 453  (−127)</td></tr><tr><td>#23949</td><td>2390 Claude Brewer Rd</td><td>Loganville</td><td>GA</td><td>333 → 221  (−112)</td></tr><tr><td>#27650</td><td>9760 Blue Mound Rd</td><td>Fort Worth</td><td>TX</td><td>586 → 492  (−94)</td></tr><tr><td>#77885</td><td>861 Route 10</td><td>Randolph</td><td>NJ</td><td>168 → 75  (−93)</td></tr><tr><td>#78068</td><td>2517 Worthington Clr</td><td>Fort Collins</td><td>CO</td><td>132 → 45  (−87)</td></tr><tr><td>#08109</td><td>3128 Northern Blvd</td><td>Long Island City</td><td>NY</td><td>331 → 247  (−84)</td></tr><tr><td>#29319</td><td>5876 Curley Rd</td><td>Wesley Chapel</td><td>FL</td><td>522 → 440  (−82)</td></tr><tr><td>#77884</td><td>111 Centennial Blvd</td><td>Voorhees</td><td>NJ</td><td>596 → 515  (−81)</td></tr><tr><td>#77955</td><td>200 W Main St</td><td>Macungie</td><td>PA</td><td>255 → 178  (−77)</td></tr><tr><td>#29320</td><td>7602 Barnes Rd</td><td>Colorado Springs</td><td>CO</td><td>688 → 616  (−72)</td></tr><tr><td>#00132</td><td>1535 Simmons Rd</td><td>Kissimmee</td><td>FL</td><td>555 → 491  (−64)</td></tr><tr><td>#27263</td><td>11800 S Cleveland Ave</td><td>Fort Myers</td><td>FL</td><td>130 → 76  (−54)</td></tr></tbody></table></section>
 
-<section><h2>Biggest restocks</h2>
-<p class='note'>The opposite end — stores that added the most advertised availability.</p>
+<section><h2>Largest increases in advertised availability</h2>
+<p class='note'>The opposite end — stores whose count of listed-available units rose the most
+over the period. The same caveat applies in reverse: this is a change in what was advertised
+between two dates, not a measured change in physical occupancy.</p>
 <table><thead><tr><th>site #</th><th>address</th><th>city</th><th>state</th><th>available units</th></tr></thead><tbody><tr><td>#00133</td><td>1355 NE 119th St</td><td>Miami</td><td>FL</td><td>619 → 1027  (+408)</td></tr><tr><td>#77939</td><td>7645 Highway 90</td><td>Milton</td><td>FL</td><td>15 → 305  (+290)</td></tr><tr><td>#77942</td><td>6425 Maurer Rd</td><td>Shawnee</td><td>KS</td><td>242 → 522  (+280)</td></tr><tr><td>#77676</td><td>16001 SW 117th Ave</td><td>miami</td><td>FL</td><td>476 → 751  (+275)</td></tr><tr><td>#27387</td><td>9130 South Hampton Road</td><td>Dallas</td><td>TX</td><td>284 → 523  (+239)</td></tr><tr><td>#23950</td><td>5005 Ozora Church Rd</td><td>Loganville</td><td>GA</td><td>101 → 182  (+81)</td></tr><tr><td>#77774</td><td>8450 Broadway</td><td>Merrillville</td><td>IN</td><td>161 → 241  (+80)</td></tr><tr><td>#29315</td><td>4745 Chippendale Dr</td><td>Sacramento</td><td>CA</td><td>555 → 633  (+78)</td></tr><tr><td>#29318</td><td>545 International Dr</td><td>Myrtle Beach</td><td>SC</td><td>338 → 409  (+71)</td></tr><tr><td>#77587</td><td>2410 Wrondel Way</td><td>Reno</td><td>NV</td><td>36 → 103  (+67)</td></tr></tbody></table></section>
 
-<section><h2>10x10 price hikes</h2>
-<p class='note'>Largest increases in a store's cheapest 10x10 over the period.</p>
+<section><h2>10x10 advertised price increases</h2>
+<p class='note'>Largest increases in a store's cheapest advertised 10x10 over the period.
+Prices shown are the advertised online rates on each date.</p>
 <table><thead><tr><th>site #</th><th>address</th><th>city</th><th>state</th><th>cheapest 10x10</th></tr></thead><tbody><tr><td>#08016</td><td>1606 Cotner Ave</td><td>Los Angeles</td><td>CA</td><td>$416 → $516  (+$100)</td></tr><tr><td>#25484</td><td>3010 Wilshire Blvd</td><td>Santa Monica</td><td>CA</td><td>$351 → $444  (+$93)</td></tr><tr><td>#23427</td><td>195 Ward Street</td><td>Revere</td><td>MA</td><td>$140 → $232  (+$92)</td></tr><tr><td>#27016</td><td>800 River Street</td><td>Hyde Park</td><td>MA</td><td>$301 → $390  (+$89)</td></tr><tr><td>#25747</td><td>367 Southern Blvd</td><td>Bronx</td><td>NY</td><td>$157 → $243  (+$86)</td></tr><tr><td>#21104</td><td>1900 El Camino Real</td><td>South San Francisco</td><td>CA</td><td>$240 → $320  (+$80)</td></tr><tr><td>#25953</td><td>5775 S Jellison St</td><td>Littleton</td><td>CO</td><td>$99 → $177  (+$78)</td></tr><tr><td>#29181</td><td>327 Mystic Ave</td><td>Medford</td><td>MA</td><td>$209 → $285  (+$76)</td></tr><tr><td>#08026</td><td>37444 Cedar Blvd</td><td>Newark</td><td>CA</td><td>$150 → $225  (+$75)</td></tr><tr><td>#23209</td><td>5503 N Australian Ave</td><td>West Palm Beach</td><td>FL</td><td>$147 → $220  (+$73)</td></tr></tbody></table></section>
 
-<section><h2>10x10 price cuts</h2>
-<p class='note'>Largest decreases — often a signal of soft demand or fresh supply nearby.</p>
+<section><h2>10x10 advertised price decreases</h2>
+<p class='note'>Largest decreases in a store's cheapest advertised 10x10 over the period.
+Published rates move for many reasons; this table reports the change without inferring a cause.</p>
 <table><thead><tr><th>site #</th><th>address</th><th>city</th><th>state</th><th>cheapest 10x10</th></tr></thead><tbody><tr><td>#27452</td><td>3690 SE Lake Weir Ave</td><td>Ocala</td><td>FL</td><td>$261 → $82  (−$179)</td></tr><tr><td>#27475</td><td>8976 SW Highway 200</td><td>Ocala</td><td>FL</td><td>$278 → $101  (−$177)</td></tr><tr><td>#20172</td><td>1515 13th Ave</td><td>Seattle</td><td>WA</td><td>$305 → $175  (−$130)</td></tr><tr><td>#20409</td><td>200 Calle Del Oaks</td><td>Del Rey Oaks</td><td>CA</td><td>$436 → $308  (−$128)</td></tr><tr><td>#23087</td><td>3611 W Washington Blvd</td><td>Los Angeles</td><td>CA</td><td>$432 → $323  (−$109)</td></tr><tr><td>#23030</td><td>300 Avery St</td><td>Los Angeles</td><td>CA</td><td>$354 → $251  (−$103)</td></tr><tr><td>#08208</td><td>2047 E Bayshore Road</td><td>Palo Alto</td><td>CA</td><td>$336 → $235  (−$101)</td></tr><tr><td>#00110</td><td>300 NW 36th St</td><td>Miami</td><td>FL</td><td>$281 → $180  (−$101)</td></tr><tr><td>#08185</td><td>700 Fairview Ave N</td><td>Seattle</td><td>WA</td><td>$263 → $165  (−$98)</td></tr><tr><td>#20487</td><td>16212 Gothard Street</td><td>Huntington Beach</td><td>CA</td><td>$331 → $237  (−$94)</td></tr></tbody></table></section>
+
+<section><h2>SKU-level rate changes</h2>
+<p class='note'>Every individual change in an advertised unit price the daily rate log has captured,
+ranked by size of change. 59,273 price changes logged across
+6 days so far. These are observed changes in published online
+rates between two snapshots; no cause is inferred.</p>
+<h3 class="sub">Largest increases</h3><table><thead><tr><th>date</th><th>site #</th><th>size</th><th>old</th><th>new</th><th>change</th><th>change %</th></tr></thead><tbody><tr><td>2026-07-15</td><td>#22018</td><td>10x30</td><td>$336.00</td><td>$604.00</td><td>+$268.00</td><td>+79.8%</td></tr><tr><td>2026-07-15</td><td>#22333</td><td>10x30</td><td>$234.00</td><td>$417.00</td><td>+$183.00</td><td>+78.2%</td></tr><tr><td>2026-07-15</td><td>#20252</td><td>10x30</td><td>$356.00</td><td>$534.00</td><td>+$178.00</td><td>+50.0%</td></tr><tr><td>2026-07-15</td><td>#27125</td><td>Parking</td><td>$169.00</td><td>$323.00</td><td>+$154.00</td><td>+91.1%</td></tr><tr><td>2026-07-15</td><td>#23429</td><td>10x30</td><td>$317.00</td><td>$469.00</td><td>+$152.00</td><td>+47.9%</td></tr><tr><td>2026-07-15</td><td>#07111</td><td>Parking</td><td>$202.00</td><td>$349.00</td><td>+$147.00</td><td>+72.8%</td></tr><tr><td>2026-07-15</td><td>#22306</td><td>10x30</td><td>$756.00</td><td>$900.00</td><td>+$144.00</td><td>+19.0%</td></tr><tr><td>2026-07-15</td><td>#08160</td><td>10x30</td><td>$601.00</td><td>$745.00</td><td>+$144.00</td><td>+24.0%</td></tr><tr><td>2026-07-15</td><td>#27150</td><td>10x20</td><td>$123.00</td><td>$266.00</td><td>+$143.00</td><td>+116.3%</td></tr><tr><td>2026-07-15</td><td>#22333</td><td>10x25</td><td>$178.00</td><td>$318.00</td><td>+$140.00</td><td>+78.7%</td></tr></tbody></table>
+<h3 class="sub">Largest decreases</h3><table><thead><tr><th>date</th><th>site #</th><th>size</th><th>old</th><th>new</th><th>change</th><th>change %</th></tr></thead><tbody><tr><td>2026-07-15</td><td>#29143</td><td>10x30</td><td>$2,009.00</td><td>$1,346.00</td><td>$-663.00</td><td>-33.0%</td></tr><tr><td>2026-07-15</td><td>#08250</td><td>10x25</td><td>$683.00</td><td>$144.00</td><td>$-539.00</td><td>-78.9%</td></tr><tr><td>2026-07-15</td><td>#34101</td><td>10x25</td><td>$1,302.00</td><td>$820.00</td><td>$-482.00</td><td>-37.0%</td></tr><tr><td>2026-07-15</td><td>#34101</td><td>10x30</td><td>$1,291.00</td><td>$813.00</td><td>$-478.00</td><td>-37.0%</td></tr><tr><td>2026-07-15</td><td>#23086</td><td>10x30</td><td>$1,187.00</td><td>$807.00</td><td>$-380.00</td><td>-32.0%</td></tr><tr><td>2026-07-15</td><td>#25770</td><td>10x30</td><td>$1,236.00</td><td>$890.00</td><td>$-346.00</td><td>-28.0%</td></tr><tr><td>2026-07-15</td><td>#26678</td><td>10x25</td><td>$685.00</td><td>$356.00</td><td>$-329.00</td><td>-48.0%</td></tr><tr><td>2026-07-15</td><td>#24237</td><td>10x30</td><td>$1,256.00</td><td>$930.00</td><td>$-326.00</td><td>-26.0%</td></tr><tr><td>2026-07-15</td><td>#25770</td><td>10x25</td><td>$1,128.00</td><td>$813.00</td><td>$-315.00</td><td>-27.9%</td></tr><tr><td>2026-07-15</td><td>#23603</td><td>10x20</td><td>$1,022.00</td><td>$716.00</td><td>$-306.00</td><td>-29.9%</td></tr></tbody></table></section>
+
+<section><h2>Trends by size</h2>
+<p class='note'>Availability and price over time, split by unit size, from the state-by-size demand log
+(history/sizes-YYYY-MM.csv). Price is a national average weighted by each state's listing count, since
+raw per-listing prices aren't retained at this granularity — read it as a trendline, not a precise
+national median. 10 days logged so far — the chart
+needs at least two distinct days to show a line, and gains one day per successful collection run.</p>
+<select id="size-picker" onchange="pickSize(this)"><option value="Locker">Locker</option><option value="5x5">5x5</option><option value="5x10">5x10</option><option value="5x15">5x15</option><option value="10x10">10x10</option><option value="10x15">10x15</option><option value="10x20">10x20</option><option value="10x25">10x25</option><option value="10x30">10x30</option><option value="Parking">Parking</option></select>
+<div class="size-panel" data-size="Locker">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — Locker</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,128.2 110.9,116.5 187.8,118.5 264.7,133.4 341.6,136.0 418.4,118.5 495.3,112.6 572.2,111.3 649.1,34.0 726.0,95.7" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='128.2' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='116.5' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='118.5' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='133.4' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='118.5' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='112.6' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='111.3' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='95.7' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">9,175</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">9,018</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — Locker</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,65.0 187.8,94.7 264.7,81.3 341.6,94.0 418.4,100.6 495.3,85.6 572.2,103.9 649.1,121.9 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='65.0' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='94.7' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='81.3' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='94.0' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='100.6' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='85.6' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='103.9' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='121.9' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$34</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$31</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="5x5" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 5x5</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,76.9 187.8,77.4 264.7,97.1 341.6,132.1 418.4,82.4 495.3,90.5 572.2,94.3 649.1,117.0 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='76.9' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='77.4' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='97.1' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='132.1' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='82.4' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='90.5' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='94.3' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='117.0' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">33,059</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">32,023</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 5x5</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,43.7 187.8,48.9 264.7,72.5 341.6,43.1 418.4,113.1 495.3,101.9 572.2,100.1 649.1,136.0 726.0,127.6" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='43.7' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='48.9' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='72.5' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='43.1' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='113.1' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='101.9' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='100.1' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='127.6' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$46</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$45</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="5x10" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 5x10</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,82.7 187.8,93.8 264.7,105.4 341.6,129.5 418.4,129.6 495.3,136.0 572.2,132.8 649.1,130.4 726.0,132.4" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='82.7' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='93.8' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='105.4' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='129.5' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='129.6' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='132.8' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='130.4' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='132.4' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">51,115</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">48,659</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 5x10</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,43.4 110.9,43.8 187.8,36.3 264.7,34.0 341.6,42.2 418.4,94.8 495.3,101.2 572.2,78.2 649.1,136.0 726.0,112.2" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='43.4' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='43.8' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='36.3' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='42.2' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='94.8' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='101.2' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='78.2' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='112.2' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$72</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$70</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="5x15" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 5x15</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,34.5 187.8,53.8 264.7,51.4 341.6,85.8 418.4,71.6 495.3,84.8 572.2,88.6 649.1,127.6 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='34.5' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='53.8' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='51.4' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='85.8' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='71.6' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='84.8' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='88.6' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='127.6' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">11,239</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">10,563</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 5x15</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,67.9 110.9,85.1 187.8,75.3 264.7,38.6 341.6,34.0 418.4,101.8 495.3,97.2 572.2,91.1 649.1,132.8 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='67.9' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='85.1' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='75.3' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='38.6' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='101.8' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='97.2' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='91.1' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='132.8' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$107</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$105</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="10x10" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 10x10</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,73.2 187.8,85.6 264.7,93.1 341.6,114.3 418.4,106.1 495.3,125.0 572.2,136.0 649.1,113.2 726.0,110.7" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='73.2' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='85.6' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='93.1' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='114.3' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='106.1' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='125.0' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='113.2' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='110.7' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">55,530</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">53,244</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 10x10</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,38.3 110.9,52.3 187.8,38.9 264.7,34.0 341.6,39.6 418.4,98.6 495.3,99.3 572.2,92.2 649.1,133.7 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='38.3' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='52.3' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='38.9' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='39.6' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='98.6' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='99.3' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='92.2' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='133.7' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$128</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$124</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="10x15" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 10x15</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,60.8 187.8,71.1 264.7,74.4 341.6,92.2 418.4,82.2 495.3,94.8 572.2,100.0 649.1,126.4 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='60.8' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='71.1' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='74.4' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='92.2' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='82.2' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='94.8' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='100.0' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='126.4' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">25,367</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">23,574</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 10x15</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,55.5 110.9,76.9 187.8,49.1 264.7,42.1 341.6,34.0 418.4,136.0 495.3,121.4 572.2,119.6 649.1,119.0 726.0,106.1" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='55.5' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='76.9' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='49.1' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='42.1' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='121.4' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='119.6' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='119.0' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='106.1' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$166</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$163</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="10x20" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 10x20</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,49.4 187.8,63.4 264.7,66.7 341.6,96.6 418.4,87.0 495.3,103.0 572.2,114.2 649.1,134.4 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='49.4' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='63.4' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='66.7' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='96.6' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='87.0' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='103.0' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='114.2' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='134.4' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">23,092</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">21,752</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 10x20</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,44.6 110.9,61.5 187.8,50.0 264.7,34.0 341.6,38.0 418.4,125.1 495.3,127.7 572.2,113.7 649.1,128.8 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='44.6' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='61.5' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='50.0' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='38.0' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='125.1' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='127.7' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='113.7' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='128.8' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$204</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$199</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="10x25" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 10x25</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,70.2 187.8,83.2 264.7,97.3 341.6,104.3 418.4,96.8 495.3,114.9 572.2,136.0 649.1,109.9 726.0,104.8" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='70.2' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='83.2' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='97.3' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='104.3' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='96.8' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='114.9' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='109.9' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='104.8' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">3,858</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">3,655</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 10x25</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,111.7 110.9,121.3 187.8,97.7 264.7,119.6 341.6,117.4 418.4,136.0 495.3,110.3 572.2,82.2 649.1,63.3 726.0,34.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='111.7' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='121.3' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='97.7' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='119.6' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='117.4' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='110.3' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='82.2' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='63.3' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='34.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$227</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$223</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="10x30" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — 10x30</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,62.7 187.8,67.3 264.7,78.3 341.6,87.6 418.4,98.4 495.3,118.5 572.2,136.0 649.1,122.8 726.0,125.7" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='62.7' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='67.3' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='78.3' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='87.6' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='98.4' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='118.5' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='122.8' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='125.7' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">5,303</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">4,877</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — 10x30</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,75.4 110.9,58.0 187.8,34.0 264.7,34.3 341.6,51.3 418.4,136.0 495.3,106.4 572.2,89.4 649.1,132.9 726.0,90.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='75.4' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='58.0' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='34.3' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='51.3' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='106.4' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='89.4' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='132.9' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='90.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$290</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$285</text>
+</svg></div>
+</div></div><div class="size-panel" data-size="Parking" style="display:none">
+<div class="chart-pair">
+<div><h3 class="sub">Advertised availability — Parking</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,34.0 110.9,66.1 187.8,69.2 264.7,82.9 341.6,84.4 418.4,87.1 495.3,97.4 572.2,118.8 649.1,127.5 726.0,136.0" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='66.1' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='69.2' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='82.9' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='84.4' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='87.1' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='97.4' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='118.8' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='127.5' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='136.0' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">8,083</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">7,591</text>
+</svg></div>
+<div><h3 class="sub">Weighted-avg price — Parking</h3><svg viewBox="0 0 760 170" role="img" style="width:100%;height:auto">
+<line x1="34" y1="136" x2="726" y2="136" stroke="#232c35"/>
+<polyline points="34.0,136.0 110.9,97.9 187.8,101.2 264.7,74.8 341.6,34.0 418.4,131.1 495.3,116.3 572.2,97.0 649.1,53.4 726.0,62.1" fill="none" stroke="#f0a44b" stroke-width="2.5"/><circle cx='34.0' cy='136.0' r='3.5' fill='#f0a44b'/><circle cx='110.9' cy='97.9' r='3.5' fill='#f0a44b'/><circle cx='187.8' cy='101.2' r='3.5' fill='#f0a44b'/><circle cx='264.7' cy='74.8' r='3.5' fill='#f0a44b'/><circle cx='341.6' cy='34.0' r='3.5' fill='#f0a44b'/><circle cx='418.4' cy='131.1' r='3.5' fill='#f0a44b'/><circle cx='495.3' cy='116.3' r='3.5' fill='#f0a44b'/><circle cx='572.2' cy='97.0' r='3.5' fill='#f0a44b'/><circle cx='649.1' cy='53.4' r='3.5' fill='#f0a44b'/><circle cx='726.0' cy='62.1' r='3.5' fill='#f0a44b'/>
+<text x="34" y="16" fill="#8fa0af" font-size="12">$114</text>
+<text x="34" y="152" fill="#8fa0af" font-size="12">2026-07-09</text>
+<text x="726" y="152" fill="#8fa0af" font-size="12" text-anchor="end">2026-07-19</text>
+<text x="34" y="130" fill="#8fa0af" font-size="12">$112</text>
+</svg></div>
+</div></div></section>
 
 <section><h2>Tracking coverage</h2>
 <p class='note'>8 stores are tracked now that weren't in the 2026-07-12
@@ -90,4 +304,12 @@ the baseline stabilizes.</p></section>
 <footer><div class="wrap">History begins April 29, 2026; snapshots accumulate daily. Part of
 <a href="https://findstorage.netlify.app">FindStorage</a> — an independent self-storage directory.
 Built with Python + SQLite.</div></footer>
+<script>
+function pickSize(sel){
+  var v = sel.value;
+  document.querySelectorAll('.size-panel').forEach(function(p){
+    p.style.display = (p.dataset.size === v) ? 'block' : 'none';
+  });
+}
+</script>
 </body></html>

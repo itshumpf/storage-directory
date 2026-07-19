@@ -42,6 +42,18 @@ def main():
     old = sku_map(json.loads(OLD.read_text(encoding="utf-8")))
     new = sku_map(json.loads(NEW.read_text(encoding="utf-8")))
 
+    if new and not old:
+        print(f"Warning: {OLD} yielded 0 SKUs (it may predate the 'sku' field "
+              "in the scraper output — an older schema, not a real empty "
+              "dataset). No changes can be logged against it. The log resumes "
+              "once two same-schema snapshots are diffed back to back.")
+    elif old and new and not (set(old) & set(new)):
+        print(f"Warning: 0 of {len(new):,} SKUs in {NEW} matched any of the "
+              f"{len(old):,} in {OLD} — likely a schema change rather than a "
+              "real 100% inventory turnover. No changes will be logged this "
+              "run; the log resumes once two same-schema snapshots are diffed "
+              "back to back.")
+
     if LOG.exists():
         with open(LOG, newline="", encoding="utf-8") as f:
             if any(row.startswith(date + ",") for row in f):
@@ -62,7 +74,7 @@ def main():
     new_file = not LOG.exists()
     LOG.parent.mkdir(exist_ok=True)
     with open(LOG, "a", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
+        w = csv.writer(f, lineterminator="\n")
         if new_file:
             w.writerow(["date", "store_id", "site_number", "size", "sku", "field", "old", "new"])
         w.writerows(events)

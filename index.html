@@ -79,6 +79,8 @@
   .results-bar { max-width: 1400px; margin: 0 auto; padding: 0 2rem; font-family: 'DM Mono', monospace; font-size: 0.76rem; color: var(--muted); margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   .results-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
   .results-count { color: var(--text); font-weight: 500; }
+  .stat-extra { color: var(--muted); }
+  .stat-extra b { color: var(--text); font-weight: 500; }
   .sort-select { background: transparent; border: none; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.76rem; cursor: pointer; outline: none; padding: 0; min-width: auto; }
   .dist-badge { background: rgba(74,158,255,0.15); color: var(--blue); padding: 3px 10px; border-radius: 100px; font-size: 0.7rem; display: none; align-items: center; gap: 6px; }
   .dist-badge.show { display: flex; }
@@ -222,6 +224,7 @@
     <span>UPDATED <span class="stat-val" id="hdr-updated">—</span></span>
     <a href="insights.html" class="header-link">INSIGHTS →</a>
     <a href="trends.html" class="header-link">TRENDS →</a>
+    <a href="markets.html" class="header-link">MARKETS →</a>
   </div>
 </header>
 
@@ -271,6 +274,8 @@
 <div class="results-bar">
   <div class="results-left">
     <span><span class="results-count" id="result-count">—</span> locations</span>
+    <span class="stat-extra" id="stat-avail"></span>
+    <span class="stat-extra" id="stat-median"></span>
     <span class="dist-badge" id="dist-badge"><span id="dist-badge-text"></span><span class="dist-badge-x" onclick="clearDistance()">✕</span></span>
   </div>
   <span>Sort: <select class="sort-select" id="sort-select" onchange="if(currentView==='grid')renderPage(1);else updateMap()">
@@ -515,9 +520,39 @@ function handleSearch() {
   });
 
   document.getElementById('result-count').textContent = filtered.length.toLocaleString();
+  updateStatBar(size);
 
   if (currentView === 'grid') renderPage(1);
   else updateMap();
+}
+
+function median(nums) {
+  if (!nums.length) return null;
+  const s = [...nums].sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+// Availability + median price across the current results, scoped to the
+// selected size (or all sizes when none is picked).
+function updateStatBar(size) {
+  let availSum = 0, prices = [];
+  for (const s of filtered) {
+    for (const u of s.units) {
+      if (size && u.size !== size) continue;
+      if (u.available && u.price) {
+        availSum += (u.count || 0);
+        prices.push(u.price);
+      }
+    }
+  }
+  const label = size || 'all sizes';
+  document.getElementById('stat-avail').innerHTML =
+    `<b>${availSum.toLocaleString()}</b> units available (${label})`;
+  const med = median(prices);
+  document.getElementById('stat-median').innerHTML = med != null
+    ? `median <b>$${med.toLocaleString(undefined,{maximumFractionDigits:0})}</b>/mo (${label})`
+    : '';
 }
 
 function setFilter(f, el) {
