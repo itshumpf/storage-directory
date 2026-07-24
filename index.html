@@ -186,6 +186,15 @@
   .side-panel .card-footer { margin-top: 16px; padding-top: 16px; }
   @media (max-width: 700px) { .side-panel { width: 100vw; top: 0; } }
 
+  /* PRICE HISTORY (in-panel popup) */
+  .card.clickable { cursor: pointer; }
+  .card.clickable:hover { border-color: var(--orange); }
+  .price-history { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .price-history h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 10px; }
+  #ph-size-select { width: 100%; margin-bottom: 12px; }
+  #ph-chart svg { width: 100%; height: auto; display: block; }
+  #ph-chart .ph-note { color: var(--muted); font-size: 0.82rem; font-style: italic; line-height: 1.5; padding: 10px 0; }
+
   /* NO DATA */
   #no-data-banner { display: none; background: rgba(232,82,10,0.1); border: 1px solid rgba(232,82,10,0.3); border-radius: 12px; padding: 18px 22px; margin: 0 0 1.5rem; }
   #no-data-banner h3 { color: var(--orange); margin-bottom: 6px; font-size: 0.95rem; }
@@ -225,6 +234,7 @@
     <a href="insights.html" class="header-link">INSIGHTS →</a>
     <a href="trends.html" class="header-link">TRENDS →</a>
     <a href="markets.html" class="header-link">MARKETS →</a>
+    <a href="merger.html" class="header-link">MERGER →</a>
   </div>
 </header>
 
@@ -644,7 +654,7 @@ function renderPage(page) {
   const grid = document.getElementById('grid'), empty = document.getElementById('empty');
   if (!total) { grid.innerHTML=''; empty.style.display='block'; document.getElementById('pagination').innerHTML=''; return; }
   empty.style.display = 'none';
-  grid.innerHTML = slice.map(renderCard).join('');
+  grid.innerHTML = slice.map(store => renderCard(store, true)).join('');
   const pg = document.getElementById('pagination');
   if (totalPages<=1) { pg.innerHTML=''; return; }
   let btns = `<button class="page-btn" onclick="renderPage(${Math.max(1,page-1)})" ${page===1?'disabled':''}>‹</button>`;
@@ -657,7 +667,7 @@ function renderPage(page) {
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function renderCard(store) {
+function renderCard(store, clickable) {
   const avail = store.units.filter(u=>u.available);
   const unitsLeft = avail.reduce((t,u)=>t+(u.count||0),0);
   // Deduplicate by size — keep cheapest available, fall back to cheapest unavailable
@@ -691,7 +701,8 @@ function renderCard(store) {
         return `<tr><td><span class="unit-size">${u.size}</span></td><td><span class="unit-count">${u.available?u.count:'—'}</span></td><td style="text-align:right">${priceCell}</td><td>${promoCell}</td></tr>`;
       }).join('')}</tbody></table>`
     : `<div class="no-units">No pricing data available</div>`;
-  return `<div class="card">
+  const stop = 'onclick="event.stopPropagation()"';
+  return `<div class="card${clickable?' clickable':''}" ${clickable?`onclick="openPanelById('${store.store_id}')"`:''}>
     <div class="card-header">
       <div class="id-group">
         ${store.site_number?`<span class="badge badge-site">Site #${store.site_number}</span>`:''}
@@ -702,12 +713,12 @@ function renderCard(store) {
     </div>
     <div class="card-address">${store.address||'—'}</div>
     <div class="card-location">${store.city}, ${store.state} ${store.zip||''}</div>
-    <div class="card-contact">${store.phone?`<span class="contact-item">📞 <a href="tel:${store.phone}">${store.phone}</a></span>`:''}</div>
+    <div class="card-contact">${store.phone?`<span class="contact-item">📞 <a href="tel:${store.phone}" ${stop}>${store.phone}</a></span>`:''}</div>
     ${unitsHtml}
     <div class="card-footer">
       <div class="footer-links">
-        <a href="${store.url}" target="_blank" class="view-link">View listing →</a>
-        <a href="${mapsUrl}" target="_blank" class="map-link">📍 Map</a>
+        <a href="${store.url}" target="_blank" class="view-link" ${stop}>View listing →</a>
+        <a href="${mapsUrl}" target="_blank" class="map-link" ${stop}>📍 Map</a>
       </div>
       ${effectiveCheapest?`<span class="from-price">from <span>$${effectiveCheapest}/mo</span></span>`:''}
     </div>
@@ -735,9 +746,15 @@ function formatPromo(promo) {
     .replace(/(\d+)% off/i, '$1% off');
 }
 function openPanel(store) {
-  document.getElementById('panel-content').innerHTML = renderCard(store);
+  document.getElementById('panel-content').innerHTML = renderCard(store, false);
   document.getElementById('side-panel').classList.add('open');
   document.getElementById('panel-overlay').classList.add('show');
+  renderPriceHistory(store);
+}
+
+function openPanelById(storeId) {
+  const store = allStores.find(s => String(s.store_id) === String(storeId));
+  if (store) openPanel(store);
 }
 
 function closePanel() {
@@ -747,6 +764,100 @@ function closePanel() {
 
 // Close on Escape key
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+// ── PRICE HISTORY POPUP ───────────────────────────────────────
+// Lazy sidecar, fetched once and cached — same pattern as the metro-markets
+// drill-down (markets-detail.json): the directory never inlines all ~4,600
+// stores' histories into the page itself.
+const PH_SIZE_VOCAB = ['Locker', '5x5', '5x10', '5x15', '10x10', '10x15', '10x20', '10x25', '10x30', 'Parking'];
+let PH_DATA = null, PH_LOADING = null, PH_STORE_ID = null;
+
+function phLoad() {
+  if (PH_DATA) return Promise.resolve(PH_DATA);
+  if (!PH_LOADING) {
+    PH_LOADING = fetch('store-history.json').then(r => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(j => { PH_DATA = j; return j; }).catch(e => { PH_LOADING = null; throw e; });
+  }
+  return PH_LOADING;
+}
+
+function renderPriceHistory(store) {
+  PH_STORE_ID = String(store.store_id);
+  const opts = ['<option value="_ten">Cheapest 10x10</option>',
+                '<option value="_med">All sizes (median)</option>']
+    .concat(PH_SIZE_VOCAB.map(sz => `<option value="${sz}">${sz}</option>`)).join('');
+  const html = `<div class="price-history">
+    <h4>Price history</h4>
+    <select id="ph-size-select" onchange="phRender()">${opts}</select>
+    <div id="ph-chart"><p class="ph-note">Loading price history…</p></div>
+  </div>`;
+  document.getElementById('panel-content').insertAdjacentHTML('beforeend', html);
+  phLoad().then(() => phRender()).catch(() => {
+    const el = document.getElementById('ph-chart');
+    if (el) el.innerHTML = '<p class="ph-note">Could not load price history — the store-history.json ' +
+      'sidecar did not fetch. Reopen this store to retry.</p>';
+  });
+}
+
+function phRender() {
+  if (!PH_DATA || !PH_STORE_ID) return;
+  const sel = document.getElementById('ph-size-select');
+  const chart = document.getElementById('ph-chart');
+  if (!sel || !chart) return;
+  const v = sel.value;
+  const rec = PH_DATA.m[PH_STORE_ID];
+  if (!rec) {
+    chart.innerHTML = '<p class="ph-note">No price history logged yet for this store — ' +
+      'check back after the next daily run.</p>';
+    return;
+  }
+  const dense = rec[0], sparse = rec[1];
+  const money = n => '$' + Math.round(n).toLocaleString();
+  let series, fmt, dates;
+  if (v === '_ten') {
+    series = dense.map(p => p[0]); fmt = money; dates = PH_DATA.d;
+  } else if (v === '_med') {
+    series = dense.map(p => p[1]); fmt = money; dates = PH_DATA.d;
+  } else {
+    const idx = PH_SIZE_VOCAB.indexOf(v);
+    series = sparse.map(row => row[idx]); fmt = money; dates = PH_DATA.sd;
+    const nPts = series.filter(x => x != null).length;
+    if (nPts === 0) {
+      chart.innerHTML = '<p class="ph-note">Size history builds daily — check back once this size ' +
+        'has been logged at this store.</p>';
+      return;
+    }
+  }
+  chart.innerHTML = phSparkWithDates(series, fmt, dates);
+}
+
+function phSparkWithDates(series, fmt, dates) {
+  const pts = [];
+  for (let i = 0; i < series.length; i++) if (series[i] != null) pts.push([i, series[i]]);
+  if (pts.length < 2) {
+    return `<p class="ph-note">Only ${pts.length} snapshot${pts.length===1?'':'s'} logged so far — ` +
+      `a trend line needs at least two.</p>`;
+  }
+  const vals = pts.map(p => p[1]);
+  const lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+  const span = (hi - lo) || 1, W = 460, H = 120, P = 30;
+  const xy = pts.map((p, k) => {
+    const x = P + (W - 2 * P) * (pts.length > 1 ? k / (pts.length - 1) : 0);
+    const y = H - P - (H - 2 * P) * ((p[1] - lo) / span);
+    return [x.toFixed(1), y.toFixed(1)];
+  });
+  const line = xy.map(c => c.join(',')).join(' ');
+  const dots = xy.map(c => `<circle cx="${c[0]}" cy="${c[1]}" r="3" fill="#e8520a"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" style="width:100%;height:auto">
+<polyline points="${line}" fill="none" stroke="#e8520a" stroke-width="2"/>${dots}
+<text x="${P}" y="14" fill="#888580" font-size="11">${fmt(hi)}</text>
+<text x="${P}" y="${H-P+16}" fill="#888580" font-size="11">${fmt(lo)}</text>
+<text x="${P}" y="${H-P-6}" fill="#888580" font-size="11">${dates[pts[0][0]]}</text>
+<text x="${W-P}" y="${H-P-6}" fill="#888580" font-size="11" text-anchor="end">${dates[pts[pts.length-1][0]]}</text>
+</svg>`;
+}
 
 loadData();
 </script>
