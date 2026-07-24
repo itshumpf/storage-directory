@@ -12,6 +12,16 @@ Also appends state-by-size demand aggregates to history/sizes-YYYY-MM.csv:
     date, state, size, listings, units_avail, median_price
 (~600 rows/day — the raw material for size-level demand curves over time.)
 
+Also appends one row per (store, size) present that day to
+history/store-sizes-YYYY-MM.csv:
+    date, store_id, size, price, available
+price is the cheapest advertised price for that size at that store (same
+rule cheapest_10x10 already uses, generalized to every size); available is
+the summed unit count for that size at that store. This is the per-store,
+per-size series the store price-history popup reads from — it starts the
+day this logging shipped, so early history is sparse by size until enough
+daily runs accumulate.
+
 (The advertised min-max price "range" is not logged: it is mechanically
 price ±20% for every unit, so it carries no information beyond the price.)
 
@@ -132,6 +142,36 @@ def main():
             w.writerow([date, st, size, a["n"], a["avail"],
                         round(statistics.median(a["prices"]), 2)])
     print(f"Logged {len(agg)} state-size aggregates -> {sout}")
+
+    # per-store, per-size cheapest price (generalizes the cheapest_10x10
+    # column above to every size, keyed by store instead of state)
+    ssout = hist / f"store-sizes-{date[:7]}.csv"
+    if ssout.exists():
+        with open(ssout, newline="", encoding="utf-8") as f:
+            if any(row.startswith(date + ",") for row in f):
+                print(f"{date} already logged in {ssout} — skipping")
+                return
+    by_store_size, seen3 = {}, set()
+    for s in data:
+        sid = str(s.get("store_id", ""))
+        if not sid or sid in seen3:
+            continue
+        seen3.add(sid)
+        for u in s.get("units", []):
+            if not (u.get("available") and u.get("price") and u.get("size")):
+                continue
+            cell = by_store_size.setdefault((sid, u["size"]), {"price": None, "avail": 0})
+            cell["avail"] += int(u.get("count") or 0)
+            if cell["price"] is None or u["price"] < cell["price"]:
+                cell["price"] = u["price"]
+    new_file = not ssout.exists()
+    with open(ssout, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        if new_file:
+            w.writerow(["date", "store_id", "size", "price", "available"])
+        for (sid, size), cell in sorted(by_store_size.items()):
+            w.writerow([date, sid, size, cell["price"], cell["avail"]])
+    print(f"Logged {len(by_store_size)} store-size rows -> {ssout}")
 
 if __name__ == "__main__":
     main()
