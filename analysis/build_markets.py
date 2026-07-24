@@ -369,7 +369,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 <h1>Metro Markets<br><span>every ZIP3 area, automatically</span></h1>
 <p class="meta">Derived from the current snapshot, updated {today} · no hand-curated list — every ZIP3
 prefix with a tracked store gets a row · <a href="/">directory</a> · <a href="/insights.html">insights</a> ·
-<a href="/trends.html">daily trends</a></p>
+<a href="/trends.html">daily trends</a> · <a href="/merger.html">merger before/after</a></p>
 <div class="kpis">
 <div class="kpi"><div class="n">{len(rows):,}</div><div class="l">ZIP3 markets</div></div>
 <div class="kpi"><div class="n">{n_reliable:,}</div><div class="l">with {MIN_STORES}+ stores</div></div>
