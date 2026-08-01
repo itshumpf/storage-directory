@@ -65,6 +65,21 @@ def load_size_history():
                     cell["wsum"] += float(row["median_price"]) * n
     return dict(sorted(agg.items()))
 
+def load_stock_history():
+    """[(date, close)] from history/psa-stock.csv, or [] if it doesn't exist
+    yet (e.g. update_stock.py hasn't run or its fetch failed on this run)."""
+    p = Path("history/psa-stock.csv")
+    if not p.exists():
+        return []
+    out = []
+    with open(p, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            try:
+                out.append((row["date"], float(row["close"])))
+            except (TypeError, ValueError):
+                continue
+    return sorted(out)
+
 def load_rate_changes():
     """Every logged SKU-level price change from history/rate_changes.csv."""
     p = Path("history/rate_changes.csv")
@@ -148,6 +163,8 @@ def main():
         tens = [v["ten"] for v in stores.values() if v["ten"]]
         if tens:
             price_series.append((d, statistics.median(tens)))
+
+    stock_series = load_stock_history()
 
     # ---- pipeline freshness diagnosis -------------------------------------
     # The movers tables can be empty for several very different reasons, and
@@ -306,6 +323,14 @@ not as an occupancy figure.</p>
 <section><h2>National median 10x10 price</h2>
 <p class='note'>Median of each store's cheapest available 10x10, per snapshot.</p>
 {svg_line(price_series, fmt="{:,.0f}", prefix="$")}</section>
+
+<section><h2>Public Storage (NYSE: PSA) share price</h2>
+<p class='note'>Daily closing price for Public Storage's stock, for the same period covered by
+the 10x10 chart above. Trading days only — markets are closed weekends and holidays, so this
+line has fewer points than the calendar-day chart above it. Not investment advice; shown for
+context alongside advertised pricing, not as a signal about either.</p>
+{svg_line(stock_series, fmt="{:,.2f}", prefix="$") if stock_series else
+    "<p class='empty'>No PSA price data yet — run analysis/update_stock.py.</p>"}</section>
 
 <section><h2>Largest declines in advertised availability</h2>
 <p class='note'>Stores whose count of units listed as available fell the most over the period
