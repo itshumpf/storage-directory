@@ -44,7 +44,6 @@ jobs:
           python analysis/analyze_storage.py
           python analysis/update_history.py
           python analysis/update_rate_log.py
-          python analysis/update_stock.py
           python analysis/build_trends.py
           python analysis/build_markets.py
           python analysis/build_store_history.py
