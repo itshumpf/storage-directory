@@ -48,11 +48,12 @@ jobs:
           python analysis/build_trends.py
           python analysis/build_markets.py
           python analysis/build_store_history.py
+          python analysis/build_repricing_stats.py
 
       - name: Commit and push updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add enriched_locations.json insights.html trends.html history/ markets.html markets-detail.json store-history.json
+          git add enriched_locations.json insights.html trends.html history/ markets.html markets-detail.json store-history.json repricing-stats.json
           git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
           git push

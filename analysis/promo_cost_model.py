@@ -37,8 +37,20 @@ and $20 of insurance are added. Set either to 0 to see rent alone.
 WHAT THIS CANNOT SEE
 --------------------
   * Existing tenants. These are advertised new-customer rates. Sitting tenants
-    follow a separate annual-increase process that is not in this dataset, and
-    nothing here establishes that they were moved at all.
+    follow a separate process that is not in this dataset, and nothing here
+    establishes that they were moved at all.
+
+    DIRECTION OF THE RESULTING BIAS, stated because it is not symmetric: the
+    model holds the list rate FLAT from month 5 to the end of the horizon. If
+    an operator raises rates on sitting tenants at any point inside that
+    window, every break-even month reported below is too EARLY and every
+    "share paying more" is too LOW. The reported figures are therefore a
+    floor, not an estimate, and not a worst case. This file asserts nothing
+    about whether any such increase occurs -- it is invisible here, because a
+    rented unit leaves the advertised inventory the scraper reads. Anyone
+    wanting to close that gap should look for the operator's own disclosure of
+    existing-customer rate practices in its SEC filings, which is a public,
+    citable source; this dataset cannot substitute for it.
   * Real promotion terms. The models below read short advertising strings at
     face value. Deposits, minimum stays, eligibility rules, prorating and
     insurance waivers for customers with their own coverage are not visible.
@@ -56,6 +68,45 @@ DEFAULT_LOG = os.path.join(HERE, "..", "history", "rate_changes.csv")
 
 # Rent due in month `m` (1-indexed) at list price P under each advertised promo.
 # Stated as data so the assumption is auditable and arguable in one place.
+#
+# VERIFIED 2026-08-24 against a live store page (Costa Mesa CA, store 235).
+# The page displays, per unit, "Month 1-4  40% OFF  <struck full price> <price>"
+# and "Months 5-12  In-Store Rent  <full price>" — which is exactly
+# 0.6*P for m<=4, P thereafter:
+#
+#     unit      full   shown m1-4   0.6*P    operator's stated
+#                                            "12-Month Savings"   4*(P-d)
+#     5x5       $110      $66       $66.0        $176              $176
+#     5x10      $165      $99       $99.0        $264              $264
+#     7.5x10    $237     $142      $142.2        $380              $380
+#
+# Two independent confirmations in one screenshot: the per-month figures match
+# the multiplier, and the operator's own "Total Estimated 12-Month Savings"
+# equals four months of discount exactly — so the entire quoted twelve-month
+# saving accrues in months 1-4, which is what this model assumes and what the
+# break-even result depends on. Displayed prices are truncated, not rounded
+# ($142 from $142.20); the effect on any median here is nil.
+#
+# Disposition of each assumption in the "40% off For 4 Month" model:
+#
+#   discount is 40% of the list price   verified — displayed price = 0.6 x list
+#                                       on three units, exactly
+#   months 1-4, full rate from month 5  verified — the page states the two
+#                                       windows explicitly, and the operator's
+#                                       own 12-month savings total equals four
+#                                       months of discount
+#   fees sit outside the discount       stated in the published terms: the
+#                                       rental fee and administrative fees are
+#                                       separate line items
+#   new sign-ups, not sitting tenants   stated in the published terms
+#
+# Nothing here rests on private knowledge, and this file names no individual as
+# a source. Every line above is checkable by loading a store page and reading
+# the published terms.
+#
+# The other promo strings below are NOT verified this way and remain readings
+# of advertising copy. They matter less: they set the BEFORE side of the
+# comparison, and the break-even headline is driven by the AFTER side.
 PROMO_MODEL = {
     "$1 first month rent": lambda P, m: 1.0 if m == 1 else P,
     "First month 50% off": lambda P, m: 0.5 * P if m == 1 else P,

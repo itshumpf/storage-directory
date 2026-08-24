@@ -1,0 +1,146 @@
+{
+  "generated": "2026-08-24T08:53:13",
+  "window_start": "2026-07-11",
+  "window_end": "2026-08-23",
+  "days": 44,
+  "days_word": "forty-four",
+  "waves": 12,
+  "waves_word": "twelve",
+  "waves_directional": 3,
+  "quiet_days": 32,
+  "zero_change_days": 17,
+  "zero_change_days_word": "seventeen",
+  "wave_median": 33579,
+  "wave_min": 12792,
+  "wave_max": 50051,
+  "quiet_median": 0,
+  "quiet_max": 2443,
+  "quiet_share_min_pct": 0.0,
+  "quiet_share_max_pct": 5.69,
+  "wave_share_min_pct": 22.35,
+  "wave_share_max_pct": 88.65,
+  "stores_latest": 4664,
+  "listings_latest": 56517,
+  "waves_table": [
+    {
+      "date": "2026-07-15",
+      "dow": "Wed",
+      "units": 33661,
+      "share_pct": 80.3,
+      "pct_down": 55.6,
+      "median": -1,
+      "median_abs": 7,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-07-18",
+      "dow": "Sat",
+      "units": 22221,
+      "share_pct": 53.9,
+      "pct_down": 60.1,
+      "median": -2,
+      "median_abs": 5,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-07-23",
+      "dow": "Thu",
+      "units": 33497,
+      "share_pct": 63.5,
+      "pct_down": 52.4,
+      "median": -1,
+      "median_abs": 7,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-07-24",
+      "dow": "Fri",
+      "units": 13979,
+      "share_pct": 26.7,
+      "pct_down": 52.6,
+      "median": -2,
+      "median_abs": 15,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-07-25",
+      "dow": "Sat",
+      "units": 13961,
+      "share_pct": 26.9,
+      "pct_down": 11.7,
+      "median": 6,
+      "median_abs": 7,
+      "tier": "increase"
+    },
+    {
+      "date": "2026-07-29",
+      "dow": "Wed",
+      "units": 42640,
+      "share_pct": 80.5,
+      "pct_down": 57.0,
+      "median": -2,
+      "median_abs": 8,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-08-01",
+      "dow": "Sat",
+      "units": 12792,
+      "share_pct": 22.3,
+      "pct_down": 13.6,
+      "median": 34,
+      "median_abs": 35,
+      "tier": "increase"
+    },
+    {
+      "date": "2026-08-05",
+      "dow": "Wed",
+      "units": 48037,
+      "share_pct": 82.5,
+      "pct_down": 49.6,
+      "median": 1,
+      "median_abs": 8,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-08-12",
+      "dow": "Wed",
+      "units": 46122,
+      "share_pct": 81.5,
+      "pct_down": 49.4,
+      "median": 1,
+      "median_abs": 8,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-08-16",
+      "dow": "Sun",
+      "units": 15932,
+      "share_pct": 28.2,
+      "pct_down": 62.9,
+      "median": -6,
+      "median_abs": 14,
+      "tier": "mixed"
+    },
+    {
+      "date": "2026-08-20",
+      "dow": "Thu",
+      "units": 50051,
+      "share_pct": 88.7,
+      "pct_down": 71.7,
+      "median": -7,
+      "median_abs": 12,
+      "tier": "decrease"
+    },
+    {
+      "date": "2026-08-22",
+      "dow": "Sat",
+      "units": 33890,
+      "share_pct": 60.2,
+      "pct_down": 37.5,
+      "median": 7,
+      "median_abs": 20,
+      "tier": "mixed"
+    }
+  ]
+}

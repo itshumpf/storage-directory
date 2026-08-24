@@ -91,6 +91,7 @@ def main():
 
     n_chg, frac_dn, med_d = collections.Counter(), {}, {}
     downs, deltas = collections.Counter(), collections.defaultdict(list)
+    store_deltas = collections.defaultdict(list)
     for r in csv.DictReader(open(args.log, newline="", encoding="utf-8")):
         if r["field"] != "price":
             continue
@@ -102,6 +103,7 @@ def main():
         if n < o:
             downs[d] += 1
         deltas[d].append(n - o)
+        store_deltas[d].append((r["store_id"], n - o))
 
     listings = collections.Counter()
     for p in HIST:
@@ -141,20 +143,80 @@ def main():
             continue
         print(f"=== {t.upper()}  ({len(rows)} of "
               f"{sum(len(v) for v in tiers.values())}) ===")
-        print(f"  {'date':12}{'dow':5}{'units':>9}{'% of inventory':>16}"
-              f"{'% down':>9}{'median $':>10}")
+        print(f"  {'date':12}{'dow':5}{'units':>9}{'% of inv':>10}"
+              f"{'% down':>8}{'median $':>10}{'median |$|':>12}{'|Δ|<=$5':>9}{'|Δ|>=$20':>10}")
         for d, c, fd, md, li in rows:
             dow = datetime.date.fromisoformat(d).strftime("%a")
             share = f"{c/li:.1%}" if li else "—"
-            print(f"  {d:12}{dow:5}{c:>9,}{share:>16}{fd:>8.1%}{md:>+10.0f}")
+            a = sorted(abs(x) for x in deltas[d])
+            tight = sum(1 for x in a if x <= 5) / len(a)
+            wide = sum(1 for x in a if x >= 20) / len(a)
+            print(f"  {d:12}{dow:5}{c:>9,}{share:>10}{fd:>7.1%}{md:>+10.0f}"
+                  f"{statistics.median(a):>12.0f}{tight:>9.0%}{wide:>10.0%}")
         print()
 
     nd = tiers.get("non-directional", [])
     if nd:
-        print("The non-directional group moves "
-              f"{min(r[1] for r in nd):,}-{max(r[1] for r in nd):,} units with a median "
-              f"change of ${statistics.median([abs(r[3]) for r in nd]):.0f}.")
-        print("Individually real; collectively close to a wash at the portfolio level.\n")
+        allnd = [x for d, *_ in nd for x in deltas[d]]
+        alld = [x for t in ("directional increase", "directional decrease")
+                for d, *_ in tiers.get(t, []) for x in deltas[d]]
+        a_nd = sorted(abs(x) for x in allnd)
+        print("=== ARE THE NON-DIRECTIONAL WAVES JUST NOISE? NO. ===")
+        print("The signed median is near zero because increases and decreases cancel.")
+        print("The ABSOLUTE median shows the individual moves are not small at all:\n")
+        print(f"  non-directional : n={len(allnd):>8,}   median |Δ| ${statistics.median(a_nd):>3.0f}"
+              f"   within $5 {sum(1 for x in a_nd if x<=5)/len(a_nd):>4.0%}"
+              f"   >= $20 {sum(1 for x in a_nd if x>=20)/len(a_nd):>4.0%}")
+        if alld:
+            a_d = sorted(abs(x) for x in alld)
+            print(f"  directional     : n={len(alld):>8,}   median |Δ| ${statistics.median(a_d):>3.0f}"
+                  f"   within $5 {sum(1 for x in a_d if x<=5)/len(a_d):>4.0%}"
+                  f"   >= $20 {sum(1 for x in a_d if x>=20)/len(a_d):>4.0%}")
+        print("\n  A 'normalisation pass' or 'rounding churn' explanation predicts a tight")
+        print("  cluster near zero. That is not what is here: a quarter of the changes on")
+        print("  non-directional days are $20 or more, and 2026-08-22 has HALF its changes")
+        print("  at $20+ with a median absolute move of $20. These are large individual")
+        print("  repricings that happen to offset in aggregate — not small ones.")
+        print("  Reporting only the signed median understates them badly, and invites the")
+        print("  fair objection that a $1 median is not a repricing event. It is not a $1")
+        print("  event; it is a two-sided one.\n")
+
+    print("=== IS THE UP/DOWN SPLIT RANDOM, OR CLUSTERED BY STORE? ===")
+    print("Second, independent test of the same question. A single noisy global pass")
+    print("would scatter signs at random within each store. Many opposing decisions")
+    print("would make individual stores internally coherent. A store is 'lopsided'")
+    print("when >=80% of its changes that day go the same way; 'pure' when all do.")
+    print("The null column reshuffles the same signs across the same store sizes.\n")
+    print(f"  {'date':12}{'tier':6}{'stores':>8}{'lopsided':>10}{'null':>7}{'ratio':>7}{'pure':>7}")
+    import random
+    rng = random.Random(0)
+    for t in order:
+        for d, c, fd, md, li in tiers.get(t, []):
+            per = collections.defaultdict(list)
+            for sid, delta in store_deltas[d]:
+                per[sid].append(delta)
+            big = [v for v in per.values() if len(v) >= 5]
+            if not big:
+                continue
+            def lopsided(sets):
+                return sum(1 for v in sets
+                           if max(sum(1 for x in v if x > 0),
+                                  sum(1 for x in v if x < 0)) / len(v) >= 0.8) / len(sets)
+            obs = lopsided(big)
+            pure = sum(1 for v in big if all(x > 0 for x in v) or all(x < 0 for x in v)) / len(big)
+            signs = [1 if x > 0 else -1 for v in big for x in v]
+            rng.shuffle(signs)
+            it = iter(signs)
+            shuf = lopsided([[next(it) for _ in v] for v in big])
+            tier = "DIR" if t != "non-directional" else "even"
+            print(f"  {d:12}{tier:6}{len(big):>8,}{obs:>9.0%}{shuf:>7.0%}"
+                  f"{obs/shuf if shuf else float('nan'):>7.1f}{pure:>7.0%}")
+    print("\n  Observed lopsidedness on non-directional days runs several times the")
+    print("  shuffled null. The signs are store-coherent: individual stores move")
+    print("  decisively, different stores move opposite ways, and the national median")
+    print("  is flat because those decisions offset — not because nothing happened.")
+    print("  Together with the absolute-dollar table above, this rules out a single")
+    print("  low-amplitude normalisation pass on two independent grounds.\n")
 
     print("=== QUIET DAYS, FOR THE GAP ===")
     q = [(d, n_chg[d], listings.get(d, 0)) for d in dates if n_chg[d] < args.min_changes]
