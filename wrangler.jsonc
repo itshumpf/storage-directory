@@ -1,0 +1,24 @@
+{
+  // Committed so the deploy stops improvising.
+  //
+  // Without this file, `npx wrangler deploy` auto-generates a config on every
+  // build and picks "directory": "." — which publishes the entire repository
+  // as static assets, including history/*.csv. On 2026-08-21 rate_changes.csv
+  // crossed the 25 MiB per-asset limit and every deploy has failed since.
+  //
+  // Nothing in any .html fetches those files. They are source data read only by
+  // analysis/*.py. The browser fetches four files: enriched_locations.json,
+  // store-history.json, markets-detail.json, locations.json.
+  //
+  // The build command assembles ./dist from just what the site serves, and this
+  // points the deploy at it.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "findstorage",
+  "compatibility_date": "2026-08-20",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./dist"
+  }
+}
