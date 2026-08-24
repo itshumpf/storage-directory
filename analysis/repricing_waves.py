@@ -90,7 +90,6 @@ def load(path):
             total[date] += 1
             if row["field"] != "price":
                 continue
-            price[date] += 1
             try:
                 old = float(row["old"])
                 new = float(row["new"])
@@ -98,8 +97,14 @@ def load(path):
                 skipped += 1
                 continue
             if old <= 0:
+                # A unit arriving, not a repricing — see update_rate_log.py's
+                # sku_map docstring. Skipped BEFORE the count, so the daily
+                # total and the median/direction stats describe the same rows.
+                # (Counting it here and excluding it below is what made
+                # 2026-08-21 read "2 changes" with dashes for every statistic.)
                 skipped += 1
                 continue
+            price[date] += 1
             ratios[date].append(new / old)
             deltas[date].append(new - old)
 

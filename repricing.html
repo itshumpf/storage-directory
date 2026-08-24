@@ -43,7 +43,7 @@ footer a{color:var(--acc);text-decoration:none}
 <div class="kpi"><div class="n">+$34</div><div class="l">median increase, August 1</div></div>
 <div class="kpi"><div class="n">12,792</div><div class="l">units repriced that day</div></div>
 <div class="kpi"><div class="n">12</div><div class="l">repricing waves in 44 days</div></div>
-<div class="kpi"><div class="n">16</div><div class="l">days with no change at all</div></div>
+<div class="kpi"><div class="n">17</div><div class="l">days with no change at all</div></div>
 </div></div></header>
 <main class="wrap">
 
@@ -51,7 +51,7 @@ footer a{color:var(--acc);text-decoration:none}
 <div class="note">Self-storage pricing is usually assumed to drift smoothly day by day. In practice, it
 doesn't. On <b>August 1st, 12,792 units</b> — about a fifth of tracked inventory — had their advertised
 rate raised, 86% of them upward, by a median of <b>$34</b>. Three weeks later, on <b>August 20th</b>,
-50,052 units moved the other way and the national median 10&times;10 rate fell 12.5% in a single day.</div>
+50,051 units moved the other way and the national median 10&times;10 rate fell 12.5% in a single day.</div>
 <div class="note">Between those events, most days log no price changes at all. Rates sit completely still
 for days at a time and then tens of thousands of units change at once — twelve times in the six weeks
 observed.</div>
@@ -67,7 +67,8 @@ share of changes that moved down, so 50% is a wave with no net direction. Reprod
 <code>analysis/repricing_waves.py</code> against <code>history/rate_changes.csv</code>. The observation
 window is taken from the recorded snapshot dates in <code>store-history.json</code>, not from the change
 log — a day on which nothing changed writes no rows, and counting only days that appear in the log would
-silently drop it.</p>
+silently drop it. Rows where the previous price is zero are excluded: those are units arriving in the
+dataset for the first time, not repricings.</p>
 </div>
 </section>
 
@@ -75,14 +76,14 @@ silently drop it.</p>
 <div class="note">A cut-off is only defensible if the thing it cuts has an obvious gap. This one does.</div>
 <div class="tablewrap"><table><thead><tr>
 <th></th><th>days</th><th>median price changes</th><th>range</th></tr></thead><tbody>
-<tr><td>Quiet days</td><td>32</td><td>1</td><td>0 – 2,443</td></tr>
-<tr><td>Wave days</td><td>12</td><td>33,582</td><td>12,792 – 50,052</td></tr>
+<tr><td>Quiet days</td><td>32</td><td>0</td><td>0 – 2,443</td></tr>
+<tr><td>Wave days</td><td>12</td><td>33,579</td><td>12,792 – 50,051</td></tr>
 </tbody></table></div>
 <div class="note" style="margin-top:14px">The busiest quiet day logged 2,443 changes. The smallest wave
 logged 12,792. Nothing in the observation period falls between those two numbers, so any threshold
-from roughly 3,000 to 12,000 selects exactly the same twelve dates. On sixteen of the forty-four days,
+from roughly 3,000 to 12,000 selects exactly the same twelve dates. On seventeen of the forty-four days,
 not a single tracked rate changed at all.</div>
-<div class="note" style="margin-top:14px"><b>Those sixteen days are silence, not missing data.</b> A
+<div class="note" style="margin-top:14px"><b>Those seventeen days are silence, not missing data.</b> A
 snapshot was recorded on every one of the 44 calendar days in the window — there are no gaps in the
 series. The days with no logged change are days on which the site was read and nothing had moved.</div>
 </section>
@@ -95,16 +96,16 @@ inventory. A wave typically touches a fifth to two-thirds of tracked units.</div
 </tr></thead><tbody>
 <tr><td>2026-07-15</td><td>33,661</td><td>55.6%</td><td class="dn">−$1</td><td>mixed</td></tr>
 <tr><td>2026-07-18</td><td>22,221</td><td>60.1%</td><td class="dn">−$2</td><td>mixed</td></tr>
-<tr><td>2026-07-23</td><td>33,504</td><td>52.4%</td><td class="dn">−$1</td><td>mixed</td></tr>
+<tr><td>2026-07-23</td><td>33,497</td><td>52.4%</td><td class="dn">−$1</td><td>mixed</td></tr>
 <tr><td>2026-07-24</td><td>13,979</td><td>52.6%</td><td class="dn">−$2</td><td>mixed</td></tr>
 <tr><td>2026-07-25</td><td>13,961</td><td>11.7%</td><td class="up">+$6</td><td><b class="up">increase</b></td></tr>
 <tr><td>2026-07-29</td><td>42,640</td><td>57.0%</td><td class="dn">−$2</td><td>mixed</td></tr>
 <tr><td>2026-08-01</td><td>12,792</td><td>13.7%</td><td class="up">+$34</td><td><b class="up">increase</b></td></tr>
 <tr><td>2026-08-05</td><td>48,037</td><td>49.7%</td><td class="up">+$1</td><td>mixed</td></tr>
 <tr><td>2026-08-12</td><td>46,122</td><td>49.4%</td><td class="up">+$1</td><td>mixed</td></tr>
-<tr><td>2026-08-16</td><td>15,942</td><td>62.9%</td><td class="dn">−$6</td><td>mixed</td></tr>
-<tr><td>2026-08-20</td><td>50,052</td><td>71.7%</td><td class="dn">−$7</td><td><b class="dn">decrease</b></td></tr>
-<tr><td>2026-08-22</td><td>33,897</td><td>37.5%</td><td class="up">+$7</td><td>mixed</td></tr>
+<tr><td>2026-08-16</td><td>15,932</td><td>62.9%</td><td class="dn">−$6</td><td>mixed</td></tr>
+<tr><td>2026-08-20</td><td>50,051</td><td>71.7%</td><td class="dn">−$7</td><td><b class="dn">decrease</b></td></tr>
+<tr><td>2026-08-22</td><td>33,890</td><td>37.5%</td><td class="up">+$7</td><td>mixed</td></tr>
 </tbody></table></div>
 </section>
 
@@ -116,7 +117,7 @@ move a lot of individual rates and leave the national picture unchanged. Three d
 moved. That is the largest single-day upward move in the observation period, and it landed on the first
 of the month.</p>
 <p style="margin-top:10px"><b>July 25 — increase.</b> 13,961 units, 88% raised, median +$6.</p>
-<p style="margin-top:10px"><b>August 20 — decrease.</b> 50,052 units, 72% of them lowered, median −$7.
+<p style="margin-top:10px"><b>August 20 — decrease.</b> 50,051 units, 72% of them lowered, median −$7.
 This is the wave visible as a cliff on the <a href="/trends.html">daily trends</a> chart: the national
 weighted median 10×10 rate fell from $136.39 to $119.29 in one day, held flat on the 21st, and recovered
 to $128.63 on the 22nd. It has not returned to its pre-wave level.</p>
@@ -129,7 +130,7 @@ moved, not because the sample did.</p>
 <section><h2>Merger week</h2>
 <div class="note">The only place in the data where waves land on three consecutive days.</div>
 <div class="method">
-<p>July 23, 24 and 25 are consecutive waves — 33,504, 13,979 and 13,961 units. Nothing else in the
+<p>July 23, 24 and 25 are consecutive waves — 33,497, 13,979 and 13,961 units. Nothing else in the
 observation period repeats on consecutive days. That window is the same one in which advertised store
 count grew from 3,539 to 4,637, covered on the <a href="/merger.html">merger before/after</a> page.</p>
 <p style="margin-top:10px"><b>Stated as a lead, not a finding:</b> the coincidence of three consecutive

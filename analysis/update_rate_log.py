@@ -25,13 +25,27 @@ NEW = Path("enriched_locations.json")
 LOG = Path("history/rate_changes.csv")
 
 def sku_map(stores):
+    """SKU -> (store_id, site_number, size, price, promo), priced units only.
+
+    A unit is excluded until it carries a real price, so its first real price
+    reads as a first sighting (no row) rather than as a change.
+
+    Zero is rejected as well as None. `is not None` alone let zero-priced
+    units into the map, and the next scrape logged them as `0 -> 81`, which
+    is a unit arriving, not a repricing. 56 such rows exist in the log as of
+    2026-08-23 — all of them the earliest row for their SKU, and strictly
+    one-way (56 rows `0 -> price`, zero rows `price -> 0`). They are excluded
+    from median and direction stats by the reader but were still counted in
+    daily totals, so counts and statistics described different row sets.
+    """
     out = {}
     for s in stores:
         for u in s.get("units", []):
             sku = u.get("sku")
-            if sku and u.get("price") is not None:
+            price = u.get("price")
+            if sku and isinstance(price, (int, float)) and price > 0:
                 out[sku] = (str(s.get("store_id")), s.get("site_number") or "",
-                            u.get("size") or "", u.get("price"), u.get("promo") or "")
+                            u.get("size") or "", price, u.get("promo") or "")
     return out
 
 def main():
