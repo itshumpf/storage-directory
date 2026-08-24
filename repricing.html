@@ -68,7 +68,9 @@ share of changes that moved down, so 50% is a wave with no net direction. Reprod
 window is taken from the recorded snapshot dates in <code>store-history.json</code>, not from the change
 log — a day on which nothing changed writes no rows, and counting only days that appear in the log would
 silently drop it. Rows where the previous price is zero are excluded: those are units arriving in the
-dataset for the first time, not repricings.</p>
+dataset for the first time, not repricings. Share of inventory uses that day's summed
+<code>listings</code> from <code>history/2026-07.csv</code> and <code>history/2026-08.csv</code>;
+the tiering and the inventory shares reproduce from <code>analysis/wave_tiers.py</code>.</p>
 </div>
 </section>
 
@@ -90,23 +92,31 @@ series. The days with no logged change are days on which the site was read and n
 
 <section><h2>The twelve waves</h2>
 <div class="note">Median change is the median dollar move among units that changed, not across all
-inventory. A wave typically touches a fifth to two-thirds of tracked units.</div>
+inventory. A wave touches between <b>22% and 89%</b> of tracked listings; a quiet day never exceeds
+5.7%. Nothing observed falls in between.</div>
 <div class="tablewrap"><table><thead><tr>
-<th>date</th><th>units repriced</th><th>share moving down</th><th>median change</th><th>direction</th>
+<th>date</th><th>units repriced</th><th>share of inventory</th><th>share moving down</th>
+<th>median change</th><th>direction</th>
 </tr></thead><tbody>
-<tr><td>2026-07-15</td><td>33,661</td><td>55.6%</td><td class="dn">−$1</td><td>mixed</td></tr>
-<tr><td>2026-07-18</td><td>22,221</td><td>60.1%</td><td class="dn">−$2</td><td>mixed</td></tr>
-<tr><td>2026-07-23</td><td>33,497</td><td>52.4%</td><td class="dn">−$1</td><td>mixed</td></tr>
-<tr><td>2026-07-24</td><td>13,979</td><td>52.6%</td><td class="dn">−$2</td><td>mixed</td></tr>
-<tr><td>2026-07-25</td><td>13,961</td><td>11.7%</td><td class="up">+$6</td><td><b class="up">increase</b></td></tr>
-<tr><td>2026-07-29</td><td>42,640</td><td>57.0%</td><td class="dn">−$2</td><td>mixed</td></tr>
-<tr><td>2026-08-01</td><td>12,792</td><td>13.7%</td><td class="up">+$34</td><td><b class="up">increase</b></td></tr>
-<tr><td>2026-08-05</td><td>48,037</td><td>49.7%</td><td class="up">+$1</td><td>mixed</td></tr>
-<tr><td>2026-08-12</td><td>46,122</td><td>49.4%</td><td class="up">+$1</td><td>mixed</td></tr>
-<tr><td>2026-08-16</td><td>15,932</td><td>62.9%</td><td class="dn">−$6</td><td>mixed</td></tr>
-<tr><td>2026-08-20</td><td>50,051</td><td>71.7%</td><td class="dn">−$7</td><td><b class="dn">decrease</b></td></tr>
-<tr><td>2026-08-22</td><td>33,890</td><td>37.5%</td><td class="up">+$7</td><td>mixed</td></tr>
+<tr><td>2026-07-15</td><td>33,661</td><td>80.3%</td><td>55.6%</td><td class="dn">−$1</td><td>mixed</td></tr>
+<tr><td>2026-07-18</td><td>22,221</td><td>53.9%</td><td>60.1%</td><td class="dn">−$2</td><td>mixed</td></tr>
+<tr><td>2026-07-23</td><td>33,497</td><td>63.5%</td><td>52.4%</td><td class="dn">−$1</td><td>mixed</td></tr>
+<tr><td>2026-07-24</td><td>13,979</td><td>26.7%</td><td>52.6%</td><td class="dn">−$2</td><td>mixed</td></tr>
+<tr><td>2026-07-25</td><td>13,961</td><td>26.9%</td><td>11.7%</td><td class="up">+$6</td><td><b class="up">increase</b></td></tr>
+<tr><td>2026-07-29</td><td>42,640</td><td>80.5%</td><td>57.0%</td><td class="dn">−$2</td><td>mixed</td></tr>
+<tr><td>2026-08-01</td><td>12,792</td><td>22.3%</td><td>13.7%</td><td class="up">+$34</td><td><b class="up">increase</b></td></tr>
+<tr><td>2026-08-05</td><td>48,037</td><td>82.5%</td><td>49.7%</td><td class="up">+$1</td><td>mixed</td></tr>
+<tr><td>2026-08-12</td><td>46,122</td><td>81.5%</td><td>49.4%</td><td class="up">+$1</td><td>mixed</td></tr>
+<tr><td>2026-08-16</td><td>15,932</td><td>28.2%</td><td>62.9%</td><td class="dn">−$6</td><td>mixed</td></tr>
+<tr><td>2026-08-20</td><td>50,051</td><td>88.7%</td><td>71.7%</td><td class="dn">−$7</td><td><b class="dn">decrease</b></td></tr>
+<tr><td>2026-08-22</td><td>33,890</td><td>60.2%</td><td>37.5%</td><td class="up">+$7</td><td>mixed</td></tr>
 </tbody></table></div>
+<div class="note" style="margin-top:14px"><b>Why the share column matters more than the count.</b>
+Store count grew from 3,539 to 4,664 across the observation period, so raw counts are not comparable
+between July and August. As a share of that day's tracked inventory the separation is sharper than the
+counts suggest: quiet days span <b>0.00% to 5.69%</b>, wave days <b>22.35% to 88.65%</b>, and nothing
+observed falls between. The waves are not an artifact of inventory arriving — listings drift smoothly
+and never jump on a wave day. The only discontinuity in 44 days is the 23 July merger.</div>
 </section>
 
 <section><h2>Most waves have no direction. Three do.</h2>

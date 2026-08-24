@@ -9,3 +9,8 @@ scrape_run.log
 # Python
 __pycache__/
 *.pyc
+
+# Internal review documents — NOT for publication.
+# The deploy step copies *.html from the repo root into dist/, so anything
+# in the root is public. Review material lives here and is never committed.
+private/
