@@ -42,8 +42,8 @@ footer a{color:var(--acc);text-decoration:none}
 <div class="kpis">
 <div class="kpi"><div class="n">+$34</div><div class="l">median increase, August 1</div></div>
 <div class="kpi"><div class="n">12,792</div><div class="l">units repriced that day</div></div>
-<div class="kpi"><div class="n">12</div><div class="l">repricing waves in 41 days</div></div>
-<div class="kpi"><div class="n">2</div><div class="l">median changes on a quiet day</div></div>
+<div class="kpi"><div class="n">12</div><div class="l">repricing waves in 44 days</div></div>
+<div class="kpi"><div class="n">16</div><div class="l">days with no change at all</div></div>
 </div></div></header>
 <main class="wrap">
 
@@ -64,7 +64,10 @@ individual rate changed.</p>
 <p style="margin-top:10px"><b>Method:</b> a day is called a <i>wave</i> when it logs 10,000 or more price
 changes. That threshold is a choice, but a safe one — see the next section. Direction is reported as the
 share of changes that moved down, so 50% is a wave with no net direction. Reproduced by
-<code>analysis/repricing_waves.py</code> against <code>history/rate_changes.csv</code>.</p>
+<code>analysis/repricing_waves.py</code> against <code>history/rate_changes.csv</code>. The observation
+window is taken from the recorded snapshot dates in <code>store-history.json</code>, not from the change
+log — a day on which nothing changed writes no rows, and counting only days that appear in the log would
+silently drop it.</p>
 </div>
 </section>
 
@@ -72,13 +75,16 @@ share of changes that moved down, so 50% is a wave with no net direction. Reprod
 <div class="note">A cut-off is only defensible if the thing it cuts has an obvious gap. This one does.</div>
 <div class="tablewrap"><table><thead><tr>
 <th></th><th>days</th><th>median price changes</th><th>range</th></tr></thead><tbody>
-<tr><td>Quiet days</td><td>30</td><td>2</td><td>0 – 2,443</td></tr>
-<tr><td>Wave days</td><td>12</td><td>33,504</td><td>12,792 – 50,052</td></tr>
+<tr><td>Quiet days</td><td>32</td><td>1</td><td>0 – 2,443</td></tr>
+<tr><td>Wave days</td><td>12</td><td>33,582</td><td>12,792 – 50,052</td></tr>
 </tbody></table></div>
 <div class="note" style="margin-top:14px">The busiest quiet day logged 2,443 changes. The smallest wave
 logged 12,792. Nothing in the observation period falls between those two numbers, so any threshold
-from roughly 3,000 to 12,000 selects exactly the same twelve dates. On thirteen of the forty-one days,
+from roughly 3,000 to 12,000 selects exactly the same twelve dates. On sixteen of the forty-four days,
 not a single tracked rate changed at all.</div>
+<div class="note" style="margin-top:14px"><b>Those sixteen days are silence, not missing data.</b> A
+snapshot was recorded on every one of the 44 calendar days in the window — there are no gaps in the
+series. The days with no logged change are days on which the site was read and nothing had moved.</div>
 </section>
 
 <section><h2>The twelve waves</h2>
@@ -142,8 +148,9 @@ site tracks. Nothing here generalises to the industry.</p>
 <p style="margin-top:10px"><b>Daily resolution.</b> Snapshots are taken once per day, so two changes to
 the same unit inside twenty-four hours are recorded as one net change. A "wave" is therefore a day on
 which a great many rates differed from the day before — not necessarily a single decision.</p>
-<p style="margin-top:10px"><b>Six weeks.</b> The observation period runs 11 July to 23 August 2026.
-Twelve events is enough to see a pattern and not enough to establish a cadence.</p>
+<p style="margin-top:10px"><b>Six weeks.</b> The observation period runs 11 July to 23 August 2026 —
+44 consecutive days with a snapshot on every one. Twelve events is enough to see a pattern and not
+enough to establish a cadence.</p>
 <p style="margin-top:10px"><b>No motive.</b> Date, size and direction are observable. Why is not.</p>
 </div>
 </section>

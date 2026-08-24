@@ -35,11 +35,45 @@ WHAT THIS CANNOT SEE
 import argparse
 import collections
 import csv
+import datetime
+import json
 import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_LOG = os.path.join(HERE, "..", "history", "rate_changes.csv")
+DEFAULT_SNAPS = os.path.join(HERE, "..", "store-history.json")
+
+
+def snapshot_window(path):
+    """The contiguous run of daily snapshots ending at the most recent one.
+
+    Why this exists: a day on which no price moved writes NO rows to
+    rate_changes.csv. Deriving the observation window from the change log
+    therefore deletes exactly the days the headline claim is about — the
+    quiet ones — and reports a window shorter than the one actually observed.
+    Until 2026-08-23 this file counted 41 days and 13 zero-change days; the
+    real figures are 44 and 16.
+
+    The snapshot list also carries isolated early probes (2026-04-29,
+    2026-07-09) that are not part of the daily series, so we take only the
+    unbroken run at the end. Returns [] if the file is missing, and the
+    caller falls back to log-derived dates with a warning.
+    """
+    try:
+        with open(path) as fh:
+            raw = json.load(fh)["d"]
+    except (OSError, KeyError, ValueError):
+        return []
+    days = sorted(datetime.date.fromisoformat(d) for d in raw)
+    if not days:
+        return []
+    run = [days[-1]]
+    for d in reversed(days[:-1]):
+        if (run[0] - d).days != 1:
+            break
+        run.insert(0, d)
+    return run
 
 
 def load(path):
@@ -89,6 +123,10 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--log", default=DEFAULT_LOG)
+    ap.add_argument("--snapshots", default=DEFAULT_SNAPS,
+                    help="JSON with a 'd' array of snapshot dates; supplies "
+                         "the true observation window including days on which "
+                         "nothing changed (default ../store-history.json)")
     ap.add_argument("--min-changes", type=int, default=10000,
                     help="price changes in a day for it to count as a wave "
                          "(default 10000)")
@@ -103,9 +141,24 @@ def main():
         return 1
 
     total, price, ratios, deltas, skipped = load(args.log)
-    dates = sorted(total)
+
+    window = snapshot_window(args.snapshots)
+    if window:
+        first_change = min(sorted(total)) if total else None
+        if first_change:
+            window = [d for d in window
+                      if d >= datetime.date.fromisoformat(first_change)]
+        dates = [d.isoformat() for d in window]
+        gaps = (window[-1] - window[0]).days + 1 - len(window)
+        source = (f"{os.path.basename(args.snapshots)} "
+                  f"({len(window)} snapshots, {gaps} calendar gaps)")
+    else:
+        dates = sorted(total)
+        source = ("CHANGE LOG ONLY — no snapshot file; days with zero changes "
+                  "are INVISIBLE and the window below is understated")
 
     print(f"rate log      : {os.path.normpath(args.log)}")
+    print(f"window source : {source}")
     print(f"dates covered : {dates[0]} .. {dates[-1]}  ({len(dates)} days)")
     print(f"rows          : {sum(total.values()):,} "
           f"({sum(price.values()):,} price)")
@@ -137,10 +190,27 @@ def main():
 
     print()
     print(f"=== {len(waves)} waves at >= {args.min_changes:,} price changes ===")
-    quiet = [d for d in dates if price[d] == 0]
-    print(f"days with ZERO price changes: {len(quiet)} of {len(dates)}")
+
+    def med(vals):
+        s = sorted(vals)
+        n = len(s)
+        if not n:
+            return 0
+        return s[n // 2] if n % 2 else (s[n // 2 - 1] + s[n // 2]) / 2
+
+    wave_n = [price[d] for d in dates if price[d] >= args.min_changes]
+    quiet_n = [price[d] for d in dates if price[d] < args.min_changes]
+    zero_n = [d for d in dates if price[d] == 0]
+
+    print(f"quiet days : {len(quiet_n):>3}   median {med(quiet_n):>9,.0f}   "
+          f"range {min(quiet_n):,} - {max(quiet_n):,}")
+    print(f"wave days  : {len(wave_n):>3}   median {med(wave_n):>9,.0f}   "
+          f"range {min(wave_n):,} - {max(wave_n):,}")
+    print(f"days with ZERO price changes: {len(zero_n)} of {len(dates)}")
+    if quiet_n and wave_n:
+        print(f"gap: busiest quiet day {max(quiet_n):,}, smallest wave "
+              f"{min(wave_n):,} — any threshold between selects the same set")
     if waves:
-        gaps = [(waves[i][0], waves[i - 1][0]) for i in range(1, len(waves))]
         print(f"wave dates: {', '.join(w[0] for w in waves)}")
         print(f"directional (skew beyond {args.skew:.0%}): "
               f"{sum(1 for w in waves if w[3])}")
