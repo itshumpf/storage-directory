@@ -209,7 +209,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 <h1>Merger Before/After<br><span>advertised inventory across a market event</span></h1>
 <p class="meta">Comparing two committed snapshots: {BEFORE_LABEL} vs. {AFTER_LABEL} ·
 <a href="/">directory</a> · <a href="/insights.html">insights</a> · <a href="/trends.html">daily trends</a> ·
-<a href="/markets.html">metro markets</a></p>
+<a href="/markets.html">metro markets</a> · <a href="/repricing.html">repricing waves</a></p>
 <div class="kpis">
 <div class="kpi"><div class="n">{total_before:,}</div><div class="l">stores, {BEFORE_LABEL}</div></div>
 <div class="kpi"><div class="n">{total_after:,}</div><div class="l">stores, {AFTER_LABEL}</div></div>

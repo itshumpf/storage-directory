@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repricing Waves — FindStorage</title>
+<meta name="description" content="Advertised self-storage rates sit static for days, then tens of thousands of units change at once. Twelve dated repricing events measured from daily snapshots.">
+<style>
+:root{--bg:#101418;--card:#161c22;--line:#232c35;--txt:#e8edf2;--dim:#8fa0af;--acc:#f0a44b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:system-ui,'Segoe UI',sans-serif;line-height:1.6;font-size:16px}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 30px;border-bottom:1px solid var(--line)}
+header h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.15}
+header h1 span{color:var(--acc)}
+header p.meta{color:var(--dim);margin-top:10px;font-size:.92rem}
+header p.meta a{color:var(--acc);text-decoration:none}
+.kpis{display:flex;flex-wrap:wrap;gap:14px;margin:26px 0 8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;min-width:130px}
+.kpi .n{font-size:1.5rem;font-weight:700;color:var(--acc)}
+.kpi .l{font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+section{padding:34px 0;border-bottom:1px solid var(--line)}
+h2{font-size:1.25rem;margin-bottom:8px}
+.note{color:var(--dim);font-size:.93rem;max-width:760px;margin-bottom:16px}
+.method{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 20px;font-size:.87rem;color:var(--dim)}
+.method b{color:var(--txt)}
+.method code{color:var(--acc);font-family:'DM Mono',monospace,monospace;font-size:.85em}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:6px}
+th{text-align:left;color:var(--dim);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);
+text-transform:uppercase;font-size:.66rem;letter-spacing:.06em}
+td{padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+tr:hover td{background:var(--card)}
+.up{color:#6fcf8e}.dn{color:#e2725b}
+.tablewrap{overflow-x:auto}
+.empty{color:var(--dim);font-style:italic}
+footer{padding:34px 0 50px;color:var(--dim);font-size:.85rem}
+footer a{color:var(--acc);text-decoration:none}
+@media(max-width:600px){table{font-size:.72rem}td,th{padding:5px}}
+</style></head><body>
+<header><div class="wrap">
+<h1>Repricing Waves<br><span>how one operator changes prices, and when</span></h1>
+<p class="meta">Measured from daily snapshots, July 11 – August 23, 2026 ·
+<a href="/">directory</a> · <a href="/insights.html">insights</a> · <a href="/trends.html">daily trends</a> ·
+<a href="/markets.html">metro markets</a> · <a href="/merger.html">merger before/after</a></p>
+<div class="kpis">
+<div class="kpi"><div class="n">+$34</div><div class="l">median increase, August 1</div></div>
+<div class="kpi"><div class="n">12,792</div><div class="l">units repriced that day</div></div>
+<div class="kpi"><div class="n">12</div><div class="l">repricing waves in 41 days</div></div>
+<div class="kpi"><div class="n">2</div><div class="l">median changes on a quiet day</div></div>
+</div></div></header>
+<main class="wrap">
+
+<section><h2>What happened</h2>
+<div class="note">Self-storage pricing is usually assumed to drift smoothly day by day. In practice, it
+doesn't. On <b>August 1st, 12,792 units</b> — about a fifth of tracked inventory — had their advertised
+rate raised, 86% of them upward, by a median of <b>$34</b>. Three weeks later, on <b>August 20th</b>,
+50,052 units moved the other way and the national median 10&times;10 rate fell 12.5% in a single day.</div>
+<div class="note">Between those events, most days log no price changes at all. Rates sit completely still
+for days at a time and then tens of thousands of units change at once — twelve times in the six weeks
+observed.</div>
+<div class="method">
+<p><b>Observed data, not an interpretation:</b> this site records the advertised online rate for every
+tracked unit once per day. When a unit's advertised rate differs from the previous snapshot, that
+difference is logged. This page counts those logged changes by date. It reports <i>when</i> prices moved
+and <i>which direction</i>. It draws no conclusion about operator intent, pricing strategy, or why any
+individual rate changed.</p>
+<p style="margin-top:10px"><b>Method:</b> a day is called a <i>wave</i> when it logs 10,000 or more price
+changes. That threshold is a choice, but a safe one — see the next section. Direction is reported as the
+share of changes that moved down, so 50% is a wave with no net direction. Reproduced by
+<code>analysis/repricing_waves.py</code> against <code>history/rate_changes.csv</code>.</p>
+</div>
+</section>
+
+<section><h2>Why the threshold isn't arbitrary</h2>
+<div class="note">A cut-off is only defensible if the thing it cuts has an obvious gap. This one does.</div>
+<div class="tablewrap"><table><thead><tr>
+<th></th><th>days</th><th>median price changes</th><th>range</th></tr></thead><tbody>
+<tr><td>Quiet days</td><td>30</td><td>2</td><td>0 – 2,443</td></tr>
+<tr><td>Wave days</td><td>12</td><td>33,504</td><td>12,792 – 50,052</td></tr>
+</tbody></table></div>
+<div class="note" style="margin-top:14px">The busiest quiet day logged 2,443 changes. The smallest wave
+logged 12,792. Nothing in the observation period falls between those two numbers, so any threshold
+from roughly 3,000 to 12,000 selects exactly the same twelve dates. On thirteen of the forty-one days,
+not a single tracked rate changed at all.</div>
+</section>
+
+<section><h2>The twelve waves</h2>
+<div class="note">Median change is the median dollar move among units that changed, not across all
+inventory. A wave typically touches a fifth to two-thirds of tracked units.</div>
+<div class="tablewrap"><table><thead><tr>
+<th>date</th><th>units repriced</th><th>share moving down</th><th>median change</th><th>direction</th>
+</tr></thead><tbody>
+<tr><td>2026-07-15</td><td>33,661</td><td>55.6%</td><td class="dn">−$1</td><td>mixed</td></tr>
+<tr><td>2026-07-18</td><td>22,221</td><td>60.1%</td><td class="dn">−$2</td><td>mixed</td></tr>
+<tr><td>2026-07-23</td><td>33,504</td><td>52.4%</td><td class="dn">−$1</td><td>mixed</td></tr>
+<tr><td>2026-07-24</td><td>13,979</td><td>52.6%</td><td class="dn">−$2</td><td>mixed</td></tr>
+<tr><td>2026-07-25</td><td>13,961</td><td>11.7%</td><td class="up">+$6</td><td><b class="up">increase</b></td></tr>
+<tr><td>2026-07-29</td><td>42,640</td><td>57.0%</td><td class="dn">−$2</td><td>mixed</td></tr>
+<tr><td>2026-08-01</td><td>12,792</td><td>13.7%</td><td class="up">+$34</td><td><b class="up">increase</b></td></tr>
+<tr><td>2026-08-05</td><td>48,037</td><td>49.7%</td><td class="up">+$1</td><td>mixed</td></tr>
+<tr><td>2026-08-12</td><td>46,122</td><td>49.4%</td><td class="up">+$1</td><td>mixed</td></tr>
+<tr><td>2026-08-16</td><td>15,942</td><td>62.9%</td><td class="dn">−$6</td><td>mixed</td></tr>
+<tr><td>2026-08-20</td><td>50,052</td><td>71.7%</td><td class="dn">−$7</td><td><b class="dn">decrease</b></td></tr>
+<tr><td>2026-08-22</td><td>33,897</td><td>37.5%</td><td class="up">+$7</td><td>mixed</td></tr>
+</tbody></table></div>
+</section>
+
+<section><h2>Most waves have no direction. Three do.</h2>
+<div class="note">Nine of the twelve waves split close to evenly between increases and decreases. Those
+move a lot of individual rates and leave the national picture unchanged. Three did not.</div>
+<div class="method">
+<p><b>August 1 — increase.</b> 12,792 units, 86% of them raised, median <b>+$34</b> on the units that
+moved. That is the largest single-day upward move in the observation period, and it landed on the first
+of the month.</p>
+<p style="margin-top:10px"><b>July 25 — increase.</b> 13,961 units, 88% raised, median +$6.</p>
+<p style="margin-top:10px"><b>August 20 — decrease.</b> 50,052 units, 72% of them lowered, median −$7.
+This is the wave visible as a cliff on the <a href="/trends.html">daily trends</a> chart: the national
+weighted median 10×10 rate fell from $136.39 to $119.29 in one day, held flat on the 21st, and recovered
+to $128.63 on the 22nd. It has not returned to its pre-wave level.</p>
+<p style="margin-top:10px">Coverage was stable throughout — 10,173 tracked listings on the 19th against
+10,063 on the 22nd, a 0.4% change, across a constant 43 states. The national median moved because rates
+moved, not because the sample did.</p>
+</div>
+</section>
+
+<section><h2>Merger week</h2>
+<div class="note">The only place in the data where waves land on three consecutive days.</div>
+<div class="method">
+<p>July 23, 24 and 25 are consecutive waves — 33,504, 13,979 and 13,961 units. Nothing else in the
+observation period repeats on consecutive days. That window is the same one in which advertised store
+count grew from 3,539 to 4,637, covered on the <a href="/merger.html">merger before/after</a> page.</p>
+<p style="margin-top:10px"><b>Stated as a lead, not a finding:</b> the coincidence of three consecutive
+repricing waves with a large inventory integration is suggestive, and this dataset cannot establish that
+one caused the other. Recorded here so it can be tested against the next integration event rather than
+argued from a single case.</p>
+</div>
+</section>
+
+<section><h2>What this cannot show</h2>
+<div class="method">
+<p><b>Advertised, not transacted.</b> These are published online rates. What a renter negotiates, or pays
+after a promotion, is not visible here and is not claimed.</p>
+<p style="margin-top:10px"><b>One operator.</b> Every figure on this page describes the one operator this
+site tracks. Nothing here generalises to the industry.</p>
+<p style="margin-top:10px"><b>Daily resolution.</b> Snapshots are taken once per day, so two changes to
+the same unit inside twenty-four hours are recorded as one net change. A "wave" is therefore a day on
+which a great many rates differed from the day before — not necessarily a single decision.</p>
+<p style="margin-top:10px"><b>Six weeks.</b> The observation period runs 11 July to 23 August 2026.
+Twelve events is enough to see a pattern and not enough to establish a cadence.</p>
+<p style="margin-top:10px"><b>No motive.</b> Date, size and direction are observable. Why is not.</p>
+</div>
+</section>
+
+</main>
+<footer><div class="wrap">Data collected from publicly advertised rates. Part of
+<a href="https://findstorage.pages.dev">FindStorage</a> — an independent self-storage directory.
+Built with Python + SQLite. Figures on this page reproduce from
+<code>analysis/repricing_waves.py</code>.</div></footer>
+</body></html>

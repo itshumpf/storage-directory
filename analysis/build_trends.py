@@ -1053,7 +1053,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 <h1>Daily Trends<br><span>what moved in the storage market</span></h1>
 <p class="meta">Updated {today} from {len(dates)} snapshot{'s' if len(dates)!=1 else ''} ·
 <a href="/">directory</a> · <a href="/insights.html">insights</a> · <a href="/markets.html">metro markets</a> ·
-<a href="/merger.html">merger before/after</a></p>
+<a href="/merger.html">merger before/after</a> · <a href="/repricing.html">repricing waves</a></p>
 <div class="kpis">
 <div class="kpi"><div class="n">{total_now:,}</div><div class="l">units available now</div></div>
 <div class="kpi"><div class="n">${med_now:,.0f}</div><div class="l">median 10x10 / mo</div></div>
