@@ -72,6 +72,15 @@ def get_product_store_urls():
         r"<loc>(https://www\.publicstorage\.com/self-storage-([a-z]{2})-([a-z0-9-]+)/(\d{4,6})\.html)</loc>", r.text)))
 
 
+# Operator tag stamped on every store this scraper produces. It exists so that
+# a row's operator is a fact in the data rather than a convention in someone's
+# head: once a second chain (extraspace_parser.py, which stamps "extraspace")
+# writes into the same files, an untagged record is indistinguishable from a
+# record whose tag failed to be written. Readers reject untagged rows rather
+# than assuming a default.
+BRAND = "publicstorage"
+
+
 def parse_stores(html):
     stores = []
     for inp in BeautifulSoup(html, "html.parser").find_all("input", class_="googleMapMarkerData"):
@@ -81,6 +90,7 @@ def parse_stores(html):
             t = d.get("title","")
             m = re.match(r"^(\d{4,6})\s*-", t)
             stores.append({
+                "brand":      BRAND,
                 "store_id":   str(d.get("storeID","")),
                 "site_number": m.group(1) if m else None,
                 "address":    c.get("storeAddress",""),
@@ -252,6 +262,7 @@ def main():
         for url, st, city, sid in get_product_store_urls():
             if sid not in all_stores:
                 all_stores[sid] = {
+                    "brand": BRAND,
                     "store_id": sid, "site_number": None, "address": "",
                     "city": city.replace("-", " ").title(), "state": st.upper(),
                     "zip": "", "phone": "", "lat": None, "lng": None,
