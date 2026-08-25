@@ -264,7 +264,7 @@ def main():
         FROM units u WHERE u.price IS NOT NULL
         GROUP BY u.promo_name ORDER BY listings DESC""")
     S["promo"] = ("The promo decoder — what the discounts are really worth",
-        "Public Storage runs exactly three promotions network-wide. Averaged over the first three "
+        "The tracked operator runs exactly three promotions network-wide. Averaged over the first three "
         "months, the famous '$1 first month' and '2nd Month Free' are near-identical (~33% off), while "
         "'First month 50% off' is barely half the discount it sounds like (~17%). Notice the tiering: "
         "the cheapest units get the '$1' offer, the priciest get '2nd Month Free' — the promo itself "
@@ -503,7 +503,7 @@ def main():
         clusters.append((city, st, len(pts), round(sum(dists) / len(dists), 2)))
     clusters.sort(key=lambda r: r[3])
     cols = ["city", "state", "stores", "avg_miles_to_nearest"]
-    S["cluster"] = ("Elbow-to-elbow — average distance to the next Public Storage",
+    S["cluster"] = ("Elbow-to-elbow — average distance to the next facility",
         "For cities with 8+ facilities: how far is each store from its nearest sibling, on average? "
         "In the tightest metros, the same brand competes with itself just blocks apart.",
         cols, clusters[:15], "")

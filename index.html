@@ -35,6 +35,20 @@
   .header-link { color: var(--orange-light); text-decoration: none; font-weight: 500; letter-spacing: 0.05em; }
   .header-link:hover { color: var(--text); }
 
+  /* DISCONTINUED NOTICE */
+  .notice-overlay { position: fixed; inset: 0; background: rgba(15,14,13,0.88);
+    backdrop-filter: blur(3px); z-index: 3000; display: grid; place-items: center; padding: 1.5rem; }
+  .notice-overlay.hidden { display: none; }
+  .notice-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 2rem; max-width: 480px; text-align: left; }
+  .notice-box h2 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+  .notice-box p { font-size: 0.95rem; line-height: 1.5; margin-bottom: 0.75rem; }
+  .notice-sub { color: var(--muted); font-size: 0.85rem; }
+  .notice-btn { margin-top: 0.5rem; background: var(--orange); color: var(--text); border: 0;
+    border-radius: 8px; padding: 0.6rem 1.1rem; font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 0.9rem; cursor: pointer; }
+  .notice-btn:hover { background: var(--orange-light); }
+
   /* HERO */
   .hero { padding: 3rem 2rem 1.5rem; max-width: 1400px; margin: 0 auto; }
   .hero h1 { font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 0.4rem; }
@@ -213,6 +227,23 @@
 </head>
 <body>
 
+<!-- DISCONTINUED NOTICE -------------------------------------------------
+     Shown once per browser session. Dismissible, because a modal that
+     cannot be closed makes the archive unusable; session-scoped rather
+     than permanent, because someone returning next month should be told
+     again that nothing here has moved since August. -->
+<div class="notice-overlay" id="notice-overlay" role="dialog" aria-modal="true"
+     aria-labelledby="notice-title">
+  <div class="notice-box">
+    <h2 id="notice-title">This directory is no longer updated.</h2>
+    <p>Data collection ended 25 August 2026.</p>
+    <p class="notice-sub">Everything here is a historical snapshot. Prices,
+      availability and store counts reflect the final collection date and
+      should not be relied on as current.</p>
+    <button class="notice-btn" onclick="dismissNotice()">Continue to archive</button>
+  </div>
+</div>
+
 <!-- SIDE PANEL -->
 <div class="panel-overlay" id="panel-overlay" onclick="closePanel()"></div>
 <div class="side-panel" id="side-panel">
@@ -241,7 +272,7 @@
 
 <div class="hero">
   <h1>Storage Unit<br><span>Locator & Pricing</span></h1>
-  <p>3,500+ U.S. Public Storage locations — every store's 5-digit site number, address, phone, and live unit pricing, including locations with no vacancy.</p>
+  <p>4,664 U.S. self-storage locations across 43 states — every store's 5-digit site number, address and phone, including locations with no vacancy. Unit pricing as advertised on 24 August 2026, the final collection date.</p>
 
   <!-- UNIFIED SMART SEARCH BAR -->
   <div class="search-bar">
@@ -313,6 +344,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
 <script>
+// ── DISCONTINUED NOTICE ──────────────────────────────────────
+// sessionStorage, not localStorage: dismissing it should last for this visit,
+// not forever. Wrapped because sessionStorage throws outright in some privacy
+// modes, and a storage error must not leave the overlay stuck over the page.
+function dismissNotice() {
+  const el = document.getElementById('notice-overlay');
+  if (el) el.classList.add('hidden');
+  try { sessionStorage.setItem('fs-notice-seen', '1'); } catch (e) { /* non-fatal */ }
+}
+(function initNotice() {
+  let seen = false;
+  try { seen = sessionStorage.getItem('fs-notice-seen') === '1'; } catch (e) { seen = false; }
+  if (seen) {
+    const el = document.getElementById('notice-overlay');
+    if (el) el.classList.add('hidden');
+  }
+})();
+
 const PER_PAGE = 24;
 let allStores = [], filtered = [], activeFilter = 'all', currentView = 'grid';
 let distCenter = null, distRadius = 20;
@@ -810,8 +859,8 @@ function phRender() {
   const v = sel.value;
   const rec = PH_DATA.m[PH_STORE_ID];
   if (!rec) {
-    chart.innerHTML = '<p class="ph-note">No price history logged yet for this store — ' +
-      'check back after the next daily run.</p>';
+    chart.innerHTML = '<p class="ph-note">No price history was logged for this store ' +
+      'before collection ended on 24 August 2026.</p>';
     return;
   }
   const dense = rec[0], sparse = rec[1];
@@ -826,8 +875,8 @@ function phRender() {
     series = sparse.map(row => row[idx]); fmt = money; dates = PH_DATA.sd;
     const nPts = series.filter(x => x != null).length;
     if (nPts === 0) {
-      chart.innerHTML = '<p class="ph-note">Size history builds daily — check back once this size ' +
-        'has been logged at this store.</p>';
+      chart.innerHTML = '<p class="ph-note">This size was never logged at this store ' +
+        'during the collection window.</p>';
       return;
     }
   }

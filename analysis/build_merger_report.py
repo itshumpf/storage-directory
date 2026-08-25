@@ -220,10 +220,10 @@ footer a{{color:var(--acc);text-decoration:none}}
 
 <section><h2>What this is</h2>
 <div class="method">
-<p><b>Observed data, not an interpretation:</b> Public Storage's dataset that this site tracks grew from
+<p><b>Observed data, not an interpretation:</b> the dataset this site tracks grew from
 {total_before:,} to {total_after:,} advertised stores between {BEFORE_LABEL} and {AFTER_LABEL} — consistent
-with the publicly reported integration of National Storage Affiliates (NSA) inventory into Public Storage's
-site. This page reports the resulting change in advertised store count and pricing signals, market by
+with the publicly reported integration of National Storage Affiliates (NSA) inventory into the tracked
+operator's site. This page reports the resulting change in advertised store count and pricing signals, market by
 market. It draws no conclusion about operator intent and makes no claim about why any individual store's
 numbers moved — it measures what changed in the two snapshots and nothing more.</p>
 <p style="margin-top:10px"><b>Method:</b> each snapshot is grouped by ZIP3 (first 3 digits of a store's zip)

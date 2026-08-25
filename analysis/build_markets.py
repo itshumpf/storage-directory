@@ -307,7 +307,7 @@ def main():
     page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Metro Markets — FindStorage</title>
-<meta name="description" content="Every U.S. ZIP3 market with a Public Storage facility: store count, availability, pricing by size, and a renter-leverage heuristic — {len(rows):,} markets, automatically derived.">
+<meta name="description" content="Every U.S. ZIP3 market with a tracked self-storage facility: store count, availability, pricing by size, and a renter-leverage heuristic — {len(rows):,} markets, automatically derived.">
 <style>
 :root{{--bg:#101418;--card:#161c22;--line:#232c35;--txt:#e8edf2;--dim:#8fa0af;--acc:#f0a44b;--bar:#2b3a47}}
 *{{margin:0;padding:0;box-sizing:border-box}}
