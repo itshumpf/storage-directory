@@ -501,8 +501,19 @@ def svg_line(series, fmt="{:,.0f}", prefix="", breaks=()):
     lo, hi = min(vals), max(vals)
     span = (hi - lo) or 1
     n = len(series)
+
+    # Every break label used to be drawn at one fixed y, which is also where the
+    # axis-maximum label sits — so two breaks and the high-value label rendered
+    # on top of each other as one unreadable run of text. Each label now gets its
+    # own row, and the whole plot is pushed down far enough to hold them.
+    idx = {d: i for i, (d, _v) in enumerate(series)}
+    live_breaks = [b for b in breaks if b in idx]
+    ROW = 14
+    TOP = ROW * len(live_breaks)          # 0 when there are no breaks
+    HF = H + TOP                          # full canvas height
+
     def x(i): return PAD + (W - 2 * PAD) * (i / max(n - 1, 1))
-    def y(v): return H - PAD - (H - 2 * PAD) * ((v - lo) / span)
+    def y(v): return TOP + H - PAD - (H - 2 * PAD) * ((v - lo) / span)
     pts = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, (_, v) in enumerate(series))
     dots = "".join(f"<circle cx='{x(i):.1f}' cy='{y(v):.1f}' r='3.5' fill='#f0a44b'/>"
                    for i, (_, v) in enumerate(series))
@@ -512,27 +523,27 @@ def svg_line(series, fmt="{:,.0f}", prefix="", breaks=()):
     # reader who takes nothing from this section but the shape of the line still
     # cannot come away thinking the step was the market moving.
     rules = ""
-    idx = {d: i for i, (d, _v) in enumerate(series)}
-    for bd in breaks:
-        if bd not in idx:
-            continue
+    for row, bd in enumerate(live_breaks):
         bx = x(idx[bd])
+        ly = ROW * row + 11               # one row per break, top-down
         anchor = "end" if bx > W / 2 else "start"
         tx = bx - 6 if anchor == "end" else bx + 6
         rules += (
-            f"<line x1='{bx:.1f}' y1='{PAD-14}' x2='{bx:.1f}' y2='{H-PAD}' "
+            # The rule starts just under its own label so the dash never runs
+            # through the text, and every rule still reaches the axis.
+            f"<line x1='{bx:.1f}' y1='{ly + 4}' x2='{bx:.1f}' y2='{TOP + H - PAD}' "
             f"stroke='#6b8ea8' stroke-width='1.5' stroke-dasharray='5 4'/>"
-            f"<text x='{tx:.1f}' y='{PAD-18}' fill='#9fc0d8' font-size='11' "
+            f"<text x='{tx:.1f}' y='{ly}' fill='#9fc0d8' font-size='11' "
             f"text-anchor='{anchor}'>{bd} · tracked population changed; "
             f"not comparable across this line</text>"
         )
-    return f"""<svg viewBox="0 0 {W} {H}" role="img" style="width:100%;height:auto">
-<line x1="{PAD}" y1="{H-PAD}" x2="{W-PAD}" y2="{H-PAD}" stroke="#232c35"/>
+    return f"""<svg viewBox="0 0 {W} {HF}" role="img" style="width:100%;height:auto">
+<line x1="{PAD}" y1="{TOP+H-PAD}" x2="{W-PAD}" y2="{TOP+H-PAD}" stroke="#232c35"/>
 {rules}<polyline points="{pts}" fill="none" stroke="#f0a44b" stroke-width="2.5"/>{dots}
-<text x="{PAD}" y="16" fill="#8fa0af" font-size="12">{prefix}{fmt.format(hi)}</text>
-<text x="{PAD}" y="{H-PAD+16}" fill="#8fa0af" font-size="12">{first_d}</text>
-<text x="{W-PAD}" y="{H-PAD+16}" fill="#8fa0af" font-size="12" text-anchor="end">{last_d}</text>
-<text x="{PAD}" y="{H-PAD-6}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(lo)}</text>
+<text x="{PAD}" y="{TOP+16}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(hi)}</text>
+<text x="{PAD}" y="{TOP+H-PAD+16}" fill="#8fa0af" font-size="12">{first_d}</text>
+<text x="{W-PAD}" y="{TOP+H-PAD+16}" fill="#8fa0af" font-size="12" text-anchor="end">{last_d}</text>
+<text x="{PAD}" y="{TOP+H-PAD-6}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(lo)}</text>
 </svg>"""
 
 def svg_stock_line(aligned):

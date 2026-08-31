@@ -1,136 +1,214 @@
 """
-extraspace_parser.py — Turn an Extra Space facility JSON into our normalized schema.
+extraspace_parser.py — Turn an Extra Space facility JSON into the FindStorage normalized schema.
 
-Extra Space is a Next.js site. Each facility has a data twin at:
-    https://www.extraspace.com/_next/data/<BUILD_ID>/en-US/storage/facilities/us/<state>/<city>/<siteNumber>.json
-
-Inside that JSON the useful parts live at:
-    pageProps.pageData.data.facilityData.data.store          -> the store
-    pageProps.pageData.data.unitClasses.data.unitClasses[]    -> the units
-
-IMPORTANT — the <BUILD_ID> (e.g. "mI_3xeiHvHEYu5qAIouLH") changes every time
-Extra Space redeploys. Do NOT hardcode it. Read it live from any page's
-window.__NEXT_DATA__.buildId (or scrape it from the __NEXT_DATA__ <script> in the
-facility HTML), then build the URL. build_facility_url() below shows the shape.
-
-Enumeration: the search endpoint
-    /_next/data/<BUILD_ID>/en-US/storage.json?searchTerm=<ZIP>
-returns store summaries (site numbers) under pageProps.pageData.data — walk ZIPs
-or the state/city index to collect every siteNumber, then fetch each facility JSON.
-
-This module only PARSES already-fetched JSON. Fetching/enumeration is separate so
-this stays easy to unit-test on a saved sample.
-
-Output matches the PS `units` shape (so update_history.py works unchanged), plus:
-  - brand              "extraspace"
-  - street_price       the real standard rate (PS never gave us a clean one)
-  - rates              the full ladder {web, street, walkIn, nsc, tier1..3}
+Designed for FindStorage.pages.dev:
+- Fails loudly on schema mismatch rather than creating default/hallucinated data.
+- Maps all store & unit fields to match enriched_locations.json exactly.
+- Preserves full rate ladder {web, street, walkIn, nsc, tier1..3} for deep analytics.
 """
 from __future__ import annotations
+import re
+from typing import Any, Dict, List, Optional
 
 
-def _dig(d, *path, default=None):
-    """Safely walk nested dict keys; return default if any hop is missing."""
-    for k in path:
-        if not isinstance(d, dict):
-            return default
-        d = d.get(k)
-    return d if d is not None else default
+def _clean_phone(phone_data: Any) -> str:
+    """Format phone number object or string into standard XXX-XXX-XXXX format."""
+    if not phone_data:
+        return ""
+    if isinstance(phone_data, dict):
+        raw = phone_data.get("internetSearchNumber") or phone_data.get("existingCustomerNumber") or ""
+    else:
+        raw = str(phone_data)
+    
+    digits = re.sub(r"\D", "", raw)
+    if len(digits) == 10:
+        return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+    elif len(digits) == 11 and digits.startswith("1"):
+        return f"{digits[1:4]}-{digits[4:7]}-{digits[7:]}"
+    return raw
 
 
-def build_facility_url(build_id, state, city, site_number):
-    """Construct the _next/data URL for one facility. build_id must be read live."""
-    return (f"https://www.extraspace.com/_next/data/{build_id}"
-            f"/en-US/storage/facilities/us/{state}/{city}/{site_number}.json")
+def _clean_size(dims: dict) -> str:
+    """Normalize size to standard format (e.g. 5x5, 10x10, 10x20)."""
+    w = dims.get("width")
+    dp = dims.get("depth")
+    if w and dp:
+        w_str = str(int(w)) if isinstance(w, (int, float)) and w == int(w) else str(w)
+        dp_str = str(int(dp)) if isinstance(dp, (int, float)) and dp == int(dp) else str(dp)
+        return f"{w_str}x{dp_str}"
+    
+    display = (dims.get("display") or "").replace("'", "").replace(" ", "").replace("X", "x")
+    return display or "Other"
 
 
-def parse_unit(u: dict) -> dict:
-    """Map one Extra Space unitClass into our normalized unit dict."""
+def parse_unit(u: dict, site_number: str) -> dict:
+    """Map one Extra Space unitClass into normalized unit dict.
+    
+    Fails loudly if required pricing or SKU structures are corrupt.
+    """
+    if not isinstance(u, dict):
+        raise ValueError(f"Unit payload must be a dict, got {type(u)}")
+
+    rates = u.get("rates")
+    if not rates or not isinstance(rates, dict):
+        raise ValueError(f"Missing 'rates' dict in unit payload: {u}")
+
+    web_rate = rates.get("web")
+    street_rate = rates.get("street")
+    
+    if web_rate is not None:
+        if not isinstance(web_rate, (int, float)) or web_rate < 0:
+            raise ValueError(f"Invalid web rate '{web_rate}' in unit: {u}")
+        web_rate = int(round(web_rate))
+
+    if street_rate is not None:
+        street_rate = int(round(street_rate))
+
     dims = u.get("dimensions") or {}
     avail = u.get("availability") or {}
-    rates = u.get("rates") or {}
-
-    # normalize size to PS style: 5' x 5' -> "5x5"
-    w, dp = dims.get("width"), dims.get("depth")
-    size = f"{w}x{dp}" if w and dp else (dims.get("display") or "").replace("'", "").replace(" ", "")
-
-    # attrs as a PS-style comma string (so is_climate() and display keep working)
-    feats = [f.get("display") for f in (u.get("features") or []) if f.get("display")]
+    
+    size = _clean_size(dims)
+    
+    # Features & attributes
+    feats = [f.get("display") for f in (u.get("features") or []) if isinstance(f, dict) and f.get("display")]
     attrs = ", ".join(feats)
 
-    # promo: join distinct promotion descriptions
+    # Promotions: join distinct promotion descriptions
     promos = []
     for p in (u.get("promotions") or []):
-        desc = _dig(p, "discount", "description")
-        if desc and desc not in promos:
-            promos.append(desc)
-    promo = "; ".join(promos)
+        if isinstance(p, dict):
+            disc = p.get("discount")
+            if isinstance(disc, dict):
+                desc = disc.get("description")
+                if desc and desc not in promos:
+                    promos.append(desc.strip())
+    promo = promos[0] if promos else ""
+    promo2 = promos[1] if len(promos) > 1 else ""
 
-    count = avail.get("available")
+    # Unit availability & counts
+    raw_count = avail.get("available")
+    count = int(raw_count) if isinstance(raw_count, (int, float)) else 0
+    is_available = bool(count > 0) or bool(avail.get("showAvailable"))
+
+    raw_uid = u.get("uid") or u.get("id")
+    sku = f"exr_{raw_uid}" if raw_uid else f"exr_unit_{site_number}_{size}"
+
     return {
         "size": size,
-        "price": rates.get("web"),            # web rate = PS "price" analog
-        "street_price": rates.get("street"),  # NEW: real standard rate
-        "rates": {k: rates.get(k) for k in           # full ladder, for later analysis
-                  ("web", "street", "walkIn", "nsc", "tier1", "tier2", "tier3")},
-        "available": bool(count) or bool(avail.get("showAvailable")),
-        "count": count or 0,
-        "sku": u.get("uid"),                  # stable id: unitClass_site
-        "attrs": attrs,
+        "price": web_rate,                    # Web rate (used by FindStorage UI)
+        "street_price": street_rate,          # Street rate for markdown comparison
+        "available": is_available,
+        "count": count,
         "promo": promo,
-        "promo2": "",
+        "promo2": promo2,
+        "sku": sku,
+        "attrs": attrs,
         "sqft": dims.get("squareFoot"),
-        "width": w,
-        "depth": dp,
+        "width": dims.get("width"),
+        "depth": dims.get("depth"),
         "size_class": dims.get("size"),       # Small / Medium / Large
+        "rates": {                            # Full rate ladder for analytics
+            "web": web_rate,
+            "street": street_rate,
+            "walkIn": rates.get("walkIn"),
+            "nsc": rates.get("nsc"),
+            "tier1": rates.get("tier1"),
+            "tier2": rates.get("tier2"),
+            "tier3": rates.get("tier3")
+        }
     }
 
 
-def parse_facility(facility_json: dict, site_number=None, brand="extraspace") -> dict:
-    """Turn a fetched facility JSON into one normalized store record with units[].
-
-    Accepts either the full raw feed (pageProps.pageData.data...) or a trimmed
-    test shape: {"store": {...}, "unit": {...}} or {"store": {...}, "units": [...]}.
+def parse_facility(facility_json: dict, site_number: Optional[str] = None) -> dict:
+    """Turn fetched Next.js facility JSON into a FindStorage store record.
+    
+    Fails loudly if expected Next.js store structure is missing.
     """
+    if not isinstance(facility_json, dict):
+        raise ValueError(f"Facility JSON must be a dict, got {type(facility_json)}")
+
+    # Navigate Next.js pageProps
     if "pageProps" in facility_json:
-        data = _dig(facility_json, "pageProps", "pageData", "data", default={})
-        store = _dig(data, "facilityData", "data", "store", default={})
-        raw_units = _dig(data, "unitClasses", "data", "unitClasses", default=[]) or []
-    else:  # trimmed test shape
-        store = facility_json.get("store") or {}
-        raw_units = facility_json.get("units") or (
-            [facility_json["unit"]] if facility_json.get("unit") else [])
+        page_props = facility_json.get("pageProps") or {}
+        page_data = page_props.get("pageData")
+        if not page_data or not isinstance(page_data, dict):
+            raise KeyError("Malformed Next.js JSON: 'pageProps.pageData' is missing or not a dict")
+        
+        data_block = page_data.get("data") or {}
+        facility_data = data_block.get("facilityData") or {}
+        store = (facility_data.get("data") or {}).get("store")
+        if not store or not isinstance(store, dict):
+            raise KeyError("Malformed Next.js JSON: 'store' object not found under facilityData.data")
+        
+        unit_classes_block = data_block.get("unitClasses") or {}
+        raw_units = (unit_classes_block.get("data") or {}).get("unitClasses")
+        if raw_units is None:
+            raise KeyError("Malformed Next.js JSON: 'unitClasses' list not found under unitClasses.data")
+    else:
+        # Fallback / trimmed test shape
+        store = facility_json.get("store")
+        if not store or not isinstance(store, dict):
+            raise KeyError("Missing 'store' dictionary in JSON payload")
+        raw_units = facility_json.get("units") or facility_json.get("unitClasses") or []
+
+    # Store metadata extraction
+    resolved_site_number = str(store.get("siteNumber") or site_number or "")
+    if not resolved_site_number:
+        raise ValueError(f"Store has no identifiable siteNumber: {store}")
+
     addr = store.get("address") or {}
+    line1 = addr.get("line1") or ""
+    city = addr.get("city") or ""
+    state = addr.get("stateAbbreviation") or addr.get("state") or ""
+    zip_code = addr.get("postalCode") or ""
 
-    units = [parse_unit(u) for u in raw_units]
-    units = [u for u in units if u["price"] is not None]  # keep priced units
+    # Lat / Lng resolution
+    lat = store.get("latitude")
+    if lat is None and isinstance(store.get("geo"), dict):
+        lat = store["geo"].get("latitude")
+    
+    lng = store.get("longitude")
+    if lng is None and isinstance(store.get("geo"), dict):
+        lng = store["geo"].get("longitude")
 
+    try:
+        lat = float(lat) if lat is not None else None
+    except (ValueError, TypeError):
+        lat = None
+
+    try:
+        lng = float(lng) if lng is not None else None
+    except (ValueError, TypeError):
+        lng = None
+
+    # Canonical facility URL on extraspace.com
+    state_slug = (store.get("stateAbbreviation") or state or "").lower()
+    city_slug = re.sub(r"[^a-z0-9]+", "_", city.lower()).strip("_")
+    canonical_url = (f"https://www.extraspace.com/storage/facilities/us/{state_slug}/{city_slug}/{resolved_site_number}/"
+                     if state_slug and city_slug else f"https://www.extraspace.com/storage/facilities/us/{resolved_site_number}/")
+
+    # Parse and validate units
+    units = []
+    for raw_u in raw_units:
+        u = parse_unit(raw_u, site_number=resolved_site_number)
+        if u["price"] is not None:
+            units.append(u)
+
+    # Construct schema matching enriched_locations.json
     return {
-        "brand": brand,
-        "store_id": store.get("storeId"),
-        # NOTE: confirm the exact store key for the public site number against a
-        # full store object (51 keys). URL path site number is the reliable fallback.
-        "site_number": store.get("siteNumber") or site_number,
-        "name": store.get("name") or store.get("displayName"),
-        "line1": addr.get("line1"),
-        "city": addr.get("city"),
-        "state": addr.get("stateAbbreviation"),
-        "zip": addr.get("postalCode"),
-        "lat": store.get("latitude") or _dig(store, "geo", "latitude"),
-        "lng": store.get("longitude") or _dig(store, "geo", "longitude"),
-        "phone": store.get("phone"),
+        "brand": "extraspace",
+        "store_id": f"exr_{resolved_site_number}",
+        "site_number": resolved_site_number,
+        "name": store.get("name") or store.get("displayName") or f"Extra Space #{resolved_site_number}",
+        "address": line1,
+        "city": city,
+        "state": state.upper(),
+        "zip": zip_code,
+        "phone": _clean_phone(store.get("phone")),
+        "lat": lat,
+        "lng": lng,
+        "url": canonical_url,
         "units": units,
+        "rating": float(store["rating"]) if store.get("rating") is not None else None,
+        "reviews": int(store["reviewCount"]) if store.get("reviewCount") is not None else None
     }
-
-
-if __name__ == "__main__":
-    import json, sys
-    src = sys.argv[1]
-    site = sys.argv[2] if len(sys.argv) > 2 else None
-    rec = parse_facility(json.loads(open(src).read()), site_number=site)
-    print(f"brand={rec['brand']} site={rec['site_number']} "
-          f"{rec['city']},{rec['state']} {rec['zip']} — {len(rec['units'])} priced units")
-    for u in rec["units"][:8]:
-        print(f"  {u['size']:>7} {'CC' if 'Climate' in u['attrs'] else '  '} "
-              f"web ${u['price']:<4} street ${u['street_price']:<4} "
-              f"avail {u['count']:<3} {u['promo']}")

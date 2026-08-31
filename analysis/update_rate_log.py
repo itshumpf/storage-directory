@@ -42,6 +42,41 @@ LOG = Path("history/rate_changes.csv")
 HEADER = ["date", "store_id", "site_number", "size", "sku",
           "field", "old", "new", "brand"]
 
+# ---------------------------------------------------------------------------
+# Run log — added 2026-08-30
+#
+# Every path out of main() writes one row here, including the paths that write
+# no rate rows at all. Without it, a day where the diff *could not run* and a
+# day where *nothing changed* are the same thing from the outside: an absent
+# date in rate_changes.csv.
+#
+# That is not hypothetical. 2026-07-22, 2026-08-08 and 2026-08-15 have no rows
+# in the log. All three scraped normally — the snapshots for those days are
+# present, distinct, and unique by content hash — so the collection worked and
+# something here declined to write. Which of the paths below fired on each day
+# is not recoverable, because nothing recorded it. Going forward it is.
+#
+# An empty result has to say which kind of empty it is: no data exists, the
+# question could not be asked, or it was never asked at all.
+# ---------------------------------------------------------------------------
+RUNLOG = Path("history/rate_log_runs.csv")
+RUNLOG_HEADER = ["date", "status", "old_skus", "new_skus", "matched_skus",
+                 "events", "note"]
+
+
+def record(date, status, note="", old_n="", new_n="", matched="", events=""):
+    """Append one row describing what this invocation did. Never raises."""
+    try:
+        RUNLOG.parent.mkdir(exist_ok=True)
+        new_file = not RUNLOG.exists()
+        with open(RUNLOG, "a", newline="", encoding="utf-8") as f:
+            w = csv.writer(f, lineterminator="\n")
+            if new_file:
+                w.writerow(RUNLOG_HEADER)
+            w.writerow([date, status, old_n, new_n, matched, events, note])
+    except Exception as e:                       # never break the pipeline
+        print(f"warning: could not write {RUNLOG}: {e}", file=sys.stderr)
+
 
 def log_header(path):
     """The header actually on disk, or None if the file does not exist."""
@@ -77,29 +112,48 @@ def sku_map(stores):
     return out
 
 def main():
+    date = datetime.date.today().isoformat()
+
     if not OLD.exists():
         print(f"No {OLD} to diff against — skipping (first run after a fresh checkout).")
+        record(date, "no-baseline",
+               f"{OLD} absent. It is gitignored, so it never arrives in a "
+               f"checkout; it is written only by Phase 8 of daily_scraper.py, "
+               f"which runs last. A scrape that ends before Phase 8 leaves no "
+               f"baseline and this day cannot be diffed.")
         return
-    date = datetime.date.today().isoformat()
+
     old = sku_map(json.loads(OLD.read_text(encoding="utf-8")))
     new = sku_map(json.loads(NEW.read_text(encoding="utf-8")))
+    matched = len(set(old) & set(new))
+    status, note = "ok", ""
 
     if new and not old:
         print(f"Warning: {OLD} yielded 0 SKUs (it may predate the 'sku' field "
               "in the scraper output — an older schema, not a real empty "
               "dataset). No changes can be logged against it. The log resumes "
               "once two same-schema snapshots are diffed back to back.")
+        status = "empty-baseline"
+        note = (f"{OLD} yielded 0 priced SKUs against {len(new):,} in {NEW} — "
+                f"an older schema, not a real empty dataset.")
     elif old and new and not (set(old) & set(new)):
         print(f"Warning: 0 of {len(new):,} SKUs in {NEW} matched any of the "
               f"{len(old):,} in {OLD} — likely a schema change rather than a "
               "real 100% inventory turnover. No changes will be logged this "
               "run; the log resumes once two same-schema snapshots are diffed "
               "back to back.")
+        status = "schema-mismatch"
+        note = (f"0 of {len(new):,} SKUs matched any of {len(old):,} — likely "
+                f"a schema change, not 100% inventory turnover.")
 
     if LOG.exists():
         with open(LOG, newline="", encoding="utf-8") as f:
             if any(row.startswith(date + ",") for row in f):
                 print(f"{date} already logged in {LOG} — skipping")
+                record(date, "already-logged",
+                       "rate_changes.csv already holds rows for this date; "
+                       "this invocation wrote nothing and is not a second day "
+                       "of data.", len(old), len(new), matched, 0)
                 return
 
     # Refuse rather than guess: an untagged row cannot be told apart later from
@@ -110,6 +164,10 @@ def main():
               f"'brand' — that snapshot predates the operator tag.\n"
               f"Re-run daily_scraper.py so the tag is stamped, then run this "
               f"again. Nothing was written.", file=sys.stderr)
+        record(date, "refused-untagged",
+               f"{untagged:,} of {len(new):,} SKUs carry no 'brand' tag; that "
+               f"snapshot predates the operator tag.",
+               len(old), len(new), matched, 0)
         return 1
 
     existing = log_header(LOG)
@@ -117,6 +175,9 @@ def main():
         print(f"REFUSING: {LOG} has header {existing}, expected {HEADER}.\n"
               f"Run `python analysis/backfill_brand.py` to add the column to "
               f"the existing rows first. Nothing was written.", file=sys.stderr)
+        record(date, "refused-header",
+               f"{LOG} header is {existing}, expected {HEADER}.",
+               len(old), len(new), matched, 0)
         return 1
 
     events = []
@@ -141,6 +202,16 @@ def main():
     cuts = sum(1 for e in events if e[5] == "price" and e[7] < e[6])
     promos = sum(1 for e in events if e[5] == "promo")
     print(f"Logged {len(events)} events for {date} ({hikes} hikes, {cuts} cuts, {promos} promo switches) -> {LOG}")
+
+    # A genuine zero is a real observation and gets said out loud, so that it
+    # is never again indistinguishable from a day the diff could not run.
+    if not events and status == "ok":
+        status = "ok-zero-changes"
+        note = (f"Diff ran normally over {matched:,} matched SKUs and found no "
+                f"price or promo change. This is a measured zero, not a "
+                f"missing day.")
+    record(date, status, note, len(old), len(new), matched, len(events))
+    print(f"  run recorded as '{status}' -> {RUNLOG}")
 
 if __name__ == "__main__":
     # Exit non-zero on the refusal paths so a scheduled run fails loudly

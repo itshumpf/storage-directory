@@ -50,10 +50,23 @@ jobs:
           python analysis/build_store_history.py
           python analysis/build_repricing_stats.py
 
+      # Immutable daily Parquet partitions under history/parquet/. Runs after
+      # the CSVs are written, and only ever adds files, so a failure here can
+      # never damage the day's collection.
+      - name: Build Parquet corpus
+        run: python analysis/build_parquet.py
+
       - name: Commit and push updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Everything the run produces is committed. The public site is frozen
+          # at the deploy layer instead: Cloudflare's git integration was
+          # disconnected 2026-08-31, so it keeps serving the last build and no
+          # push can change it. That makes the repo a private archive and takes
+          # the freeze off this line entirely.
+          #
+          # history/ carries the Parquet partitions as well as the CSVs.
           git add enriched_locations.json insights.html trends.html history/ markets.html markets-detail.json store-history.json repricing-stats.json
           git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
           git push
