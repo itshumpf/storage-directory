@@ -1,9 +1,20 @@
 name: Daily Storage Scraper
 
 on:
+  # Minute 17, not 00. GitHub's own docs: "The schedule event can be delayed
+  # during periods of high loads... high load times include the start of every
+  # hour. If the load is sufficiently high enough, some queued jobs may be
+  # dropped." On 2026-08-31 the :00 slot queued about seven hours — every prior
+  # run since 2026-07-11 had started shortly after 06:00 local. Moving off the
+  # top of the hour is the documented mitigation.
+  #
+  # 11:00 UTC is 06:00 CDT and 05:00 CST. The cron is fixed in UTC, so the local
+  # start time shifts an hour at each DST boundary; the next is 2026-11-01.
+  # Nothing depends on the local hour, but a snapshot series that changes its
+  # sampling time by an hour twice a year should say so somewhere.
   schedule:
-    - cron: '0 11 * * 1-6'  # 6am CST (11am UTC) Mon-Sat
-    - cron: '0 11 * * 0'    # Sundays: adds the exhaustive store-ID probe
+    - cron: '17 11 * * 1-6'  # Mon-Sat
+    - cron: '17 11 * * 0'    # Sundays: adds the exhaustive store-ID probe
   workflow_dispatch:         # allows manual trigger from GitHub UI
     inputs:
       deep:
@@ -31,20 +42,46 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run scraper
-        run: python daily_scraper.py ${{ (github.event.schedule == '0 11 * * 0' || inputs.deep == true) && '--deep' || '' }}
+        # This string must match the Sunday cron above EXACTLY. It is compared
+        # literally, so changing the schedule without changing this line makes
+        # the weekly deep probe stop running with no error and no log entry.
+        run: python daily_scraper.py ${{ (github.event.schedule == '17 11 * * 0' || inputs.deep == true) && '--deep' || '' }}
 
       - name: Check output
         run: |
           echo "Stores scraped:"
           python -c "import json; data=json.load(open('enriched_locations.json')); print(f'{len(data)} stores, {sum(1 for s in data if s[\"units\"])} with pricing')"
 
-      - name: Rebuild insights and trends reports
+      # SPLIT 2026-08-31. These produce the durable record — the CSVs and the
+      # rate log. If any of them fails the day is genuinely lost and the job
+      # should stop.
+      - name: Record the day's data
         run: |
           python analysis/load_storage.py enriched_locations.json
-          python analysis/analyze_storage.py
           python analysis/update_history.py
           python analysis/update_rate_log.py
+
+      # These render the record. They are regenerable from the CSVs at any
+      # time, so a failure here must NOT cost the day's collection.
+      #
+      # On 2026-08-31 build_repricing_stats.py exited 1 — correctly, refusing
+      # to emit nulls — and took the commit step down with it. The scrape had
+      # succeeded: 4,670 stores, 58,603 listings, 55,011 rate events. All of it
+      # died with the runner because a presentation script would not write a
+      # summary JSON.
+      #
+      # continue-on-error surfaces the failure in the UI without failing the
+      # job, so the data still commits.
+      # update_stock.py is here, not above, because it fetches from an external
+      # source. Putting a third-party outage on the critical path would recreate
+      # the exact failure this split exists to prevent — and a missed day of
+      # share price is recoverable from any provider later, unlike a missed
+      # day of advertised rents.
+      - name: Rebuild insights and trends reports
+        continue-on-error: true
+        run: |
           python analysis/update_stock.py
+          python analysis/analyze_storage.py
           python analysis/build_trends.py
           python analysis/build_markets.py
           python analysis/build_store_history.py

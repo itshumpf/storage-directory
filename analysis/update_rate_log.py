@@ -33,6 +33,7 @@ import csv
 import datetime
 import json
 import sys
+import time
 from pathlib import Path
 
 OLD = Path("enriched_locations_backup.json")
@@ -60,8 +61,27 @@ HEADER = ["date", "store_id", "site_number", "size", "sku",
 # question could not be asked, or it was never asked at all.
 # ---------------------------------------------------------------------------
 RUNLOG = Path("history/rate_log_runs.csv")
-RUNLOG_HEADER = ["date", "status", "old_skus", "new_skus", "matched_skus",
-                 "events", "note"]
+RUNLOG_HEADER = ["date", "status", "baseline_age_days", "old_skus", "new_skus",
+                 "matched_skus", "events", "note"]
+
+
+def baseline_age_days():
+    """Days between the baseline snapshot's mtime and now, or "" if unknown.
+
+    Added 2026-08-31. A diff against a six-day-old baseline produces six days
+    of change stamped with one date, and nothing in rate_changes.csv can tell
+    that apart from a normal day. On 2026-08-31 the first run after a week of
+    collection being off logged 55,011 events where a typical day is 1,400 to
+    5,600 — a 10x anomaly with no field on the row explaining it.
+
+    An interval is a property of the measurement, not a detail. If it is not
+    recorded, every consumer of this log silently assumes it is one day.
+    """
+    try:
+        age = time.time() - OLD.stat().st_mtime
+        return round(age / 86400.0, 2)
+    except OSError:
+        return ""
 
 
 def record(date, status, note="", old_n="", new_n="", matched="", events=""):
@@ -73,7 +93,8 @@ def record(date, status, note="", old_n="", new_n="", matched="", events=""):
             w = csv.writer(f, lineterminator="\n")
             if new_file:
                 w.writerow(RUNLOG_HEADER)
-            w.writerow([date, status, old_n, new_n, matched, events, note])
+            w.writerow([date, status, baseline_age_days(), old_n,
+                        new_n, matched, events, note])
     except Exception as e:                       # never break the pipeline
         print(f"warning: could not write {RUNLOG}: {e}", file=sys.stderr)
 
