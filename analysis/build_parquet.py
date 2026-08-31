@@ -16,14 +16,20 @@ append, so git stores a complete new copy each day. Twelve months of that is
 365 full copies of an ever-larger binary.
 
 Daily partitions are written once and never touched again, so git only ever
-adds a small new file. Measured on the real corpus 2026-08-30:
+adds a small new file. Measured on disk against the real corpus, 2026-08-31:
 
     history/ as CSV      71.67 MB
-    history/ as Parquet   7.61 MB     9.4x smaller
-    rate_changes.csv     38.44 MB  ->  3.83 MB   (10.0x)
+    history/parquet/      9.54 MB     7.5x smaller
+    rate_changes.csv     38.44 MB  ->  4.39 MB   (8.8x)
 
-Projected to twelve months of rate changes: ~307 MB of CSV against ~31 MB of
+Projected to twelve months of rate changes: ~308 MB of CSV against ~35 MB of
 Parquet. The CSV path meets GitHub's 100 MB per-file limit around month four.
+
+(An earlier draft of this docstring claimed 7.61 MB and 9.4x. Those came from
+a scratch-directory run whose totals double-counted shared table directories,
+and they were 25% optimistic. The figures above are `du` on the committed
+tree. Numbers a script prints about its own output must be re-derivable from
+that output.)
 
 The .duckdb file is deliberately NOT an artifact here. DuckDB reads the
 partitions directly through read_parquet(), so the database is derived in
@@ -60,11 +66,15 @@ HISTORY = Path("history")
 OUT = HISTORY / "parquet"
 
 # Files whose rows carry a date column and are partitioned by it.
+# Patterns are "20*", not "2026-*". A year-locked glob would keep working
+# perfectly until 1 January and then silently stop seeing new monthly files —
+# no error, just partitions that quietly stop appearing. This corpus is meant
+# to run for at least a year, so it has to survive the year rolling over.
 DATED = {
     "rate_changes.csv": "date",
-    "store-sizes-2026-*.csv": "date",
-    "sizes-2026-*.csv": "date",
-    "2026-*.csv": "date",
+    "store-sizes-20*.csv": "date",
+    "sizes-20*.csv": "date",
+    "20*.csv": "date",
 }
 # Small files with no useful date partition — copied whole.
 WHOLE = ("pipeline.csv", "psa-stock.csv")
@@ -127,7 +137,6 @@ def main():
 
     con = duckdb.connect()
     written = skipped = 0
-    total_csv = total_pq = 0
 
     patterns = list(DATED.items())
     seen_files = set()
@@ -170,8 +179,12 @@ def main():
                 """)
                 written += 1
 
-            total_csv += src.stat().st_size
-            total_pq += sum(p.stat().st_size for p in tdir.glob("*.parquet"))
+            # Sizes are summed once at the end by walking the tree, not here.
+            # Adding up tdir.glob() per source file counted shared directories
+            # repeatedly — store-sizes-2026-07 and store-sizes-2026-08 both
+            # write into store-sizes/ — and reported 16.29 MB for 9.54 MB on
+            # disk. A number a script prints about its own output has to be
+            # re-derivable from the output.
             print(f"  {src.name:28s} {len(dates):3d} day partitions -> {tdir}/")
 
     for name in WHOLE:
@@ -191,9 +204,12 @@ def main():
         print(f"  {name:28s} whole file -> {dest}")
 
     print(f"\n{written} partitions written, {skipped} already present")
+
+    total_csv = sum(p.stat().st_size for p in hist.glob("*.csv"))
+    total_pq = sum(p.stat().st_size for p in out.rglob("*.parquet"))
     if total_csv and total_pq:
         print(f"source CSV {total_csv/1e6:.2f} MB -> parquet {total_pq/1e6:.2f} MB "
-              f"({total_csv/total_pq:.1f}x)")
+              f"({total_csv/total_pq:.1f}x)  [both measured on disk]")
     print(f"\nnote: {CR_BOUNDARY_NOTE}")
     print("      every row carries wrote_with = 'crlf' | 'lf' recording which.")
     print("\nquery it:")
