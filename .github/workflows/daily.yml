@@ -32,6 +32,16 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          # Full history. actions/checkout defaults to a depth-1 shallow clone,
+          # and the rebase-and-retry in the push step below cannot rebase onto
+          # history it does not have. Added with that retry on 2026-09-01.
+          #
+          # It costs a bigger clone — .git is around 320 MB and grows with each
+          # daily partition — against a job that already runs for over an hour.
+          # A minute of clone is the cheapest insurance here: the alternative
+          # failure mode is losing a day of collection that cannot be recovered.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -60,6 +70,27 @@ jobs:
           python analysis/load_storage.py enriched_locations.json
           python analysis/update_history.py
           python analysis/update_rate_log.py
+
+      # PUSHED HERE, BEFORE ANYTHING REGENERABLE. Added 2026-09-01.
+      #
+      # Today's advertised prices exist nowhere else and cannot be collected
+      # again tomorrow. The reports and the Parquet corpus can be rebuilt from
+      # these CSVs at any time. Leaving all of it to one commit at the end put
+      # the irreplaceable thing behind the replaceable ones, so any failure in
+      # the back half took the day's prices down with it — which is what
+      # happened on 2026-08-31, and again on 2026-09-01 for a different reason.
+      #
+      # Two pushes in one job is slightly more machinery for a much smaller
+      # blast radius: after this step the day is safe no matter what follows.
+      - name: Push the day's data
+        run: |
+          # Invoked as `bash <script>`, not `./<script>`, so it does not depend
+          # on the executable bit. Git records that bit, Windows does not carry
+          # it, and a file committed 100644 fails here with "Permission denied"
+          # — on the step whose entire job is to stop the day being lost.
+          bash .github/push_with_retry.sh \
+            "Daily data: $(date +'%Y-%m-%d')" \
+            enriched_locations.json history/
 
       # These render the record. They are regenerable from the CSVs at any
       # time, so a failure here must NOT cost the day's collection.
@@ -93,20 +124,23 @@ jobs:
       - name: Build Parquet corpus
         run: python analysis/build_parquet.py
 
-      - name: Commit and push updated data
+      # The second push: the regenerable half. Everything here can be rebuilt
+      # from the CSVs already pushed above, so a failure at this point costs
+      # rendering time, not data.
+      #
+      # The public site is frozen at the deploy layer rather than by holding
+      # files back: Cloudflare's git integration was disconnected 2026-08-31,
+      # so it keeps serving the last build and no push can change it. That
+      # makes the repo a private archive.
+      #
+      # history/ is named again because the Parquet partitions land under it
+      # after the first push; git add on an already-committed tree is a no-op.
+      - name: Push reports and Parquet
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Everything the run produces is committed. The public site is frozen
-          # at the deploy layer instead: Cloudflare's git integration was
-          # disconnected 2026-08-31, so it keeps serving the last build and no
-          # push can change it. That makes the repo a private archive and takes
-          # the freeze off this line entirely.
-          #
-          # history/ carries the Parquet partitions as well as the CSVs.
-          git add enriched_locations.json insights.html trends.html history/ markets.html markets-detail.json store-history.json repricing-stats.json
-          git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
-          git push
+          bash .github/push_with_retry.sh \
+            "Daily reports and Parquet: $(date +'%Y-%m-%d')" \
+            history/ insights.html trends.html markets.html \
+            markets-detail.json store-history.json repricing-stats.json
 
       # LAST, and deliberately after the push. Added 2026-09-01.
       #

@@ -14,3 +14,14 @@
 *.py  text eol=lf
 *.yml text eol=lf
 *.md  text eol=lf
+
+# Shell scripts MUST be LF. They are edited on Windows and executed on the
+# ubuntu-latest runner, and a CRLF shebang line makes Linux look for an
+# interpreter literally named "bash\r" — the step dies with
+# "/usr/bin/env: 'bash\r': No such file or directory", which reads like the
+# runner is broken rather than like a line-ending problem.
+#
+# This is not covered by core.autocrlf alone: autocrlf is per-machine config,
+# so it protects whoever has it set and nobody else. An attribute travels with
+# the repo.
+*.sh  text eol=lf
