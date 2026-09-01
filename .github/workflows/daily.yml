@@ -107,3 +107,19 @@ jobs:
           git add enriched_locations.json insights.html trends.html history/ markets.html markets-detail.json store-history.json repricing-stats.json
           git diff --staged --quiet || git commit -m "Daily data update: $(date +'%Y-%m-%d')"
           git push
+
+      # LAST, and deliberately after the push. Added 2026-09-01.
+      #
+      # OFFER_RE stopped matching Public Storage's JSON-LD at some unknown
+      # earlier date and the run kept reporting success, because a regex that
+      # matches nothing looks exactly like a store with no offers. Every run in
+      # between is missing attrs/price_min/price_max and those days cannot be
+      # recovered.
+      #
+      # This step exists only to turn the run red so it gets noticed. It runs
+      # after the commit on purpose: the day's collection is already safe on
+      # disk and in git before this is allowed to fail anything. Putting it any
+      # earlier would skip the commit and destroy the very data it is meant to
+      # be protecting — which is what happened on 2026-08-31.
+      - name: Verify enrichment
+        run: python analysis/check_enrichment.py

@@ -108,8 +108,28 @@ def parse_stores(html):
     return stores
 
 
+# REWRITTEN 2026-09-01. The offer object changed shape and this pattern matched
+# zero times for an unknown number of days — silently, because a regex that
+# finds nothing is indistinguishable from a store with no offers.
+#
+# It used to be one formatted string:
+#     "price":"$38 - $57" ... "itemOffered":{...}
+# It is now two numeric schema.org fields on an AggregateOffer:
+#     "lowPrice":"38","highPrice":"57","priceCurrency":"USD","itemOffered":{...}
+#
+# No dollar sign, no separator, no combined field. The old pattern required a
+# literal `"price":"$`, so nothing matched. `itemOffered` also gained nested
+# objects (brand, aggregateRating), but they sit *after* "sku", so the lazy
+# [^}]*? runs still reach name/description/sku before the first closing brace.
+#
+# Verified against the real markup saved in offer_sample.txt (store 607,
+# Anniston AL, fetched 2026-09-01): 7 offers, 7 matches, all four groups
+# populated. See dump_offer_html.py for how to re-check this after the next
+# time it breaks — and it will break again, because it is a regex over someone
+# else's HTML.
 OFFER_RE = re.compile(
-    r'"price":"\$([\d,]+)(?:\s*-\s*\$([\d,]+))?"[^{]*"itemOffered":\{[^}]*?"name":"[^"]*"'
+    r'"lowPrice":"([\d,.]+)","highPrice":"([\d,.]+)"'
+    r'[^{]*?"itemOffered":\{[^}]*?"name":"[^"]*"'
     r'[^}]*?"description":"([^"]+)"[^}]*?"sku":"([^"]+)"')
 RATING_RE = re.compile(r'"aggregateRating":\{[^}]*?"ratingCount":"(\d+)","ratingValue":"([\d.]+)"')
 PIPELINE_FILE = "history/pipeline.csv"
@@ -167,8 +187,14 @@ def fetch_unit_attrs(html_text):
     for lo, hi, desc, sku in OFFER_RE.findall(html_text):
         desc = desc.replace(" (Prices are not guaranteed)", "")
         attrs = desc.split(" ", 1)[1] if " " in desc else desc  # drop leading size
-        pmin = int(lo.replace(",", ""))
-        pmax = int(hi.replace(",", "")) if hi else pmin
+        # lowPrice/highPrice arrive as bare numeric strings ("38"). They have
+        # been seen only as whole dollars, but float() first so a "38.00" or a
+        # thousands comma cannot throw and take the whole store page down.
+        try:
+            pmin = int(float(lo.replace(",", "")))
+            pmax = int(float(hi.replace(",", ""))) if hi else pmin
+        except ValueError:
+            continue
         out[sku] = (attrs, pmin, pmax)
     return out
 
@@ -452,7 +478,15 @@ def main():
     # Phase 8 — Save
     print(f"\n[8/8] Saving...")
     if os.path.exists(OUTPUT_FILE):
-        shutil.copy(OUTPUT_FILE, BACKUP_FILE)
+        # copy2, not copy: it preserves the source mtime, so the backup keeps
+        # the timestamp of the run that produced it rather than the timestamp
+        # of the copy. analysis/update_rate_log.py reads that mtime to report
+        # how old the baseline it diffed against actually is, and plain copy()
+        # stamped it with "now" — making every run report a baseline age of
+        # 0.0 days no matter the real gap. On 2026-08-31 it logged 0.0 for a
+        # baseline roughly a week stale, which was the exact case the field
+        # was added to catch.
+        shutil.copy2(OUTPUT_FILE, BACKUP_FILE)
         print(f"      Backed up existing → {BACKUP_FILE}")
 
     with open(OUTPUT_FILE, "w") as f:
