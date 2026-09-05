@@ -1,0 +1,5641 @@
+[
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4579",
+    "site_number": "4579",
+    "name": "CubeSmart of 3401 Robinson Rd Arnold",
+    "address": "3401 Robinson Rd",
+    "city": "Arnold",
+    "state": "MO",
+    "zip": "63010",
+    "phone": "636-296-5311",
+    "lat": 38.41685,
+    "lng": -90.38745,
+    "url": "https://www.cubesmart.com/missouri-self-storage/arnold-self-storage/4579.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 45,
+        "street_price": 75,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3d0b6253-72d6-4882-a1f9-df97483df5c1",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 45,
+          "street": 75
+        }
+      },
+      {
+        "size": "Other",
+        "price": 31,
+        "street_price": 52,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_c67e3368-6953-4c77-8bad-0ce6332212f6",
+        "attrs": "",
+        "rates": {
+          "web": 31,
+          "street": 52
+        }
+      }
+    ],
+    "rating": 4.3,
+    "reviews": 133
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_2259",
+    "site_number": "2259",
+    "name": "CubeSmart of 8252 Westheimer Rd Houston",
+    "address": "8252 Westheimer Rd",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77063",
+    "phone": "713-266-6630",
+    "lat": 29.73844,
+    "lng": -95.51239,
+    "url": "https://www.cubesmart.com/texas-self-storage/houston-self-storage/2259.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 11,
+        "street_price": 22,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_140c0af4-1a0f-4ab0-9d9d-2c628ccc4db2",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 11,
+          "street": 22
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 12,
+        "street_price": 24,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9bcebb96-e209-4fb2-a849-1126faf7aa22",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 12,
+          "street": 24
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 21,
+        "street_price": 41,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_99da91e5-7e58-490d-8db0-367f92aa3003",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 21,
+          "street": 41
+        }
+      },
+      {
+        "size": "5x6",
+        "price": 22,
+        "street_price": 43,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4a3e9576-f487-4b8d-8f62-f5c1bf5fe07a",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 22,
+          "street": 43
+        }
+      },
+      {
+        "size": "5x7",
+        "price": 25,
+        "street_price": 49,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_8d9b6070-24b7-4b1e-a7a4-c832aafceb1b",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 25,
+          "street": 49
+        }
+      },
+      {
+        "size": "5x8",
+        "price": 27,
+        "street_price": 53,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_e2a7005f-24ee-40d7-ad08-aad98882bed2",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 27,
+          "street": 53
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 34,
+        "street_price": 68,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6577bac5-4f35-431e-9e00-d7abb8032c78",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 34,
+          "street": 68
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 36,
+        "street_price": 71,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_0b9f7931-c6c3-4f56-93fe-e3544343b6ee",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 36,
+          "street": 71
+        }
+      },
+      {
+        "size": "6x10",
+        "price": 37,
+        "street_price": 73,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c9e3e66d-5fbb-4912-9b84-28beabda7d8c",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 37,
+          "street": 73
+        }
+      },
+      {
+        "size": "7x10",
+        "price": 39,
+        "street_price": 77,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1efdd500-0b6b-402c-a4b1-03e9677a4526",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 39,
+          "street": 77
+        }
+      },
+      {
+        "size": "9x10",
+        "price": 69,
+        "street_price": 137,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_04c9796e-2f48-40a5-82c6-98cbf57009c2",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 69,
+          "street": 137
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 72,
+        "street_price": 111,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_83bf600e-f035-4433-91f2-592d835ef646",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 72,
+          "street": 111
+        }
+      },
+      {
+        "size": "9x12",
+        "price": 80,
+        "street_price": 160,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_7b00b270-f620-40c4-aac1-8769ed14fbda",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 80,
+          "street": 160
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 86,
+        "street_price": 132,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_dd2190ef-a620-4c32-86cc-4e59f30d6edf",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 86,
+          "street": 132
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 107,
+        "street_price": 164,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_aa10bbea-d1ee-4f14-bbbe-5c5e08b1ee56",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 107,
+          "street": 164
+        }
+      },
+      {
+        "size": "9x20",
+        "price": 156,
+        "street_price": 312,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3c224efb-654d-4d8d-891e-80eedd47e782",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 156,
+          "street": 312
+        }
+      },
+      {
+        "size": "10x18",
+        "price": 158,
+        "street_price": 243,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_bb4e57dc-660a-46c1-aeb7-7e34084ae29f",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 158,
+          "street": 243
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 187,
+        "street_price": 288,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_8431929e-077b-417b-8d6d-5a382c92cd47",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 187,
+          "street": 288
+        }
+      },
+      {
+        "size": "10x24",
+        "price": 276,
+        "street_price": 552,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_100d668b-b069-453e-a620-718d12f0a382",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 276,
+          "street": 552
+        }
+      }
+    ],
+    "rating": 4.7,
+    "reviews": 482
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4435",
+    "site_number": "4435",
+    "name": "CubeSmart of 7331 Steel Mill Dr Springfield",
+    "address": "7331 Steel Mill Dr",
+    "city": "Springfield",
+    "state": "VA",
+    "zip": "22150",
+    "phone": "703-451-3200",
+    "lat": 38.79445,
+    "lng": -77.1979,
+    "url": "https://www.cubesmart.com/virginia-self-storage/springfield-self-storage/4435.html",
+    "units": [
+      {
+        "size": "5x10",
+        "price": 23,
+        "street_price": 45,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_806b6a80-2c83-44b2-9edc-e95ba3da712d",
+        "attrs": "",
+        "rates": {
+          "web": 23,
+          "street": 45
+        }
+      },
+      {
+        "size": "5x6",
+        "price": 75,
+        "street_price": 150,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_0dc615c6-bbe3-49c3-958b-0eb4cb454429",
+        "attrs": "Elevator Access, Indoor",
+        "rates": {
+          "web": 75,
+          "street": 150
+        }
+      },
+      {
+        "size": "4x10",
+        "price": 102,
+        "street_price": 203,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d32a3636-2446-4d81-ab19-cd6d88396510",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 102,
+          "street": 203
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 106,
+        "street_price": 212,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_48f4071c-6735-4974-a67c-a23b7cc86168",
+        "attrs": "Elevator Access, Indoor",
+        "rates": {
+          "web": 106,
+          "street": 212
+        }
+      },
+      {
+        "size": "5x11",
+        "price": 110,
+        "street_price": 220,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a58d7708-bf93-45d0-b594-5e0b79411ae7",
+        "attrs": "Elevator Access, Indoor",
+        "rates": {
+          "web": 110,
+          "street": 220
+        }
+      },
+      {
+        "size": "5x12",
+        "price": 119,
+        "street_price": 237,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_2150dee1-95e1-401d-aed1-57a709a275ee",
+        "attrs": "Elevator Access, Indoor",
+        "rates": {
+          "web": 119,
+          "street": 237
+        }
+      },
+      {
+        "size": "7x10",
+        "price": 122,
+        "street_price": 244,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_bf1c2f09-ee6c-4f29-9dd6-f817c96e8b6a",
+        "attrs": "Elevator Access, Indoor",
+        "rates": {
+          "web": 122,
+          "street": 244
+        }
+      },
+      {
+        "size": "8x10",
+        "price": 30,
+        "street_price": 60,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_e9077043-c098-4e6f-b7a2-d3aabd111bd7",
+        "attrs": "",
+        "rates": {
+          "web": 30,
+          "street": 60
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 60,
+        "street_price": 120,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d7d2989c-ebd1-4871-948d-93ac075e9951",
+        "attrs": "",
+        "rates": {
+          "web": 60,
+          "street": 120
+        }
+      }
+    ],
+    "rating": 4.9,
+    "reviews": 98
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_3159",
+    "site_number": "3159",
+    "name": "CubeSmart of 1372 E 5th St Ontario",
+    "address": "1372 E 5th St",
+    "city": "Ontario",
+    "state": "CA",
+    "zip": "91764",
+    "phone": "909-218-4551",
+    "lat": 34.08113,
+    "lng": -117.6262,
+    "url": "https://www.cubesmart.com/california-self-storage/ontario-self-storage/3159.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 64,
+        "street_price": 98,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_6e355e19-7bb3-4380-be93-b816389253e9",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 64,
+          "street": 98
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 75,
+        "street_price": 150,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_784d25fe-5aee-4655-8ac4-ce890dfd177d",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 75,
+          "street": 150
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 78,
+        "street_price": 156,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3233e2e6-7888-4573-96b0-c4db64e8f63c",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 78,
+          "street": 156
+        }
+      },
+      {
+        "size": "5x15",
+        "price": 102,
+        "street_price": 203,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_deec6f3b-679c-4f42-b4ea-66369d01bcbb",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 102,
+          "street": 203
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 146,
+        "street_price": 224,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_f4c88b67-0cc5-4fb1-9512-4ad61c557706",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 146,
+          "street": 224
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 160,
+        "street_price": 319,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_aa28d377-f12c-4170-aa29-471caede42c9",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 160,
+          "street": 319
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 179,
+        "street_price": 357,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_8e3d61ba-0fc1-4bc9-b72a-05656cf64317",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 179,
+          "street": 357
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 234,
+        "street_price": 468,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b286331e-b061-4f79-a0db-ad7da69d1dbd",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 234,
+          "street": 468
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 315,
+        "street_price": 630,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_17e63145-00f2-43ca-957e-9b0329529fa1",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 315,
+          "street": 630
+        }
+      },
+      {
+        "size": "12x50",
+        "price": 310,
+        "street_price": 517,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_703a3aa7-f405-4f1d-8b37-4c6d90c23d94",
+        "attrs": "",
+        "rates": {
+          "web": 310,
+          "street": 517
+        }
+      }
+    ],
+    "rating": 4.6,
+    "reviews": 550
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_135",
+    "site_number": "135",
+    "name": "CubeSmart of 6512 14th St W Bradenton",
+    "address": "6512 14th St W",
+    "city": "Bradenton",
+    "state": "FL",
+    "zip": "34207",
+    "phone": "941-758-0001",
+    "lat": 27.42433,
+    "lng": -82.57581,
+    "url": "https://www.cubesmart.com/florida-self-storage/bradenton-self-storage/135.html",
+    "units": [
+      {
+        "size": "3x3",
+        "price": 9,
+        "street_price": 15,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ab2a3eb8-5c16-42d8-a799-00a8c9b6556c",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 9,
+          "street": 15
+        }
+      },
+      {
+        "size": "4x8",
+        "price": 14,
+        "street_price": 23,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_02a26de4-3be1-4c14-944c-2050296560b0",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 14,
+          "street": 23
+        }
+      },
+      {
+        "size": "4x8",
+        "price": 14,
+        "street_price": 24,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_73e32a26-d408-4ae1-92d7-8c9ca51565a1",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 14,
+          "street": 24
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 15,
+        "street_price": 25,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c6609dd7-5ed5-407c-9d25-ca170b8954b1",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 15,
+          "street": 25
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 15,
+        "street_price": 25,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c205f0d9-6add-4cf2-9f53-da316fdee1e1",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 15,
+          "street": 25
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 16,
+        "street_price": 27,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9f086c4f-06a9-4ade-b098-b0c4cd99171f",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 16,
+          "street": 27
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 17,
+        "street_price": 28,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_111d62c3-5d8c-4087-abec-7b6960cd3419",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 17,
+          "street": 28
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 17,
+        "street_price": 28,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ccfe801d-2ba5-44bc-b926-69cdf692a95a",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 17,
+          "street": 28
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 19,
+        "street_price": 32,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4f7af490-b112-459e-b9be-a3a07d92136d",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 19,
+          "street": 32
+        }
+      },
+      {
+        "size": "5x15",
+        "price": 28,
+        "street_price": 46,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c6377539-2a84-4a93-a25d-336ead3e1842",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 28,
+          "street": 46
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 56,
+        "street_price": 93,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_513038b9-4c92-46c3-8d14-559748028dea",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 56,
+          "street": 93
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 45,
+        "street_price": 75,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f719bd7a-03a4-48be-8c16-27a5777f5636",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 45,
+          "street": 75
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 79,
+        "street_price": 105,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_91c5df6a-ea62-4547-8cf1-471d64fc7633",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 79,
+          "street": 105
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 115,
+        "street_price": 192,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_780e04d9-5843-4f0c-8dce-7777ba15c0e2",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 115,
+          "street": 192
+        }
+      },
+      {
+        "size": "20x10",
+        "price": 115,
+        "street_price": 192,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6d380a57-dfe1-4cea-adf7-23d2ac42f026",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 115,
+          "street": 192
+        }
+      },
+      {
+        "size": "Other",
+        "price": 83,
+        "street_price": 138,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_6f705dac-c878-4fa2-a1d3-07a8896fb4e1",
+        "attrs": "",
+        "rates": {
+          "web": 83,
+          "street": 138
+        }
+      }
+    ],
+    "rating": 4.6,
+    "reviews": 307
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4251",
+    "site_number": "4251",
+    "name": "CubeSmart of 3501 Sw Martin Downs Blvd Palm City",
+    "address": "3501 Sw Martin Downs Blvd",
+    "city": "Palm City",
+    "state": "FL",
+    "zip": "34990",
+    "phone": "772-221-7222",
+    "lat": 27.16339,
+    "lng": -80.30144,
+    "url": "https://www.cubesmart.com/florida-self-storage/palm-city-self-storage/4251.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 14,
+        "street_price": 23,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a64c9702-4ba0-422a-8ce3-3aa70f152264",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 14,
+          "street": 23
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 15,
+        "street_price": 25,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_48f733c0-350c-4d97-a3f8-c5aad8febd1a",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 15,
+          "street": 25
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 22,
+        "street_price": 36,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b01e7923-f221-45cd-98bd-4f2ce7a827f0",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 22,
+          "street": 36
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 39,
+        "street_price": 52,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_53ad761c-2d93-4c95-9261-c39890781b40",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 39,
+          "street": 52
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 41,
+        "street_price": 54,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_6966ba68-ae6d-4e0d-9fbd-c26a853c1b84",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 41,
+          "street": 54
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 49,
+        "street_price": 65,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_6f9d88f8-4447-4fe1-8e17-e6efc2c3a6c0",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 49,
+          "street": 65
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 50,
+        "street_price": 84,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a8d35dd1-c3f6-4264-9667-8cc8e00764a9",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 50,
+          "street": 84
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 52,
+        "street_price": 87,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b8a1217e-6682-40c1-a52c-42e52f2d4a36",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 52,
+          "street": 87
+        }
+      },
+      {
+        "size": "5x15",
+        "price": 61,
+        "street_price": 102,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ab86aff2-e10f-45af-8749-f70de46fddcd",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 61,
+          "street": 102
+        }
+      },
+      {
+        "size": "5x15",
+        "price": 70,
+        "street_price": 93,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_36f99a8e-569b-41ce-b25d-60ec787309a7",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 70,
+          "street": 93
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 105,
+        "street_price": 140,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_89bf85d4-4834-447e-b409-70acd0d87ae6",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 105,
+          "street": 140
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 149,
+        "street_price": 198,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_3dda7cb3-9217-4814-95cd-7fabfe16db04",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 149,
+          "street": 198
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 159,
+        "street_price": 212,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_5339cd7d-cca6-449e-b95e-4039b49ceeb5",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 159,
+          "street": 212
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 202,
+        "street_price": 337,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1dc5fa90-dfcf-43a0-9d2d-b87ac05e0501",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 202,
+          "street": 337
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 269,
+        "street_price": 358,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_4946d4ed-0884-47f5-935e-2035eec6fb66",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 269,
+          "street": 358
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 292,
+        "street_price": 389,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_572c0331-bff0-46e1-beb2-bd7d9a564de1",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 292,
+          "street": 389
+        }
+      },
+      {
+        "size": "28x20",
+        "price": 432,
+        "street_price": 720,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ea1a847e-da40-4dee-a0a4-4b4b48ee1083",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 432,
+          "street": 720
+        }
+      }
+    ],
+    "rating": 4.7,
+    "reviews": 161
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4898",
+    "site_number": "4898",
+    "name": "CubeSmart of 7273 Kearney St Commerce City",
+    "address": "7273 Kearney St",
+    "city": "Commerce City",
+    "state": "CO",
+    "zip": "80022",
+    "phone": "720-773-8421",
+    "lat": 39.82824,
+    "lng": -104.9176,
+    "url": "https://www.cubesmart.com/colorado-self-storage/commerce-city-self-storage/4898.html",
+    "units": [
+      {
+        "size": "5x10",
+        "price": 83,
+        "street_price": 165,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_580d98df-4d0b-4fd8-8d04-49bc026d945d",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 83,
+          "street": 165
+        }
+      },
+      {
+        "size": "6x10",
+        "price": 85,
+        "street_price": 130,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_8fc37464-7205-4726-ac11-96d70b902563",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 85,
+          "street": 130
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 133,
+        "street_price": 205,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_3029b1dd-8d8e-4373-8c5e-c1af106de9aa",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 133,
+          "street": 205
+        }
+      },
+      {
+        "size": "8x20",
+        "price": 157,
+        "street_price": 314,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_7b43ae61-e396-4b19-9a98-c42033a48804",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 157,
+          "street": 314
+        }
+      },
+      {
+        "size": "10x18",
+        "price": 166,
+        "street_price": 331,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a83d7ca7-39ed-45e8-ba50-efac5e2bb85e",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 166,
+          "street": 331
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 171,
+        "street_price": 342,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_96bb5324-5bc3-4f0a-b35c-2d892fe7669e",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 171,
+          "street": 342
+        }
+      }
+    ],
+    "rating": 4.4,
+    "reviews": 193
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4701",
+    "site_number": "4701",
+    "name": "CubeSmart of 1111 Sw Pine Island Rd Cape Coral",
+    "address": "1111 Sw Pine Island Rd",
+    "city": "Cape Coral",
+    "state": "FL",
+    "zip": "33991",
+    "phone": "239-402-3331",
+    "lat": 26.64375,
+    "lng": -81.99687,
+    "url": "https://www.cubesmart.com/florida-self-storage/cape-coral-self-storage/4701.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 13,
+        "street_price": 26,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_21e09c3c-a5b1-4ab8-ae55-d20311b27cf0",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 13,
+          "street": 26
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 19,
+        "street_price": 38,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_5e271bcb-1b81-4d1e-a818-68085dbf3918",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 19,
+          "street": 38
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 23,
+        "street_price": 45,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_5b38e997-d4b4-4a9c-96e7-2f067d74d994",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 23,
+          "street": 45
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 23,
+        "street_price": 45,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a89b8c07-bb67-4817-83d2-cb0ddce56567",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 23,
+          "street": 45
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 27,
+        "street_price": 53,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_e7aedf42-71a0-4195-a7dc-fb8face3e604",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 27,
+          "street": 53
+        }
+      },
+      {
+        "size": "7.5x10",
+        "price": 32,
+        "street_price": 64,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_836af184-ffce-4293-93b2-5c906ca1e0e9",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 32,
+          "street": 64
+        }
+      },
+      {
+        "size": "10x7.5",
+        "price": 32,
+        "street_price": 64,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_18ca7deb-7851-4286-8bf7-56f70a069ffc",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 32,
+          "street": 64
+        }
+      },
+      {
+        "size": "10x7.5",
+        "price": 38,
+        "street_price": 76,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a39326e9-d9e7-43d2-8789-b22ee3e6fc89",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 38,
+          "street": 76
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 40,
+        "street_price": 79,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_96d6c9c8-136d-46aa-b781-6ba82273f1b3",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 40,
+          "street": 79
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 57,
+        "street_price": 113,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_11a238a2-5270-4a4e-9dd3-abc8666d7865",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 57,
+          "street": 113
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 71,
+        "street_price": 141,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_fe871a72-b4d4-4ebc-9135-94a0990d5b00",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 71,
+          "street": 141
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 106,
+        "street_price": 212,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_32ae8bcc-5da2-4743-8040-f87ca6263184",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 106,
+          "street": 212
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 106,
+        "street_price": 212,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a54392c7-b431-4e57-9a31-bc4be3d46901",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 106,
+          "street": 212
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 133,
+        "street_price": 265,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ebbdf37d-21fb-44f0-ad81-8ebb8675dcd6",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 133,
+          "street": 265
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 171,
+        "street_price": 342,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d0454bdb-abc7-4218-ae3e-53dbdbe0f9aa",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 171,
+          "street": 342
+        }
+      },
+      {
+        "size": "20x15",
+        "price": 178,
+        "street_price": 356,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3743bb1e-85a0-4a2d-9572-39e4ae621263",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 178,
+          "street": 356
+        }
+      },
+      {
+        "size": "20x20",
+        "price": 185,
+        "street_price": 370,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_25e4411d-48d2-4d1f-8630-d5c7e243eb62",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 185,
+          "street": 370
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 208,
+        "street_price": 416,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_7dedfc51-61c8-4ead-835b-89381cb33641",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 208,
+          "street": 416
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 224,
+        "street_price": 448,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c34e09b6-83b6-4df6-82ac-9c32bed660b7",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 224,
+          "street": 448
+        }
+      }
+    ],
+    "rating": 4.8,
+    "reviews": 165
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4869",
+    "site_number": "4869",
+    "name": "CubeSmart of 401 Jonestown Rd Winston Salem",
+    "address": "401 Jonestown Rd",
+    "city": "Winston Salem",
+    "state": "NC",
+    "zip": "27104",
+    "phone": "336-283-7013",
+    "lat": 36.08383,
+    "lng": -80.34677,
+    "url": "https://www.cubesmart.com/north-carolina-self-storage/winston-salem-self-storage/4869.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 32,
+        "street_price": 53,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f7c02615-34d0-4963-869c-a9c57da5eb39",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 32,
+          "street": 53
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 33,
+        "street_price": 55,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_2608d8d9-0d79-4a8b-aed3-fc16735b2b99",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 33,
+          "street": 55
+        }
+      },
+      {
+        "size": "3x10",
+        "price": 37,
+        "street_price": 62,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_78bdbcdb-8965-48cf-8c37-7cd8628a291a",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 37,
+          "street": 62
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 42,
+        "street_price": 70,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ce9e169d-e155-419c-a513-21890a8478d9",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 42,
+          "street": 70
+        }
+      },
+      {
+        "size": "7x10",
+        "price": 44,
+        "street_price": 58,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_32d74325-050c-4e2c-a81a-2f28c267839b",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 44,
+          "street": 58
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 50,
+        "street_price": 67,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_fd28340e-7abd-448f-8e67-0bf23694d8d7",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 50,
+          "street": 67
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 59,
+        "street_price": 78,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_47c9e163-3028-4e24-9604-c0d0bd82fe79",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 59,
+          "street": 78
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 74,
+        "street_price": 98,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_ff9432ff-ee06-4381-a899-88f379a0e68c",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 74,
+          "street": 98
+        }
+      },
+      {
+        "size": "20x10",
+        "price": 128,
+        "street_price": 214,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c529a211-77e2-487d-bf1d-12aee574a51e",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 128,
+          "street": 214
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 175,
+        "street_price": 233,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_5ec99089-93b4-4506-95b5-d91691050fcc",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 175,
+          "street": 233
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 272,
+        "street_price": 453,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d5f1ac80-6341-4991-b542-c7f0cf7bab4b",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 272,
+          "street": 453
+        }
+      }
+    ],
+    "rating": 4.8,
+    "reviews": 242
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_1476",
+    "site_number": "1476",
+    "name": "CubeSmart of 2623 Fire Rd Egg Harbor Township",
+    "address": "2623 Fire Rd",
+    "city": "Egg Harbor Township",
+    "state": "NJ",
+    "zip": "08234",
+    "phone": "609-646-4884",
+    "lat": 39.41227,
+    "lng": -74.54007,
+    "url": "https://www.cubesmart.com/new-jersey-self-storage/egg-harbor-township-self-storage/1476.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 47,
+        "street_price": 94,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_acd52f3f-1f68-4f9e-b479-c52a7705c8c6",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 47,
+          "street": 94
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 54,
+        "street_price": 83,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_1b3fb635-0d3e-4493-b35c-b9fab053f96f",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 54,
+          "street": 83
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 56,
+        "street_price": 111,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_8e4509b8-eece-4ad0-9e8e-61d254e9ef2d",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 56,
+          "street": 111
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 60,
+        "street_price": 120,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a736662e-3521-4895-89e6-4a1d2906abbf",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 60,
+          "street": 120
+        }
+      },
+      {
+        "size": "5x15",
+        "price": 77,
+        "street_price": 154,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_682eff95-5ac0-4673-951e-63b53d4988ed",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 77,
+          "street": 154
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 99,
+        "street_price": 197,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_88644a82-7563-40e6-9835-5ef9569eee49",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 99,
+          "street": 197
+        }
+      },
+      {
+        "size": "8x10",
+        "price": 90,
+        "street_price": 180,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a998e921-689a-40a4-af6d-6ace0285d93e",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 90,
+          "street": 180
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 103,
+        "street_price": 159,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_19bbf5b9-1db2-4e25-b54a-5168ae3c366a",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 103,
+          "street": 159
+        }
+      },
+      {
+        "size": "8x15",
+        "price": 121,
+        "street_price": 242,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9acf01fe-5532-47a8-a9cb-71527bef0daa",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 121,
+          "street": 242
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 137,
+        "street_price": 273,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6a0efbee-ceee-4247-956d-ee11e30fc85f",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 137,
+          "street": 273
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 165,
+        "street_price": 254,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_ecfd12a3-a71a-4daa-81bd-2a3252799dfc",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 165,
+          "street": 254
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 190,
+        "street_price": 379,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_7d6dc4cc-ed6c-41cc-8bf5-ba3de9812ab0",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 190,
+          "street": 379
+        }
+      },
+      {
+        "size": "8x20",
+        "price": 106,
+        "street_price": 211,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_956be4ea-cbcd-4af6-9d3e-b0772d72d3b2",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 106,
+          "street": 211
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 151,
+        "street_price": 233,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_606b6da7-6c8e-4634-99fd-97496ae9058c",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 151,
+          "street": 233
+        }
+      },
+      {
+        "size": "8x25",
+        "price": 163,
+        "street_price": 326,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_7a3b32e1-adc4-42bd-872d-710233c1c2c2",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 163,
+          "street": 326
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 201,
+        "street_price": 401,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c6462dac-896b-4f89-b727-ff4b87d00553",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 201,
+          "street": 401
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 254,
+        "street_price": 507,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_76540728-0977-4074-a163-3744d07627ce",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 254,
+          "street": 507
+        }
+      },
+      {
+        "size": "Other",
+        "price": 80,
+        "street_price": 133,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_67f222d8-8b8c-4c6a-85ab-29cfded6b51d",
+        "attrs": "",
+        "rates": {
+          "web": 80,
+          "street": 133
+        }
+      }
+    ],
+    "rating": 4.4,
+    "reviews": 272
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_2451",
+    "site_number": "2451",
+    "name": "CubeSmart of 945 Atlantic Ave Brooklyn",
+    "address": "945 Atlantic Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11238",
+    "phone": "718-399-3600",
+    "lat": 40.68062,
+    "lng": -73.9611,
+    "url": "https://www.cubesmart.com/new-york-self-storage/brooklyn-self-storage/2451.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 37,
+        "street_price": 61,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_bf8f0629-22f4-4dc3-8dfc-125a687b4627",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 37,
+          "street": 61
+        }
+      },
+      {
+        "size": "5x8",
+        "price": 170,
+        "street_price": 226,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_2b8ab884-2a26-48e3-9d37-e2848e2cdaac",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 170,
+          "street": 226
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 181,
+        "street_price": 241,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_ec3e7e9b-e1f5-445e-acd6-c8c01b5416fb",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 181,
+          "street": 241
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 331,
+        "street_price": 441,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_a3641170-51c5-4c69-b8f4-a50dfd91abaf",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 331,
+          "street": 441
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 526,
+        "street_price": 701,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_d60ca33a-4c87-4aba-ba1f-f828d62ca2d7",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 526,
+          "street": 701
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 701,
+        "street_price": 1168,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c3d699b9-9fd1-4273-840b-b840e077fd52",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 701,
+          "street": 1168
+        }
+      }
+    ],
+    "rating": 4.8,
+    "reviews": 407
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4921",
+    "site_number": "4921",
+    "name": "CubeSmart of 39 Thomas Johnson Dr Frederick",
+    "address": "39 Thomas Johnson Dr",
+    "city": "Frederick",
+    "state": "MD",
+    "zip": "21702",
+    "phone": "240-288-2998",
+    "lat": 39.45535,
+    "lng": -77.40302,
+    "url": "https://www.cubesmart.com/maryland-self-storage/frederick-self-storage/4921.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 41,
+        "street_price": 81,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_0dc851cb-ced1-4bf9-8787-a6096b8d8e2e",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 41,
+          "street": 81
+        }
+      },
+      {
+        "size": "5x7.5",
+        "price": 47,
+        "street_price": 72,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_70943546-02b5-48ed-ae25-a4cdc8fed5d3",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 47,
+          "street": 72
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 67,
+        "street_price": 133,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3904b8da-4bd7-4654-b9d0-9a58338d5641",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 67,
+          "street": 133
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 79,
+        "street_price": 158,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_033fab3c-e742-4643-9677-bbe0534eb90f",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 79,
+          "street": 158
+        }
+      },
+      {
+        "size": "7.5x10",
+        "price": 85,
+        "street_price": 130,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_c6dc5bdf-ce68-48a7-a01f-9098dafb9378",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 85,
+          "street": 130
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 86,
+        "street_price": 171,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_2b22040c-c841-4aa7-898b-01dc375bb1ea",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 86,
+          "street": 171
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 137,
+        "street_price": 211,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_9a20003c-a961-4014-9b68-e80351543fbc",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 137,
+          "street": 211
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 175,
+        "street_price": 269,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_2aeed3be-f1cc-49b0-bad2-cd43b31a5944",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 175,
+          "street": 269
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 237,
+        "street_price": 365,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_d41f715e-45f7-4118-bf76-dcd0477fa911",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 237,
+          "street": 365
+        }
+      },
+      {
+        "size": "20x10",
+        "price": 316,
+        "street_price": 631,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3b93a154-cf6e-4857-ae03-6290f3b79bef",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 316,
+          "street": 631
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 346,
+        "street_price": 691,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_2b8b8c48-0d81-468f-a0d1-9f7286ba03e2",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 346,
+          "street": 691
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 384,
+        "street_price": 767,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_eda3a5cf-f48e-46d2-9336-bc4ee77a8773",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 384,
+          "street": 767
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 444,
+        "street_price": 683,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_66a047a1-9b5b-4c9e-af27-d8dac7221d9c",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 444,
+          "street": 683
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 460,
+        "street_price": 707,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_444e7bfd-0359-4187-88af-72963e1083af",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 460,
+          "street": 707
+        }
+      },
+      {
+        "size": "Other",
+        "price": 86,
+        "street_price": 143,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_4d961d39-a59b-4423-aafc-0e06624c15f3",
+        "attrs": "",
+        "rates": {
+          "web": 86,
+          "street": 143
+        }
+      }
+    ],
+    "rating": 4.9,
+    "reviews": 213
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_5188",
+    "site_number": "5188",
+    "name": "CubeSmart of 149 Wason Avenue Springfield",
+    "address": "149 Wason Avenue",
+    "city": "Springfield",
+    "state": "MA",
+    "zip": "01107",
+    "phone": "203-951-6867",
+    "lat": 42.12463,
+    "lng": -72.61192,
+    "url": "https://www.cubesmart.com/massachusetts-self-storage/springfield-self-storage/5188.html",
+    "units": [
+      {
+        "size": "3x5",
+        "price": 14,
+        "street_price": 28,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_e94490f4-75e8-450d-a879-999e17a5ea26",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 14,
+          "street": 28
+        }
+      },
+      {
+        "size": "3x5",
+        "price": 16,
+        "street_price": 32,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_44179e17-ea58-4dfa-9d6a-822b45916daa",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 16,
+          "street": 32
+        }
+      },
+      {
+        "size": "3x8",
+        "price": 21,
+        "street_price": 41,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_34ffebe1-f503-4f9d-a4ad-656dab03645b",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 21,
+          "street": 41
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 22,
+        "street_price": 43,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_748f494e-7794-456d-8d33-abcc7614bdee",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 22,
+          "street": 43
+        }
+      },
+      {
+        "size": "4x7",
+        "price": 23,
+        "street_price": 45,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_614d7487-586c-4cb8-8a01-d6635599a81e",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 23,
+          "street": 45
+        }
+      },
+      {
+        "size": "3x10",
+        "price": 24,
+        "street_price": 47,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_e5104482-8cac-4a60-800d-71aeed2080c7",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 24,
+          "street": 47
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 25,
+        "street_price": 49,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_fb9f0085-5ce5-4165-9fde-f0fa0b0cbc26",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 25,
+          "street": 49
+        }
+      },
+      {
+        "size": "4x8",
+        "price": 26,
+        "street_price": 51,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_44702719-57e2-41a7-9c65-3fb339744fc4",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 26,
+          "street": 51
+        }
+      },
+      {
+        "size": "3x10",
+        "price": 28,
+        "street_price": 56,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1605725a-d138-41ef-80c2-4d29fe186629",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 28,
+          "street": 56
+        }
+      },
+      {
+        "size": "4x10",
+        "price": 28,
+        "street_price": 56,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3c63d154-2a5c-456a-9f21-515f186ebe6d",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 28,
+          "street": 56
+        }
+      },
+      {
+        "size": "5x8",
+        "price": 28,
+        "street_price": 56,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_dcd8b5bb-e5bd-4ce4-b4d7-8f7f84a15528",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 28,
+          "street": 56
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 30,
+        "street_price": 60,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a3d2c158-c09a-43c4-afef-7252b0a588b6",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 30,
+          "street": 60
+        }
+      },
+      {
+        "size": "5x7",
+        "price": 31,
+        "street_price": 62,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c3ee962e-8ab1-4226-a9c0-d9dda806501a",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 31,
+          "street": 62
+        }
+      },
+      {
+        "size": "7x8",
+        "price": 33,
+        "street_price": 66,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d600d1a5-5317-498f-82e5-f1ef1c8045a5",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 33,
+          "street": 66
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 37,
+        "street_price": 73,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b10a54de-113b-45a7-bab7-e35c269b6883",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 37,
+          "street": 73
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 37,
+        "street_price": 73,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_edb3075b-d231-4253-bf69-2317422ffe0d",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 37,
+          "street": 73
+        }
+      },
+      {
+        "size": "5x13",
+        "price": 38,
+        "street_price": 75,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1b7dd4a7-1d3d-4f7c-8f7e-b956bd8fca45",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 38,
+          "street": 75
+        }
+      },
+      {
+        "size": "5x12",
+        "price": 40,
+        "street_price": 79,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3fc446ca-1e5b-458d-9cf4-4fc57e973584",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 40,
+          "street": 79
+        }
+      },
+      {
+        "size": "5x15",
+        "price": 40,
+        "street_price": 79,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f2a582ec-5e90-4c12-8d4a-11ee276757d4",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 40,
+          "street": 79
+        }
+      },
+      {
+        "size": "8x10",
+        "price": 42,
+        "street_price": 83,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_16bb8466-6d28-44b7-9457-e58fb07952e8",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 42,
+          "street": 83
+        }
+      },
+      {
+        "size": "7x13",
+        "price": 44,
+        "street_price": 88,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_40caf395-b293-4604-b802-ed77f467392a",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 44,
+          "street": 88
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 48,
+        "street_price": 96,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6428f00c-ada8-4873-aaab-380df9303042",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 48,
+          "street": 96
+        }
+      },
+      {
+        "size": "5x20",
+        "price": 48,
+        "street_price": 96,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_fe7223d1-1a9e-4852-9f0c-541beb7a018e",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 48,
+          "street": 96
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 53,
+        "street_price": 105,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1713359a-e7ca-4b01-a67b-6ceb327d1e41",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 53,
+          "street": 105
+        }
+      },
+      {
+        "size": "8x15",
+        "price": 53,
+        "street_price": 105,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3e8263fb-fe32-4aa7-8879-dd8439dbf126",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 53,
+          "street": 105
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 54,
+        "street_price": 107,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_eef05c96-0785-411f-bbe7-976ed9d1f1ad",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 54,
+          "street": 107
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 57,
+        "street_price": 113,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9b512358-62c6-47e2-acd5-e1eaf55de17a",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 57,
+          "street": 113
+        }
+      },
+      {
+        "size": "5x20",
+        "price": 57,
+        "street_price": 113,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3126fd6c-5769-4718-844f-6c0bbad63e8c",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 57,
+          "street": 113
+        }
+      },
+      {
+        "size": "10x13",
+        "price": 57,
+        "street_price": 113,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1921ead4-69de-43cb-8e77-2d0b7bb0372f",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 57,
+          "street": 113
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 64,
+        "street_price": 128,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_8715c7c7-568b-47fb-8e47-1f1726896afd",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 64,
+          "street": 128
+        }
+      },
+      {
+        "size": "8x20",
+        "price": 57,
+        "street_price": 113,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_285444a9-0ce0-4914-90ee-159784ab6689",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 57,
+          "street": 113
+        }
+      },
+      {
+        "size": "10x17",
+        "price": 70,
+        "street_price": 139,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_44463dbc-1be6-435d-9545-fac99590c536",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 70,
+          "street": 139
+        }
+      },
+      {
+        "size": "10x18",
+        "price": 96,
+        "street_price": 192,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c30a3ca5-d6db-4250-90ad-99c85d6a10a0",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 96,
+          "street": 192
+        }
+      },
+      {
+        "size": "5x36",
+        "price": 96,
+        "street_price": 192,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4d04307e-5ba6-46b9-b75a-6faac7c530c7",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 96,
+          "street": 192
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 105,
+        "street_price": 210,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_903c9ea1-d4d1-493f-81e7-4eacc90ba3fb",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 105,
+          "street": 210
+        }
+      },
+      {
+        "size": "12x18",
+        "price": 111,
+        "street_price": 222,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_602e8a04-81ba-4d04-93c9-2204bd0f4064",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 111,
+          "street": 222
+        }
+      },
+      {
+        "size": "12x18",
+        "price": 131,
+        "street_price": 261,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ef8f1115-d156-4e0f-a469-5e014a82121b",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 131,
+          "street": 261
+        }
+      },
+      {
+        "size": "10x22",
+        "price": 133,
+        "street_price": 265,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_e5424b42-c70a-4450-a491-7408b719cd31",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 133,
+          "street": 265
+        }
+      },
+      {
+        "size": "20x15",
+        "price": 183,
+        "street_price": 366,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9b263c02-cfd3-41b5-a692-457d9fa59963",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 183,
+          "street": 366
+        }
+      },
+      {
+        "size": "20x15",
+        "price": 183,
+        "street_price": 366,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a92f0c5b-4975-469d-b915-ceba16faeef9",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 183,
+          "street": 366
+        }
+      },
+      {
+        "size": "13x29",
+        "price": 247,
+        "street_price": 494,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b7ca2c54-8788-426b-a2f3-a24415f90f26",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 247,
+          "street": 494
+        }
+      },
+      {
+        "size": "20x20",
+        "price": 248,
+        "street_price": 496,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ea9aa750-fa4e-41be-bac5-347e9441e97d",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 248,
+          "street": 496
+        }
+      },
+      {
+        "size": "14x27",
+        "price": 294,
+        "street_price": 588,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_5d072638-8427-47d0-a3b0-9b16e8302d94",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 294,
+          "street": 588
+        }
+      }
+    ],
+    "rating": 4.9,
+    "reviews": 55
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_306",
+    "site_number": "306",
+    "name": "CubeSmart of 201 S Plumer Ave Tucson",
+    "address": "201 S Plumer Ave",
+    "city": "Tucson",
+    "state": "AZ",
+    "zip": "85719",
+    "phone": "520-623-9092",
+    "lat": 32.21946,
+    "lng": -110.9393,
+    "url": "https://www.cubesmart.com/arizona-self-storage/tucson-self-storage/306.html",
+    "units": [
+      {
+        "size": "5x10",
+        "price": 61,
+        "street_price": 102,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d84f06eb-5379-4942-be51-ee182f3932d0",
+        "attrs": "",
+        "rates": {
+          "web": 61,
+          "street": 102
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 71,
+        "street_price": 118,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3fb6ede9-dec5-457d-97f5-3b06a4e3ada7",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 71,
+          "street": 118
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 80,
+        "street_price": 134,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c8d63a41-f597-4eee-82f0-1527a1e49aa7",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 80,
+          "street": 134
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 151,
+        "street_price": 251,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_827828ca-cf5b-45bf-b1ac-e72ce5c58f4d",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 151,
+          "street": 251
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 185,
+        "street_price": 308,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f2f2aea3-b8ab-48a3-a1b1-a20778a21b38",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 185,
+          "street": 308
+        }
+      },
+      {
+        "size": "20x10",
+        "price": 185,
+        "street_price": 308,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c854c5e6-7b91-4afa-93b0-4ccc1614b135",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 185,
+          "street": 308
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 293,
+        "street_price": 489,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d72ad9e5-6619-416f-8b42-34c406b1a3ab",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 293,
+          "street": 489
+        }
+      },
+      {
+        "size": "Other",
+        "price": 56,
+        "street_price": 94,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_ca1138b0-d535-418e-9ef4-52011e9175ff",
+        "attrs": "",
+        "rates": {
+          "web": 56,
+          "street": 94
+        }
+      },
+      {
+        "size": "Other",
+        "price": 71,
+        "street_price": 118,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_4ab2788c-f3d8-49f2-b1d4-5f87ccbe62fe",
+        "attrs": "",
+        "rates": {
+          "web": 71,
+          "street": 118
+        }
+      },
+      {
+        "size": "Other",
+        "price": 83,
+        "street_price": 139,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_fe1bff0e-1019-4251-8fac-f665c002be8d",
+        "attrs": "",
+        "rates": {
+          "web": 83,
+          "street": 139
+        }
+      }
+    ],
+    "rating": 4.7,
+    "reviews": 297
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_138",
+    "site_number": "138",
+    "name": "CubeSmart of 540 S Volusia Ave Orange City",
+    "address": "540 S Volusia Ave",
+    "city": "Orange City",
+    "state": "FL",
+    "zip": "32763",
+    "phone": "386-774-1414",
+    "lat": 28.94277,
+    "lng": -81.29787,
+    "url": "https://www.cubesmart.com/florida-self-storage/orange-city-self-storage/138.html",
+    "units": [
+      {
+        "size": "3x5",
+        "price": 21,
+        "street_price": 41,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ae6519a8-461f-472f-a6db-55421797831c",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 21,
+          "street": 41
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 21,
+        "street_price": 41,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_556d16f2-0fc9-4610-bb3e-ab159746daf1",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 21,
+          "street": 41
+        }
+      },
+      {
+        "size": "4x5",
+        "price": 23,
+        "street_price": 46,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d6aec393-63a9-42af-9726-5ed115ffa88c",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 23,
+          "street": 46
+        }
+      },
+      {
+        "size": "4x5",
+        "price": 24,
+        "street_price": 48,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3fc53b79-550c-404f-ae30-e4caa7284e9d",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 24,
+          "street": 48
+        }
+      },
+      {
+        "size": "4x5",
+        "price": 26,
+        "street_price": 51,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_2e11f8f3-c84b-424e-986d-66504083e0ef",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 26,
+          "street": 51
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 38,
+        "street_price": 75,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f5802bf9-aec3-4e1b-94c7-6011f27b67a5",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 38,
+          "street": 75
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 40,
+        "street_price": 79,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_67314638-67a4-4c19-aef3-a33489eaee21",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 40,
+          "street": 79
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 41,
+        "street_price": 81,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3eb7b4fe-196b-4c68-ba8f-76b87c4f654e",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 41,
+          "street": 81
+        }
+      },
+      {
+        "size": "4x8",
+        "price": 46,
+        "street_price": 92,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4a0a6c23-af55-47ed-8cdb-d97d60db49c7",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 46,
+          "street": 92
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 52,
+        "street_price": 103,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_58de16a6-e29a-45f4-8269-782daf00a4ea",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 52,
+          "street": 103
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 52,
+        "street_price": 103,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6955df63-5790-406f-a0a5-f94fdfe8916e",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 52,
+          "street": 103
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 90,
+        "street_price": 138,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_04f94ce8-dc51-4b32-baa0-e113cd36ad58",
+        "attrs": "1st Floor Access, Indoor",
+        "rates": {
+          "web": 90,
+          "street": 138
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 97,
+        "street_price": 149,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_4bbd8c5e-693f-4f7a-b7c8-6487b87b0bf0",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 97,
+          "street": 149
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 125,
+        "street_price": 192,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_58301db0-cf5f-4332-85b0-15af328ea710",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 125,
+          "street": 192
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 134,
+        "street_price": 268,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_37c0eba7-ff85-4384-bd42-79736677e07a",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 134,
+          "street": 268
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 166,
+        "street_price": 332,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ebb28eb5-0af0-41b7-904a-00b116cbbf9a",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 166,
+          "street": 332
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 240,
+        "street_price": 479,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_efb8e150-6f06-4a29-b9da-2941cdca9922",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 240,
+          "street": 479
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 285,
+        "street_price": 569,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_facaa22e-6669-4226-9ebc-7c2faaca1c7b",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 285,
+          "street": 569
+        }
+      },
+      {
+        "size": "20x20",
+        "price": 302,
+        "street_price": 604,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f63709a3-366d-4756-bfd5-af003cc1fb5d",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 302,
+          "street": 604
+        }
+      }
+    ],
+    "rating": 4.6,
+    "reviews": 403
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_409",
+    "site_number": "409",
+    "name": "CubeSmart of 3345 Medlock Bridge Rd Peachtree Corners",
+    "address": "3345 Medlock Bridge Rd",
+    "city": "Peachtree Corners",
+    "state": "GA",
+    "zip": "30092",
+    "phone": "770-729-8500",
+    "lat": 33.96611,
+    "lng": -84.20813,
+    "url": "https://www.cubesmart.com/georgia-self-storage/peachtree-corners-self-storage/409.html",
+    "units": [
+      {
+        "size": "5x10",
+        "price": 23,
+        "street_price": 39,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1da48675-d19b-4c20-8363-862b79b9eb14",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 23,
+          "street": 39
+        }
+      },
+      {
+        "size": "8x10",
+        "price": 33,
+        "street_price": 55,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d27772ee-66f4-4d72-bfc1-2c53cd8afee3",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 33,
+          "street": 55
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 52,
+        "street_price": 86,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3b903315-6f3f-4333-a8a3-f494123458a3",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 52,
+          "street": 86
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 67,
+        "street_price": 89,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_e769b960-aca0-4866-936e-d921e2367bab",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 67,
+          "street": 89
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 86,
+        "street_price": 143,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9e7ba734-7091-4b75-950e-2b131624fec5",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 86,
+          "street": 143
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 113,
+        "street_price": 150,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_a0807654-b642-4f3a-ba9b-4965bc1c0609",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 113,
+          "street": 150
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 119,
+        "street_price": 158,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_0b0a896e-a1e2-4705-b117-1ed2db3acc34",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 119,
+          "street": 158
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 154,
+        "street_price": 256,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_cae77b77-956d-484f-b0b3-fd0b4a72c35f",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 154,
+          "street": 256
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 167,
+        "street_price": 222,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_ef2d6fa7-c14d-4188-854a-f33f85794e2e",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 167,
+          "street": 222
+        }
+      },
+      {
+        "size": "20x20",
+        "price": 171,
+        "street_price": 285,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_2420540f-6948-4a04-b9c3-21df572fdf28",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 171,
+          "street": 285
+        }
+      },
+      {
+        "size": "Other",
+        "price": 134,
+        "street_price": 224,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_266b6b7a-e07d-4065-85ab-59ff35baf01d",
+        "attrs": "",
+        "rates": {
+          "web": 134,
+          "street": 224
+        }
+      }
+    ],
+    "rating": 4.9,
+    "reviews": 1059
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4222",
+    "site_number": "4222",
+    "name": "CubeSmart of 100 Constitution Ave Upper Darby",
+    "address": "100 Constitution Ave",
+    "city": "Upper Darby",
+    "state": "PA",
+    "zip": "19082",
+    "phone": "610-624-5124",
+    "lat": 39.96153,
+    "lng": -75.264,
+    "url": "https://www.cubesmart.com/pennsylvania-self-storage/upper-darby-self-storage/4222.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 13,
+        "street_price": 21,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ee721896-b81a-48b2-9955-2a6ad8836b4b",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 13,
+          "street": 21
+        }
+      },
+      {
+        "size": "5x7",
+        "price": 17,
+        "street_price": 29,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_dc998e92-ed51-44ed-ba10-3153bff314e3",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 17,
+          "street": 29
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 22,
+        "street_price": 36,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d26aca4c-691d-4bb8-8fe9-b4e905f063cf",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 22,
+          "street": 36
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 55,
+        "street_price": 91,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_8dc5609d-e7d9-4ef0-8ff1-cbfbd48fa33a",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 55,
+          "street": 91
+        }
+      },
+      {
+        "size": "8x5",
+        "price": 64,
+        "street_price": 107,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6ecee747-d088-4d2c-97e7-78c0bb72d6ce",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 64,
+          "street": 107
+        }
+      },
+      {
+        "size": "5x8",
+        "price": 69,
+        "street_price": 92,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_91a3a9a9-2c48-4df8-9191-cfdd7a882efb",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 69,
+          "street": 92
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 70,
+        "street_price": 116,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d99e7b03-1c3c-46cd-b740-b195ebb68fcf",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 70,
+          "street": 116
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 70,
+        "street_price": 116,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_2ae68191-e9ae-400c-b7b2-592a446993d7",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 70,
+          "street": 116
+        }
+      },
+      {
+        "size": "18x3",
+        "price": 71,
+        "street_price": 118,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b44bc7d8-3a97-4154-bd48-b9a0d1da7eec",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 71,
+          "street": 118
+        }
+      },
+      {
+        "size": "5x12",
+        "price": 74,
+        "street_price": 124,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f6f3951e-ac14-4312-9832-0035c74e40dd",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 74,
+          "street": 124
+        }
+      },
+      {
+        "size": "14x5",
+        "price": 81,
+        "street_price": 135,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_953d7ef2-fe9f-427e-8ab3-e44a2b05c4b5",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 81,
+          "street": 135
+        }
+      },
+      {
+        "size": "10x7",
+        "price": 88,
+        "street_price": 146,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b0e99f1c-d285-4a44-b275-a9ee8a3c95c8",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 88,
+          "street": 146
+        }
+      },
+      {
+        "size": "10x8",
+        "price": 85,
+        "street_price": 142,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f93df129-d857-481a-83d8-ab9ef1279c84",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 85,
+          "street": 142
+        }
+      },
+      {
+        "size": "6x14",
+        "price": 91,
+        "street_price": 151,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_fd611c3b-58a7-47d7-957f-acb489d580fe",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 91,
+          "street": 151
+        }
+      },
+      {
+        "size": "8x10",
+        "price": 104,
+        "street_price": 174,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1ce444f5-1812-4431-805a-30713534e437",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 104,
+          "street": 174
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 122,
+        "street_price": 163,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_2d185f78-9ef1-475e-b902-d2e026e55183",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 122,
+          "street": 163
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 135,
+        "street_price": 225,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_09fe62e1-77ce-4b32-b95e-1be38c2da11d",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 135,
+          "street": 225
+        }
+      },
+      {
+        "size": "10x13",
+        "price": 145,
+        "street_price": 242,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6ed631ea-52b4-4eb6-9b25-1ec5e43f95c1",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 145,
+          "street": 242
+        }
+      },
+      {
+        "size": "11x11",
+        "price": 154,
+        "street_price": 257,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_13a4cc44-c13a-49e2-8e85-c6f04a86b576",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 154,
+          "street": 257
+        }
+      },
+      {
+        "size": "10x18",
+        "price": 160,
+        "street_price": 213,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_5727fce7-e747-44e2-914a-c1bba2398a1a",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 160,
+          "street": 213
+        }
+      }
+    ],
+    "rating": 4.4,
+    "reviews": 228
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_3323",
+    "site_number": "3323",
+    "name": "CubeSmart of 38300 North Gantzel Rd San Tan Valley",
+    "address": "38300 North Gantzel Rd",
+    "city": "San Tan Valley",
+    "state": "AZ",
+    "zip": "85140",
+    "phone": "480-471-6220",
+    "lat": 33.22553,
+    "lng": -111.563,
+    "url": "https://www.cubesmart.com/arizona-self-storage/san-tan-valley-self-storage/3323.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 42,
+        "street_price": 83,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3240e4d0-cfb8-49fb-adca-55d71bf47c5a",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 42,
+          "street": 83
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 51,
+        "street_price": 101,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_65641669-53d8-43ca-9853-22f55ad3c426",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 51,
+          "street": 101
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 118,
+        "street_price": 235,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4058dad9-514f-46ec-b34d-a9abfb7f7246",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 118,
+          "street": 235
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 125,
+        "street_price": 250,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_e3946bb2-0cae-4530-9c51-cd7ce4fef9dc",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 125,
+          "street": 250
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 141,
+        "street_price": 217,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_ccc5d2a2-61c2-4c70-a3c0-e15a7b7c0524",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 141,
+          "street": 217
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 190,
+        "street_price": 379,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a1284e32-ecd6-4b06-bf66-2d9974269006",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 190,
+          "street": 379
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 196,
+        "street_price": 391,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_02bcdadb-73ef-467d-8340-de059c56b3d1",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 196,
+          "street": 391
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 209,
+        "street_price": 321,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_83a4544c-5c3f-489a-8e2a-b07ef07a9bd4",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 209,
+          "street": 321
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 236,
+        "street_price": 471,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4bcb040c-3110-4808-b8db-3dadd7dbb5d6",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 236,
+          "street": 471
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 262,
+        "street_price": 523,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ef63548a-76e0-4f1b-a5ff-3d5c6491dac2",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 262,
+          "street": 523
+        }
+      },
+      {
+        "size": "20x15",
+        "price": 313,
+        "street_price": 625,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_5370236f-3237-4802-838c-9055fba13447",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 313,
+          "street": 625
+        }
+      }
+    ],
+    "rating": 4.5,
+    "reviews": 312
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4298",
+    "site_number": "4298",
+    "name": "CubeSmart of 255 Newtonville Ave Newton",
+    "address": "255 Newtonville Ave",
+    "city": "Newton",
+    "state": "MA",
+    "zip": "02458",
+    "phone": "617-546-5330",
+    "lat": 42.35303,
+    "lng": -71.19731,
+    "url": "https://www.cubesmart.com/massachusetts-self-storage/newton-self-storage/4298.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 77,
+        "street_price": 102,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_5ac28a89-9f36-4dee-b111-cc7fd6e230d6",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 77,
+          "street": 102
+        }
+      },
+      {
+        "size": "3x4",
+        "price": 80,
+        "street_price": 133,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_b77d933e-fab4-4106-ab75-4d0ab7c534a0",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 80,
+          "street": 133
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 85,
+        "street_price": 141,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_62d4f6d4-6007-4c61-a7f4-200027423b57",
+        "attrs": "Climate Controlled",
+        "rates": {
+          "web": 85,
+          "street": 141
+        }
+      },
+      {
+        "size": "4x5",
+        "price": 96,
+        "street_price": 160,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_b5afcd6a-b63d-4432-ae31-56ef361e64d7",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 96,
+          "street": 160
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 112,
+        "street_price": 187,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_f05d1eb3-95bb-4900-9ad2-3e1e85682e64",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 112,
+          "street": 187
+        }
+      },
+      {
+        "size": "4x5",
+        "price": 140,
+        "street_price": 234,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_508a89b4-300f-4ac5-ab19-baa191c0689d",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 140,
+          "street": 234
+        }
+      },
+      {
+        "size": "5x7.5",
+        "price": 144,
+        "street_price": 240,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_18037b97-dcca-4892-808e-a9ad6a167e01",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 144,
+          "street": 240
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 150,
+        "street_price": 250,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_5655dc30-36a5-45bf-9bb0-953e9a849cfd",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 150,
+          "street": 250
+        }
+      },
+      {
+        "size": "5x9",
+        "price": 178,
+        "street_price": 297,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_fa75e095-ef6b-4cc4-a323-dc2cf352d5a9",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 178,
+          "street": 297
+        }
+      },
+      {
+        "size": "7.5x10",
+        "price": 189,
+        "street_price": 315,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_e35e2245-4ed4-4369-b8e5-1f1bf42cd2e9",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 189,
+          "street": 315
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 193,
+        "street_price": 321,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_b893b292-947d-4232-80be-a66f0a1d7f66",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 193,
+          "street": 321
+        }
+      },
+      {
+        "size": "6.5x10",
+        "price": 201,
+        "street_price": 268,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_1a6541d3-98c9-4263-9a6a-e3bd64b1c6d9",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 201,
+          "street": 268
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 224,
+        "street_price": 374,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_98d5409e-a8bd-4b6e-8c83-80de9ec2cf26",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 224,
+          "street": 374
+        }
+      },
+      {
+        "size": "6.5x10",
+        "price": 247,
+        "street_price": 412,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_9148eff3-79e4-4346-80d4-ce80de863bfe",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 247,
+          "street": 412
+        }
+      },
+      {
+        "size": "7.5x10",
+        "price": 263,
+        "street_price": 350,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_a0282c80-7938-42ab-aea7-e2bcc20de369",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 263,
+          "street": 350
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 289,
+        "street_price": 481,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "2nd Month Free",
+        "sku": "cube_6d84f030-1226-4477-8b86-ccd14bb78c5d",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 289,
+          "street": 481
+        }
+      },
+      {
+        "size": "10x12.5",
+        "price": 347,
+        "street_price": 578,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_c671717b-4b23-4edc-909e-2a99fc700af0",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 347,
+          "street": 578
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 358,
+        "street_price": 597,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_81647e22-fbfc-4c6e-aad0-d13b5d37d6ab",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 358,
+          "street": 597
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 485,
+        "street_price": 809,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "",
+        "sku": "cube_e32b5f3d-5a3f-47dc-a1b4-2473a828f41b",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 485,
+          "street": 809
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 540,
+        "street_price": 720,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_ae455415-50c8-4607-b1d2-b0a1aa6a5be5",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 540,
+          "street": 720
+        }
+      }
+    ],
+    "rating": 4.9,
+    "reviews": 307
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4133",
+    "site_number": "4133",
+    "name": "CubeSmart of 3817 Gulf Fwy Dickinson",
+    "address": "3817 Gulf Fwy",
+    "city": "Dickinson",
+    "state": "TX",
+    "zip": "77539",
+    "phone": "281-309-9900",
+    "lat": 29.4477,
+    "lng": -95.07493,
+    "url": "https://www.cubesmart.com/texas-self-storage/dickinson-self-storage/4133.html",
+    "units": [
+      {
+        "size": "5x10",
+        "price": 28,
+        "street_price": 56,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_0dc74b2a-c6a4-4c66-bdf5-621322197bad",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 28,
+          "street": 56
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 34,
+        "street_price": 68,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_8d6f91d7-6561-4ec6-9228-055a54b87c9f",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 34,
+          "street": 68
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 44,
+        "street_price": 88,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b4ec8602-4950-4478-9690-42723e8e3852",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 44,
+          "street": 88
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 59,
+        "street_price": 91,
+        "available": true,
+        "count": 1,
+        "promo": "35% Off",
+        "promo2": "",
+        "sku": "cube_8af3e248-010a-4701-914f-fe7d108e6c8b",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 59,
+          "street": 91
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 87,
+        "street_price": 173,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ee69b0e4-d7ea-42f0-bb51-76893b0f888c",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 87,
+          "street": 173
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 100,
+        "street_price": 199,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_bb2b5aa7-7d3b-4554-9c33-705fb2185b5a",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 100,
+          "street": 199
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 153,
+        "street_price": 306,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ad7de49a-5be7-43a6-a5a4-270f2a569d86",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 153,
+          "street": 306
+        }
+      },
+      {
+        "size": "10x40",
+        "price": 222,
+        "street_price": 444,
+        "available": true,
+        "count": 1,
+        "promo": "50% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_993d05d6-f121-4f2d-9d1a-2e8119efffea",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 222,
+          "street": 444
+        }
+      }
+    ],
+    "rating": 4.6,
+    "reviews": 366
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_251",
+    "site_number": "251",
+    "name": "CubeSmart of 43 Old Olden Ave Hamilton",
+    "address": "43 Old Olden Ave",
+    "city": "Hamilton",
+    "state": "NJ",
+    "zip": "08610",
+    "phone": "609-888-4300",
+    "lat": 40.20578,
+    "lng": -74.71233,
+    "url": "https://www.cubesmart.com/new-jersey-self-storage/hamilton-self-storage/251.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 45,
+        "street_price": 75,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_99367492-20bd-43a0-916f-208b607faf45",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 45,
+          "street": 75
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 53,
+        "street_price": 89,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_bf319655-7f96-4333-85d0-0fd4b9530bd4",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 53,
+          "street": 89
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 113,
+        "street_price": 151,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_664decbe-6872-4d91-aafd-12ffbc7c3cc2",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 113,
+          "street": 151
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 124,
+        "street_price": 207,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9ce078f9-4c24-494f-925e-3825ab734d3a",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 124,
+          "street": 207
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 160,
+        "street_price": 267,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_7cafd5b8-6b8c-49c9-b212-78020624ebf9",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 160,
+          "street": 267
+        }
+      },
+      {
+        "size": "20x15",
+        "price": 233,
+        "street_price": 388,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_51e1b62e-d4d0-4b3d-8e2e-6404118cbf47",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 233,
+          "street": 388
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 234,
+        "street_price": 312,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_0aa9c7aa-75ea-4882-95d7-a68c8bdfe396",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 234,
+          "street": 312
+        }
+      },
+      {
+        "size": "Other",
+        "price": 122,
+        "street_price": 162,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_30eb795c-969e-4421-b619-ad62f1ca7247",
+        "attrs": "",
+        "rates": {
+          "web": 122,
+          "street": 162
+        }
+      }
+    ],
+    "rating": 4.5,
+    "reviews": 448
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_5149",
+    "site_number": "5149",
+    "name": "CubeSmart of 14411 W Lake Houston Parkway Houston",
+    "address": "14411 W Lake Houston Parkway",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77044",
+    "phone": "281-971-8497",
+    "lat": 29.93595,
+    "lng": -95.17693,
+    "url": "https://www.cubesmart.com/texas-self-storage/houston-self-storage/5149.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 31,
+        "street_price": 52,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_25499e5e-b723-4f74-901a-2f360aee1d6c",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 31,
+          "street": 52
+        }
+      },
+      {
+        "size": "5x7",
+        "price": 37,
+        "street_price": 61,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_0672d7ec-5110-40e1-b8dc-18f3c681ed66",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 37,
+          "street": 61
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 43,
+        "street_price": 71,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ecf32b44-a967-4133-96be-af84c2a32a9d",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 43,
+          "street": 71
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 48,
+        "street_price": 80,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_7651a483-a05b-49a5-9ec4-b0c6be2d58ec",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 48,
+          "street": 80
+        }
+      },
+      {
+        "size": "5x15",
+        "price": 56,
+        "street_price": 94,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c346f950-a3d7-420c-b8c9-d6558f372aea",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 56,
+          "street": 94
+        }
+      },
+      {
+        "size": "7.5x10",
+        "price": 77,
+        "street_price": 128,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_cedd9635-3836-4edf-8704-1549862245b0",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 77,
+          "street": 128
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 77,
+        "street_price": 103,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_f229d6cc-1a02-436f-bdd6-9d04c44a2aee",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 77,
+          "street": 103
+        }
+      },
+      {
+        "size": "5x20",
+        "price": 80,
+        "street_price": 134,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_026366af-f66f-4c94-8887-e5bafb4306af",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 80,
+          "street": 134
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 83,
+        "street_price": 139,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f5727e30-7c24-49ac-bac7-c31c7d64645a",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 83,
+          "street": 139
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 96,
+        "street_price": 160,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_221498ef-22f7-41e7-a3f2-3b6c06a44e2a",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 96,
+          "street": 160
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 145,
+        "street_price": 241,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_74e1b4d9-98ca-4838-91b3-b2829e2de825",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 145,
+          "street": 241
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 205,
+        "street_price": 342,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ad9c9ead-5f3d-48bf-9d0c-0987950be1ad",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 205,
+          "street": 342
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 194,
+        "street_price": 323,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_0e210e62-4837-46be-a3a9-4ef46e09fdaf",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 194,
+          "street": 323
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 203,
+        "street_price": 271,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_b55bc5dc-c4d2-4dcb-9e6f-98048eda5b6e",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 203,
+          "street": 271
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 238,
+        "street_price": 396,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_636021e0-8433-453f-8152-3cc0cb63b2ec",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 238,
+          "street": 396
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 241,
+        "street_price": 401,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ece8e005-05dc-4c07-8ada-b4ff9d758e52",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 241,
+          "street": 401
+        }
+      },
+      {
+        "size": "20x10",
+        "price": 241,
+        "street_price": 401,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6124d266-b47e-4692-b4a8-1457004f54cb",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 241,
+          "street": 401
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 247,
+        "street_price": 412,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4eeb2f50-0ca9-4a8f-8ac0-d1629e6c6612",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 247,
+          "street": 412
+        }
+      }
+    ],
+    "rating": 4.4,
+    "reviews": 115
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_5309",
+    "site_number": "5309",
+    "name": "CubeSmart of 2601 Gateway Dr State College",
+    "address": "2601 Gateway Dr",
+    "city": "State College",
+    "state": "PA",
+    "zip": "16801",
+    "phone": "",
+    "lat": 40.76761,
+    "lng": -77.88438,
+    "url": "https://www.cubesmart.com/pennsylvania-self-storage/state-college-self-storage/5309.html",
+    "units": [],
+    "rating": null,
+    "reviews": null
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4936",
+    "site_number": "4936",
+    "name": "CubeSmart of 3200 Kirby Dr Pearland",
+    "address": "3200 Kirby Dr",
+    "city": "Pearland",
+    "state": "TX",
+    "zip": "77584",
+    "phone": "281-946-7920",
+    "lat": 29.55055,
+    "lng": -95.39974,
+    "url": "https://www.cubesmart.com/texas-self-storage/pearland-self-storage/4936.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 41,
+        "street_price": 68,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b4201fac-81ab-40b0-9f68-2457bf9c5549",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 41,
+          "street": 68
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 52,
+        "street_price": 86,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_126280d9-63b2-4f24-8553-8c98f2ea7bf5",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 52,
+          "street": 86
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 58,
+        "street_price": 96,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_9c8d4703-02af-4914-97e8-b1fc35609653",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 58,
+          "street": 96
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 76,
+        "street_price": 127,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3804dc9a-cc19-4ef5-a225-9eb7b23dd507",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 76,
+          "street": 127
+        }
+      },
+      {
+        "size": "7.5x10",
+        "price": 77,
+        "street_price": 102,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_d441f2f9-b2be-41c2-b3cb-858d7c601f0e",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 77,
+          "street": 102
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 128,
+        "street_price": 214,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_09c80868-6ecd-4579-a0f5-be225608d13e",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 128,
+          "street": 214
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 151,
+        "street_price": 251,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_db31802c-ca0e-403b-b746-4913b909ab93",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 151,
+          "street": 251
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 173,
+        "street_price": 289,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_d417f227-a11c-410e-9857-5167da37058c",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 173,
+          "street": 289
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 194,
+        "street_price": 323,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c8e37a28-50e9-4b87-ae5c-7936f32ab405",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 194,
+          "street": 323
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 187,
+        "street_price": 312,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_1a9f13f1-5ab6-4b0d-a359-0179d720bcd4",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 187,
+          "street": 312
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 208,
+        "street_price": 346,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_dacdb660-b865-4933-b1ee-8c09598a1069",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 208,
+          "street": 346
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 219,
+        "street_price": 365,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_b906c05f-dbf1-43c8-a883-17100ba41ff2",
+        "attrs": "Climate Controlled, Elevator Access",
+        "rates": {
+          "web": 219,
+          "street": 365
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 259,
+        "street_price": 431,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_bca07b11-2074-4bd5-9fbb-9661f0cd2a67",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 259,
+          "street": 431
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 274,
+        "street_price": 456,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3b258a0e-d6e0-4579-bc37-f4dd55be85a2",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 274,
+          "street": 456
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 280,
+        "street_price": 466,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_ac52c658-b94a-4f5c-b362-d540ef803c0e",
+        "attrs": "Drive-up Access",
+        "rates": {
+          "web": 280,
+          "street": 466
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 380,
+        "street_price": 507,
+        "available": true,
+        "count": 1,
+        "promo": "25% Off",
+        "promo2": "",
+        "sku": "cube_3542f5ce-81a5-41b7-b7c8-522b382d26cb",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 380,
+          "street": 507
+        }
+      }
+    ],
+    "rating": 4.8,
+    "reviews": 419
+  },
+  {
+    "brand": "cubesmart",
+    "store_id": "cube_4866",
+    "site_number": "4866",
+    "name": "CubeSmart of 450 John Fitch Hwy Fitchburg",
+    "address": "450 John Fitch Hwy",
+    "city": "Fitchburg",
+    "state": "MA",
+    "zip": "01420",
+    "phone": "978-829-6960",
+    "lat": 42.58368,
+    "lng": -71.77368,
+    "url": "https://www.cubesmart.com/massachusetts-self-storage/fitchburg-self-storage/4866.html",
+    "units": [
+      {
+        "size": "5x5",
+        "price": 60,
+        "street_price": 100,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_494b26e2-9542-4432-ab3c-8b6fa7e9a917",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 60,
+          "street": 100
+        }
+      },
+      {
+        "size": "5x8",
+        "price": 86,
+        "street_price": 144,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_88f281f3-c884-4b71-9463-ddf6fd2e6a26",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 86,
+          "street": 144
+        }
+      },
+      {
+        "size": "10x5",
+        "price": 88,
+        "street_price": 146,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_3a9eb35f-6c94-4e37-a4b2-1e9b5c56cfcc",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 88,
+          "street": 146
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 88,
+        "street_price": 146,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c0c57d6d-5ede-4bc7-ba63-807d636ef1ae",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 88,
+          "street": 146
+        }
+      },
+      {
+        "size": "7x10",
+        "price": 94,
+        "street_price": 157,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_45777d7d-c7f1-40b3-aec6-332f20d3d2f5",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 94,
+          "street": 157
+        }
+      },
+      {
+        "size": "10x9",
+        "price": 107,
+        "street_price": 178,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_f74b0398-87b2-4da8-a2ca-1421ca7f2f58",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 107,
+          "street": 178
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 115,
+        "street_price": 191,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_233cb42c-6603-48fd-83b8-c5ee80d69cce",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 115,
+          "street": 191
+        }
+      },
+      {
+        "size": "8x15",
+        "price": 116,
+        "street_price": 193,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_4c3d2de5-7887-4d77-a621-2694594f202b",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 116,
+          "street": 193
+        }
+      },
+      {
+        "size": "26x5",
+        "price": 145,
+        "street_price": 241,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_a340f543-c49c-4439-9bdf-fc70cbce6dea",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 145,
+          "street": 241
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 145,
+        "street_price": 242,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_6b6b038a-b930-4caa-957e-b54a3a6e0a32",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 145,
+          "street": 242
+        }
+      },
+      {
+        "size": "16x10",
+        "price": 194,
+        "street_price": 324,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_288fa162-5e79-49ba-971c-e192a207aa0d",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 194,
+          "street": 324
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 238,
+        "street_price": 396,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_da487369-fedc-4a2b-ad7a-deefa63115e9",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 238,
+          "street": 396
+        }
+      },
+      {
+        "size": "10x22",
+        "price": 264,
+        "street_price": 440,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_c55059d4-54aa-4022-8678-d6ce2554e2cf",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 264,
+          "street": 440
+        }
+      },
+      {
+        "size": "16x15",
+        "price": 271,
+        "street_price": 451,
+        "available": true,
+        "count": 1,
+        "promo": "40% Off",
+        "promo2": "First Month Free",
+        "sku": "cube_20984c69-18ee-4471-8a0f-dfea00aa130c",
+        "attrs": "Climate Controlled, 1st Floor Access",
+        "rates": {
+          "web": 271,
+          "street": 451
+        }
+      }
+    ],
+    "rating": 4.7,
+    "reviews": 66
+  }
+]

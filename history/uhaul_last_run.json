@@ -1,0 +1,22 @@
+{
+  "affiliate_count": 0,
+  "catalog_count": 2023,
+  "completed_at": "2026-09-04T22:27:53.402482+00:00",
+  "completed_count": 2023,
+  "current_index": 2023,
+  "current_store_id": "uhaul_736055",
+  "current_url": "https://www.uhaul.com/Locations/Self-Storage-near-Saint-Louis-MO-63110/736055/",
+  "date": "2026-09-04",
+  "facility_count": 2023,
+  "owned_managed_count": 2023,
+  "priced_facility_count": 1957,
+  "priced_facility_ratio": 0.967375185368265,
+  "resumed_count": 0,
+  "skipped": {},
+  "sku_overlap": null,
+  "snapshot": "history\\uhaul\\2026-09-04.json",
+  "started_at": "2026-09-04T17:53:11.000974+00:00",
+  "status": "complete",
+  "unit_count": 25669,
+  "warnings": []
+}

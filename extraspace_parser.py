@@ -7,6 +7,7 @@ Designed for FindStorage.pages.dev:
 - Preserves full rate ladder {web, street, walkIn, nsc, tier1..3} for deep analytics.
 """
 from __future__ import annotations
+import hashlib
 import re
 from typing import Any, Dict, List, Optional
 
@@ -91,7 +92,30 @@ def parse_unit(u: dict, site_number: str) -> dict:
     is_available = bool(count > 0) or bool(avail.get("showAvailable"))
 
     raw_uid = u.get("uid") or u.get("id")
-    sku = f"exr_{raw_uid}" if raw_uid else f"exr_unit_{site_number}_{size}"
+    if raw_uid:
+        sku = f"exr_{raw_uid}"
+    else:
+        # The old fallback was f"exr_unit_{site_number}_{size}". A facility
+        # routinely offers several unit classes at the same size -- climate
+        # controlled and not, ground floor and upper -- so that key collapsed
+        # them onto one another. The last one parsed won, silently, and the
+        # rate log would then read two different units' prices as one unit
+        # flip-flopping day to day.
+        #
+        # Size plus the unit's own features and floor is enough to tell those
+        # apart, and it is stable as long as the unit is. Price is excluded on
+        # purpose: a repricing must show up as a changed price on the same SKU,
+        # not as one unit disappearing and another arriving.
+        #
+        # 'exrh_' marks it as derived, so it is never mistaken later for a real
+        # Extra Space uid.
+        seed = "|".join([
+            str(site_number), size, attrs or "",
+            str(dims.get("squareFoot") or ""), str(u.get("floor") or ""),
+            str(u.get("unitTypeId") or u.get("classId") or ""),
+        ])
+        digest = hashlib.sha1(seed.encode("utf-8")).hexdigest()[:16]
+        sku = f"exrh_{site_number}_{digest}"
 
     return {
         "size": size,

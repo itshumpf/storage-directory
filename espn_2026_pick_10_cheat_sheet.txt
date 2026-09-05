@@ -1,0 +1,130 @@
+TWO STATE RUMBLE — 2026 DRAFT CHEAT SHEET
+10 teams | Pick 10 | Snake | Full PPR | 1 QB
+Draft: Sep. 4, 2026, 8:00 PM CDT
+
+YOUR PICKS
+1.10, 2.01, 3.10, 4.01, 5.10, 6.01, 7.10, 8.01,
+9.10, 10.01, 11.10, 12.01, 13.10, 14.01, 15.10, 16.01, 17.10
+
+IMPORTANT CUSTOM-SCORING NOTES
+- 1 point per reception.
+- 1 point per rushing first down: upgrade high-volume runners and rushing QBs.
+- Passing is 1 point per 20 yards (better than the usual 25), but each sack is -1.
+- Do not force QB early in a one-QB league, but Josh Allen/Lamar Jackson are worth
+  considering at the listed turns because of this scoring.
+- D/ST scoring is unusually strong (2 per sack, 3 per block, 1 per stuff), but
+  still wait until the final three rounds unless the room starts a major run.
+
+HOW TO USE THIS
+- At each pick, take the first available target that fits your roster.
+- At a turn, think about both picks together. Avoid leaving a position you need
+  exposed to 18 selections before your next turn.
+- If an earlier-round target falls, take the value over the names listed later.
+
+ROUND 1 — PICK 10
+Targets: CeeDee Lamb (WR), Justin Jefferson (WR), De'Von Achane (RB)
+Fallback: Drake London (WR), Jonathan Taylor (RB)
+
+ROUND 2 — PICK 11
+Targets: De'Von Achane (RB), Drake London (WR), James Cook III (RB)
+Fallback: Chase Brown (RB), Nico Collins (WR), Chris Olave (WR)
+Plan: Ideally leave the first turn with one RB and one WR. Two elite WRs or two
+elite RBs are fine if value forces it.
+
+ROUND 3 — PICK 30
+Targets: Josh Allen (QB), Garrett Wilson (WR), Kenneth Walker III (RB)
+Fallback: Breece Hall (RB), DeVonta Smith (WR)
+
+ROUND 4 — PICK 31
+Targets: Kyren Williams (RB), Malik Nabers (WR), Tetairoa McMillan (WR)
+Fallback: Zay Flowers (WR), Emeka Egbuka (WR), Quinshon Judkins (RB)
+Plan: By now, aim for at least two RB/WR starters. Josh Allen is the only QB to
+force here; otherwise keep building RB/WR.
+
+ROUND 5 — PICK 50
+Targets: Lamar Jackson (QB), Bucky Irving (RB), Jaylen Waddle (WR)
+Fallback: Davante Adams (WR), Terry McLaurin (WR)
+
+ROUND 6 — PICK 51
+Targets: Tyler Warren (TE), DJ Moore (WR), Jameson Williams (WR)
+Fallback: Rome Odunze (WR), David Montgomery (RB), TreVeyon Henderson (RB)
+Plan: If you passed on McBride/Bowers and Warren is gone, do not panic-draft TE.
+
+ROUND 7 — PICK 70
+Targets: Jalen Hurts (QB), Joe Burrow (QB), Harold Fannin Jr. (TE)
+Fallback: DK Metcalf (WR), Michael Pittman Jr. (WR), Tony Pollard (RB)
+
+ROUND 8 — PICK 71
+Targets: George Kittle (TE), Courtland Sutton (WR), Jaylen Warren (RB)
+Fallback: Sam LaPorta (TE), Parker Washington (WR), Kenny Gainwell (RB)
+Plan: If still missing QB, Hurts/Burrow are the preferred choices. If both are
+gone, wait and use the later QB group rather than reaching.
+
+ROUND 9 — PICK 90
+Targets: Tucker Kraft (TE), Chuba Hubbard (RB), Wan'Dale Robinson (WR)
+Fallback: Stefon Diggs (WR), Alec Pierce (WR), Jonathon Brooks (RB)
+
+ROUND 10 — PICK 91
+Targets: Brian Thomas Jr. (WR), Josh Downs (WR), Chris Godwin Jr. (WR)
+Fallback: Jordan Addison (WR), Travis Kelce (TE), RJ Harvey (RB)
+Plan: Favor RB/WR upside here; you need bench players who can become weekly
+starters, not low-ceiling backups.
+
+ROUND 11 — PICK 110
+Targets: Blake Corum (RB), RJ Harvey (RB), Jake Ferguson (TE)
+Fallback: Makai Lemon (WR), Quentin Johnston (WR), Jayden Reed (WR)
+
+ROUND 12 — PICK 111
+Targets: Xavier Worthy (WR), Romeo Doubs (WR), Dalton Kincaid (TE)
+Fallback: Jalen Coker (WR), Tyjae Spears (RB), Kyler Murray (QB)
+Plan: If you still need QB, Kyler Murray, Tyler Shough, Jared Goff, or Baker
+Mayfield are the late options. In this sack-penalty league, prefer a secure,
+efficient starter over a QB behind a poor line.
+
+ROUND 13 — PICK 130
+Targets: Jordan Mason (RB), Deebo Samuel Sr. (WR), Woody Marks (RB)
+Fallback: Tank Dell (WR), Jalen McMillan (WR), Zach Charbonnet (RB)
+
+ROUND 14 — PICK 131
+Targets: Zach Charbonnet (RB), Jonah Coleman (RB), Isiah Pacheco (RB)
+Fallback: Chris Rodriguez Jr. (RB), Khalil Shakir (WR), Hunter Henry (TE)
+Plan: Load the bench with RB lottery tickets and receivers with a path to volume.
+Do not draft a backup QB or backup TE unless your starter is risky.
+
+ROUND 15 — PICK 150
+Targets: Texans D/ST, Broncos D/ST, Steelers D/ST
+Fallback: Seahawks D/ST, Rams D/ST, Patriots D/ST
+Note: Your scoring makes an elite pressure defense more useful than usual.
+
+ROUND 16 — PICK 151
+Targets: Tyler Allgeier (RB), Dylan Sampson (RB), Keenan Allen (WR)
+Fallback: T.J. Hockenson (TE), Rashid Shaheed (WR), Brian Robinson Jr. (RB)
+If you still need D/ST, take the best unit from Round 15 here.
+
+ROUND 17 — PICK 170
+Targets: Brandon Aubrey (K), Cameron Dicker (K), Harrison Mevis (K)
+Fallback: Ka'imi Fairbairn (K), Jason Myers (K), Eddy Pineiro (K)
+Take the best remaining kicker on a productive offense. Do not take two.
+
+TURN-BY-TURN ROSTER CHECK
+After Round 2: 2 RB/WR total
+After Round 4: 4 core players, or 3 core players + Josh Allen
+After Round 6: at least 4 RB/WR; possibly QB or TE
+After Round 8: preferably QB settled; 5-6 RB/WR total
+After Round 12: all offensive starting slots filled except K/DST
+Final rounds: one D/ST, one K, then upside RB/WR depth
+
+QUICK TIEBREAKERS
+1. Earlier-round value that unexpectedly fell.
+2. Starting RB/WR need.
+3. High-volume rusher (rushing-first-down bonus).
+4. Target-heavy receiver (full PPR).
+5. Upside bench RB/WR over backup QB/TE.
+
+LIVE-DRAFT RULE
+This is a map, not a rigid script. Player availability, late news, and positional
+runs should decide the actual pick. During the draft, compare the available-player
+list against the highest remaining names here.
+
+Prepared Sep. 4, 2026 using this league's ESPN settings and current ESPN PPR Top
+300 / contemporary PPR consensus rankings.

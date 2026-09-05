@@ -51,6 +51,8 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 |---|---|
 | `index.html` | The directory frontend (single file, no build step) |
 | `daily_scraper.py` | Production scraper run daily by GitHub Actions |
+| `uhaul_scraper.py` | Slow, resumable, all-or-nothing U.S. U-Haul owned/managed daily snapshot collector |
+| `uhaul_parser.py` | U-Haul sitemap and server-rendered room parser |
 | `enriched_locations.json` | The dataset: ~3,500 facilities with unit-level pricing |
 | `analysis/load_storage.py` | Loads the dataset into a normalized SQLite database |
 | `analysis/run_queries.py` | Core analysis query set (run all, or one by number) |
@@ -70,6 +72,9 @@ pip install -r requirements.txt
 
 # Scrape a fresh dataset (~25-30 min, rate-limited)
 python daily_scraper.py
+
+# Separate full U-Haul snapshot (~3+ hours at a five-second request floor)
+python uhaul_scraper.py
 
 # Build the analysis database and run the query suite
 python analysis/load_storage.py enriched_locations.json
@@ -93,3 +98,36 @@ This is an independent research/portfolio project, not affiliated with or endors
 ---
 
 Built by Braeden Keena.
+
+## Multi-operator pipeline (September 2026)
+
+Collection now covers four operators. Each collector is unchanged and still owns its own
+brand; `storage_pipeline.py` is the seam that joins them.
+
+| Brand | Collector | Snapshot lands in |
+|---|---|---|
+| Public Storage | `daily_scraper.py` (Actions, `daily.yml`) | `enriched_locations.json` → `history/publicstorage/<date>.json` |
+| CubeSmart | `cubesmart_scraper.py` (Actions, `cubesmart.yml`) | `history/cubesmart/<date>.json` |
+| Storage Sense | `storagesense_scraper.py` (Actions, `storagesense.yml`) | `history/storagesense/<date>.json` |
+| U-Haul | `uhaul_scraper.py` (Actions, `uhaul.yml`) | `history/uhaul/<date>.json` |
+
+All four emit the same record shape, so one immutable dated snapshot per brand per day is the
+whole contract. `assemble.yml` runs after any collector finishes and does:
+
+```bash
+python storage_pipeline.py daily      # import -> merge -> record -> build-dashboard
+python storage_pipeline.py status     # freshness of every brand at a glance
+```
+
+which maintains `history/combined/` (cross-brand daily store aggregates, state × size
+aggregates, and a per-SKU rate-change log — all brand-tagged, all idempotent) and writes
+`dashboard-data.json` for the private dashboard:
+
+```bash
+python -m http.server 8777      # then open http://localhost:8777/dashboard.html
+```
+
+The dashboard is the replacement for the sunset FindStorage site: overview tiles per brand,
+size-by-size price comparison, state table, store search with map and per-size detail,
+trends, and a rate-change feed. It is a single file with no build step, reads only
+`dashboard-data.json`, and is not published anywhere.

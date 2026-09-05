@@ -1,0 +1,801 @@
+#!/usr/bin/env python3
+"""
+storage_pipeline.py — one front door for every operator's collector.
+
+The four collectors (Public Storage, CubeSmart, Storage Sense, U-Haul) already
+emit the same record shape — brand / store_id / site_number / address / lat /
+lng / url / units[{size, price, street_price, available, count, promo, promo2,
+sku, attrs}] — but each one lands it somewhere different and on its own clock.
+This script is the seam that joins them:
+
+    history/<brand>/<YYYY-MM-DD>.json      one immutable snapshot per brand per day
+    history/combined/latest.json           every brand's freshest snapshot, merged (gitignored, rebuildable)
+    history/combined/latest.manifest.json  what went into it and how old each part is
+    history/combined/daily-YYYY-MM.csv     per-store daily aggregates, all brands
+    history/combined/sizes-YYYY-MM.csv     per-brand, per-state, per-size daily aggregates
+    history/combined/rate_changes-YYYY-MM.csv
+                                           per-SKU price / street / promo / listed / delisted events, all brands
+    history/combined/record_runs.csv       what has been recorded (idempotency ledger)
+    dashboard-data.json                    the compact file dashboard.html reads
+
+Commands (run from the repo root):
+
+    python storage_pipeline.py status                     freshness of every brand, at a glance
+    python storage_pipeline.py audit                      field completeness per brand (catches a parser reading the wrong node)
+    python storage_pipeline.py snapshot <brand> [--source PATH] [--date D]
+                                                          normalize a collector's output into history/<brand>/
+    python storage_pipeline.py import                     sweep every brand's known output locations into snapshots
+    python storage_pipeline.py merge   [--date D] [--max-age-days N]
+    python storage_pipeline.py record  [--date D]         record every (brand, date) snapshot not yet in the ledger
+    python storage_pipeline.py backfill-ps                seed daily-*.csv from the legacy history/YYYY-MM.csv series
+    python storage_pipeline.py build-dashboard            write dashboard-data.json
+    python storage_pipeline.py daily   [--date D]         import -> merge -> record -> build-dashboard
+    python storage_pipeline.py run <brand> [-- extra args] launch that brand's collector, then snapshot its output
+
+Design rules, all inherited from the existing collectors:
+  * Snapshots are immutable. `snapshot` refuses to overwrite one unless --force.
+  * Every write is atomic (temp file + replace).
+  * Nothing here scrapes on its own. `run` only shells out to the collector you already have.
+  * Every command is idempotent — re-running a day is a no-op, never a duplicate row.
+  * Fails loudly on suspicious input (empty list, count below the brand floor, wrong shape).
+
+Stdlib only, so it runs anywhere the collectors run (Windows, the Actions runner, this VM).
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import datetime as dt
+import json
+import re
+import shutil
+import statistics
+import subprocess
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+HISTORY = ROOT / "history"
+COMBINED = HISTORY / "combined"
+DASHBOARD_DATA = ROOT / "dashboard-data.json"
+
+# Fixed display order everywhere (charts, tables, legends). Never re-sorted by size.
+BRANDS = {
+    "publicstorage": {
+        "label": "Public Storage",
+        "short": "PS",
+        # Where the collector leaves its output today.
+        "sources": ["enriched_locations.json"],
+        # Below this many stores the file is a partial scrape, not a snapshot.
+        "floor": 3000,
+        "run": [sys.executable, "daily_scraper.py"],
+    },
+    "cubesmart": {
+        "label": "CubeSmart",
+        "short": "CS",
+        "sources": ["cubesmart_locations.json", "cubesmart_{date}.json"],
+        "floor": 1200,
+        # --out points at the dated snapshot so the crawler's own resume logic
+        # continues *today's* file if it is interrupted, instead of skipping
+        # every store it saw yesterday.
+        "run": [sys.executable, "cubesmart_scraper.py", "--out", "history/cubesmart/{date}.json"],
+    },
+    "storagesense": {
+        "label": "Storage Sense",
+        "short": "SS",
+        "sources": ["history/storagesense/{date}.json", "history/storagesense_locations.json"],
+        "floor": 250,
+        "run": [sys.executable, "storagesense_scraper.py",
+                "--out", "history/storagesense_locations.json",
+                "--state", "history/storagesense_state.json",
+                "--report", "history/storagesense_last_run.json",
+                "--delay", "5", "--budget", "0", "--refresh-hours", "0"],
+    },
+    "uhaul": {
+        "label": "U-Haul",
+        "short": "UH",
+        "sources": ["history/uhaul/{date}.json", "history/uhaul_locations.json"],
+        "floor": 1600,
+        "run": [sys.executable, "uhaul_scraper.py", "--delay", "5"],
+    },
+}
+BRAND_ORDER = list(BRANDS)
+MAX_DROP = 0.10  # a snapshot this much smaller than the last one is a partial crawl, not a market
+
+DAILY_HEADER = ["date", "brand", "store_id", "state", "listings", "units_avail",
+                "cheapest_10x10", "median_price", "median_ppsf"]
+SIZES_HEADER = ["date", "brand", "state", "size", "listings", "units_avail", "median_price"]
+CHANGES_HEADER = ["date", "brand", "store_id", "site_number", "size", "sku", "field", "old", "new"]
+LEDGER_HEADER = ["recorded_at", "brand", "date", "previous_date", "stores", "events", "note"]
+
+SIZE_RE = re.compile(r"^\s*(\d+(?:\.\d+)?)\s*[xX×]\s*(\d+(?:\.\d+)?)\s*$")
+
+
+# --------------------------------------------------------------------------- utils
+def today() -> str:
+    return dt.date.today().isoformat()
+
+
+def atomic_write_json(path: Path, value) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(value, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    tmp.replace(path)
+
+
+def read_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def append_csv(path: Path, header: list[str], rows: list[list]) -> None:
+    if not rows:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    new = not path.exists() or path.stat().st_size == 0
+    with open(path, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        if new:
+            w.writerow(header)
+        w.writerows(rows)
+
+
+def read_csv(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    with open(path, newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def snapshot_dir(brand: str) -> Path:
+    return HISTORY / brand
+
+
+def snapshot_dates(brand: str) -> list[str]:
+    d = snapshot_dir(brand)
+    if not d.exists():
+        return []
+    return sorted(p.stem for p in d.glob("????-??-??.json"))
+
+
+def snapshot_path(brand: str, date: str) -> Path:
+    return snapshot_dir(brand) / f"{date}.json"
+
+
+def load_snapshot(brand: str, date: str) -> list[dict]:
+    """Read a snapshot through normalize(), so records the collectors wrote themselves
+    (Storage Sense, U-Haul) carry the same keys as the ones this script wrote."""
+    return normalize(brand, read_json(snapshot_path(brand, date)))
+
+
+def parse_size(size: str):
+    m = SIZE_RE.match(size or "")
+    if not m:
+        return None, None, None
+    w, d = float(m.group(1)), float(m.group(2))
+    return w, d, w * d
+
+
+def num(v):
+    try:
+        return float(v) if v not in (None, "") else None
+    except (TypeError, ValueError):
+        return None
+
+
+# --------------------------------------------------------------------------- normalize
+def normalize_store(brand: str, s: dict) -> dict | None:
+    """Coerce one collector record into the shared shape. Returns None if unusable."""
+    sid = s.get("store_id") or s.get("site_number")
+    if not sid:
+        return None
+    units = []
+    for u in s.get("units") or []:
+        size = str(u.get("size") or "").strip()
+        price = num(u.get("price"))
+        w, d, sqft = parse_size(size)
+        if u.get("sqft"):
+            sqft = num(u["sqft"])
+        street = num(u.get("street_price"))
+        if street is None and isinstance(u.get("rates"), dict):
+            street = num(u["rates"].get("street"))
+        units.append({
+            "size": size,
+            "price": price,
+            "street_price": street,
+            "available": bool(u.get("available", True)),
+            "count": int(u.get("count") or 0),
+            "promo": (u.get("promo") or "").strip(),
+            "promo2": (u.get("promo2") or "").strip(),
+            "sku": str(u.get("sku") or ""),
+            "attrs": (u.get("attrs") or "").strip(),
+            "sqft": sqft,
+        })
+    return {
+        "brand": brand,
+        "store_id": str(sid),
+        "site_number": str(s.get("site_number") or ""),
+        "name": s.get("name") or "",
+        "address": s.get("address") or "",
+        "city": s.get("city") or "",
+        "state": (s.get("state") or "").upper(),
+        "zip": str(s.get("zip") or ""),
+        "phone": s.get("phone") or "",
+        "lat": num(s.get("lat")),
+        "lng": num(s.get("lng")),
+        "url": s.get("url") or "",
+        "rating": num(s.get("rating")),
+        "reviews": int(num(str(s.get("reviews")).replace(",", "")) or 0) if s.get("reviews") not in (None, "") else None,
+        "units": units,
+    }
+
+
+def normalize(brand: str, raw) -> list[dict]:
+    if isinstance(raw, dict):
+        # U-Haul checkpoint shape, or a keyed map.
+        if "stores" in raw and isinstance(raw["stores"], list):
+            raw = raw["stores"]
+        else:
+            raw = list(raw.values())
+    if not isinstance(raw, list):
+        raise SystemExit(f"{brand}: expected a list of stores, got {type(raw).__name__}")
+    out, seen = [], set()
+    for s in raw:
+        if not isinstance(s, dict):
+            continue
+        if s.get("brand") and s["brand"] != brand:
+            raise SystemExit(f"{brand}: record tagged brand={s['brand']!r} — wrong file for this brand")
+        rec = normalize_store(brand, s)
+        if rec and rec["store_id"] not in seen:
+            seen.add(rec["store_id"])
+            out.append(rec)
+    out.sort(key=lambda r: r["store_id"])
+    return out
+
+
+DATE_IN_NAME = re.compile(r"(\d{4}-\d{2}-\d{2})")
+
+
+def source_date(brand: str, source: Path, run_date: str) -> str:
+    """The date the data in `source` was collected — NOT the date this script runs.
+
+    A rolling file (enriched_locations.json, *_locations.json) is whatever the last
+    successful collector run left behind. On a clone that has fallen behind origin, or a
+    day the collector did not run, that can be days old. Filing it under today's date would
+    fabricate a day of "no change", so the date comes from the collector's own record:
+      * a date in the file name wins (history/<brand>/2026-09-04.json, cubesmart_2026-09-04.json)
+      * Public Storage: the last date update_history.py logged in history/YYYY-MM.csv —
+        it is written by the same job, from the same file
+      * Storage Sense / U-Haul rolling files: the last-run report next to them
+      * otherwise the file's modification date
+    """
+    m = DATE_IN_NAME.search(source.name)
+    if m:
+        return m.group(1)
+    if brand == "publicstorage":
+        months = sorted(HISTORY.glob("????-??.csv"))
+        if months:
+            rows = read_csv(months[-1])
+            if rows:
+                return max(r["date"] for r in rows)
+    if brand == "storagesense":
+        rep = HISTORY / "storagesense_last_run.json"
+        if rep.exists():
+            r = read_json(rep)
+            if r.get("finished_at"):
+                return r["finished_at"][:10]
+    if brand == "uhaul":
+        rep = HISTORY / "uhaul_last_run.json"
+        if rep.exists():
+            r = read_json(rep)
+            if r.get("status", "").startswith("complete") and r.get("date"):
+                return r["date"]
+    return dt.date.fromtimestamp(source.stat().st_mtime).isoformat()
+
+
+CORE_FIELDS = ("address", "city", "state", "zip", "phone", "lat", "lng", "url")
+UNIT_FIELDS = ("size", "price", "sku")
+
+
+def completeness(recs: list[dict]) -> dict[str, float]:
+    """Share of records with each core field EMPTY. The check that would have
+    caught U-Haul on 2026-09-03: 1,182 facilities, every address "", every lat
+    null, and the run green — an empty string is indistinguishable from a
+    facility that did not publish one unless someone counts them."""
+    n = max(len(recs), 1)
+    out = {f: sum(1 for r in recs if r.get(f) in (None, "")) / n for f in CORE_FIELDS}
+    units = [u for r in recs for u in r["units"]]
+    m = max(len(units), 1)
+    out.update({f"unit.{f}": sum(1 for u in units if u.get(f) in (None, "")) / m for f in UNIT_FIELDS})
+    return out
+
+
+def warn_if_hollow(brand: str, date: str, recs: list[dict], threshold: float = 0.5) -> list[str]:
+    hollow = [f"{f} {v:.0%} empty" for f, v in completeness(recs).items() if v > threshold]
+    if hollow:
+        print(f"WARNING {brand} {date}: fields mostly empty — {', '.join(hollow)}. "
+              f"The collector ran but its parser may be reading the wrong node.", file=sys.stderr)
+    return hollow
+
+
+def cmd_audit() -> None:
+    """Field completeness for every brand's latest snapshot, side by side."""
+    rows = {}
+    for brand in BRAND_ORDER:
+        dates = snapshot_dates(brand)
+        if dates:
+            rows[brand] = (dates[-1], completeness(load_snapshot(brand, dates[-1])))
+    if not rows:
+        print("no snapshots yet"); return
+    fields = list(CORE_FIELDS) + [f"unit.{f}" for f in UNIT_FIELDS]
+    print(f"{'% empty':<12}" + "".join(f"{BRANDS[b]['short']} {d[5:]:<9}" for b, (d, _) in rows.items()))
+    for f in fields:
+        line = f"{f:<12}"
+        for b, (_, c) in rows.items():
+            v = c[f]
+            line += f"{('—' if v == 0 else f'{v:.0%}'):>5}{'  !!' if v > 0.5 else '    '} "
+        print(line)
+    print("\n!! = more than half empty. Some are by design (Public Storage publishes no street rate);\n"
+          "   a core field like address or lat at !! means the parser is reading the wrong node.")
+
+
+def cmd_snapshot(brand: str, source: Path | None, date: str | None, force: bool = False,
+                 quiet: bool = False, trust_date: bool = False) -> Path | None:
+    cfg = BRANDS[brand]
+    run_date = date or today()
+    if source is None:
+        for pattern in cfg["sources"]:
+            cand = ROOT / pattern.format(date=run_date)
+            if cand.exists():
+                source = cand
+                break
+        if source is None:
+            if not quiet:
+                print(f"{brand}: no source found for {run_date} (looked for {cfg['sources']})")
+            return None
+    detected = source_date(brand, source, run_date)
+    if trust_date and date and DATE_IN_NAME.search(source.name) is None:
+        pass  # the collector just ran under this date; the caller knows better than the heuristics
+    else:
+        if date and detected != date and not quiet:
+            print(f"{brand}: {source.name} holds data from {detected}, not {date}; filing it under {detected}")
+        date = detected
+    dest = snapshot_path(brand, date)
+    if dest.exists() and not force:
+        if source.resolve() == dest.resolve():
+            # The collector already wrote the immutable snapshot itself. Validate it in place.
+            recs = normalize(brand, read_json(dest))
+            if len(recs) < cfg["floor"]:
+                raise SystemExit(f"{brand} {date}: {len(recs)} stores is below the floor of {cfg['floor']}")
+            warn_if_hollow(brand, date, recs)
+            if not quiet:
+                print(f"{brand} {date}: snapshot already in place ({len(recs):,} stores)")
+            return dest
+        if not quiet:
+            print(f"{brand} {date}: snapshot exists, not overwriting (use --force)")
+        return dest
+    recs = normalize(brand, read_json(source))
+    if len(recs) < cfg["floor"]:
+        raise SystemExit(f"{brand} {date}: {len(recs)} stores is below the floor of {cfg['floor']} — "
+                         f"refusing to snapshot a partial crawl from {source}")
+    # A snapshot must be newer than what it replaces: a stale rolling file re-imported
+    # under today's date would fabricate a day of "no change".
+    prior = [d for d in snapshot_dates(brand) if d < date]
+    if prior and not force:
+        prev = load_snapshot(brand, prior[-1])
+        if json.dumps(prev, sort_keys=True) == json.dumps(recs, sort_keys=True):
+            print(f"{brand} {date}: {source.name} is byte-identical to the {prior[-1]} snapshot — "
+                  f"the collector did not run. Nothing written (use --force to record it anyway).")
+            return None
+        # Same 10% rule the collectors use: a sharp drop is an interrupted crawl, and
+        # snapshotting it would log hundreds of phantom "delisted" events.
+        if len(recs) < len(prev) * (1 - MAX_DROP):
+            raise SystemExit(f"{brand} {date}: {len(recs):,} stores is more than {MAX_DROP:.0%} below the "
+                             f"{prior[-1]} snapshot ({len(prev):,}) — looks like a partial crawl. "
+                             f"Nothing written (use --force to record it anyway).")
+    warn_if_hollow(brand, date, recs)
+    atomic_write_json(dest, recs)
+    units = sum(len(r["units"]) for r in recs)
+    print(f"{brand} {date}: {len(recs):,} stores, {units:,} units -> {dest.relative_to(ROOT)}")
+    return dest
+
+
+def cmd_import(date: str) -> None:
+    """Sweep every known output location. Also picks up dated CubeSmart files left in the root."""
+    for brand in BRAND_ORDER:
+        cmd_snapshot(brand, None, date)
+    # Dated CubeSmart crawls left in the root by hand runs: cubesmart_YYYY-MM-DD.json
+    for p in sorted(ROOT.glob("cubesmart_????-??-??.json")):
+        d = p.stem.split("_")[1]
+        if not snapshot_path("cubesmart", d).exists():
+            cmd_snapshot("cubesmart", p, d)
+
+
+# --------------------------------------------------------------------------- merge
+def latest_snapshot(brand: str, date: str, max_age_days: int):
+    dates = [d for d in snapshot_dates(brand) if d <= date]
+    if not dates:
+        return None, None, None
+    d = dates[-1]
+    age = (dt.date.fromisoformat(date) - dt.date.fromisoformat(d)).days
+    if age > max_age_days:
+        return d, age, None
+    return d, age, load_snapshot(brand, d)
+
+
+def cmd_merge(date: str, max_age_days: int) -> dict:
+    stores, manifest = [], {"date": date, "built_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+                            "max_age_days": max_age_days, "brands": {}}
+    for brand in BRAND_ORDER:
+        d, age, recs = latest_snapshot(brand, date, max_age_days)
+        entry = {"label": BRANDS[brand]["label"], "snapshot_date": d, "age_days": age,
+                 "included": recs is not None, "stores": 0, "priced_stores": 0, "units": 0}
+        if recs is not None:
+            entry.update(stores=len(recs),
+                         priced_stores=sum(1 for r in recs if r["units"]),
+                         units=sum(len(r["units"]) for r in recs))
+            stores.extend(recs)
+        manifest["brands"][brand] = entry
+    manifest["stores"] = len(stores)
+    if not stores:
+        raise SystemExit("merge: no brand had a snapshot within the age window — nothing written")
+    atomic_write_json(COMBINED / "latest.json", stores)
+    atomic_write_json(COMBINED / "latest.manifest.json", manifest)
+    for b, e in manifest["brands"].items():
+        flag = "" if e["included"] else ("  (STALE — excluded)" if e["snapshot_date"] else "  (no snapshot yet)")
+        print(f"  {BRANDS[b]['label']:<15} {e['snapshot_date'] or '—':<10} {e['stores']:>6,} stores "
+              f"{e['units']:>8,} units{flag}")
+    print(f"merged {len(stores):,} stores -> {COMBINED / 'latest.json'}")
+    return manifest
+
+
+# --------------------------------------------------------------------------- record
+def store_rows(date: str, brand: str, recs: list[dict]):
+    daily, sizes = [], defaultdict(lambda: {"n": 0, "avail": 0, "prices": []})
+    for s in recs:
+        units = [u for u in s["units"] if u["available"] and u["price"]]
+        tens = [u["price"] for u in units if u["size"] == "10x10"]
+        prices = [u["price"] for u in units]
+        ppsf = [u["price"] / u["sqft"] for u in units if u.get("sqft")]
+        daily.append([date, brand, s["store_id"], s["state"], len(units),
+                      sum(u["count"] for u in units),
+                      min(tens) if tens else "",
+                      round(statistics.median(prices), 2) if prices else "",
+                      round(statistics.median(ppsf), 3) if ppsf else ""])
+        for u in units:
+            if u["size"] and s["state"]:
+                a = sizes[(s["state"], u["size"])]
+                a["n"] += 1
+                a["avail"] += u["count"]
+                a["prices"].append(u["price"])
+    size_rows = [[date, brand, st, sz, a["n"], a["avail"], round(statistics.median(a["prices"]), 2)]
+                 for (st, sz), a in sorted(sizes.items())]
+    return daily, size_rows
+
+
+def sku_map(recs: list[dict]) -> dict:
+    out = {}
+    for s in recs:
+        for u in s["units"]:
+            if u["sku"] and u["price"]:
+                out[u["sku"]] = (s["store_id"], s["site_number"], u["size"], u["price"],
+                                 u["street_price"], " | ".join(p for p in (u["promo"], u["promo2"]) if p))
+    return out
+
+
+def change_rows(date: str, brand: str, prev: list[dict], cur: list[dict]) -> tuple[list[list], str]:
+    old, new = sku_map(prev), sku_map(cur)
+    if not old or not new:
+        return [], "no priced SKUs on one side"
+    overlap = len(set(old) & set(new)) / max(len(new), 1)
+    if overlap < 0.5:
+        return [], f"SKU overlap only {overlap:.0%} — schema change or full turnover; log withheld"
+    # A store present on only one side was not observed (skipped, dead link,
+    # partial crawl) — that is a coverage gap, not a listing event. listed /
+    # delisted rows are only written for stores seen on both days.
+    old_stores = {v[0] for v in old.values()}
+    new_stores = {v[0] for v in new.values()}
+    both = old_stores & new_stores
+    rows = []
+    for sku, (sid, site, size, price, street, promo) in new.items():
+        if sku not in old:
+            if sid in both:
+                rows.append([date, brand, sid, site, size, sku, "listed", "", price])
+            continue
+        osid, osite, osize, oprice, ostreet, opromo = old[sku]
+        if oprice != price:
+            rows.append([date, brand, sid, site, size, sku, "price", oprice, price])
+        if ostreet != street and street is not None and ostreet is not None:
+            rows.append([date, brand, sid, site, size, sku, "street_price", ostreet, street])
+        if opromo != promo:
+            rows.append([date, brand, sid, site, size, sku, "promo", opromo, promo])
+    for sku, (sid, site, size, price, *_rest) in old.items():
+        if sku not in new and sid in both:
+            rows.append([date, brand, sid, site, size, sku, "delisted", price, ""])
+    return rows, ""
+
+
+def cmd_record(upto: str) -> None:
+    ledger = read_csv(COMBINED / "record_runs.csv")
+    done = {(r["brand"], r["date"]) for r in ledger}
+    for brand in BRAND_ORDER:
+        dates = [d for d in snapshot_dates(brand) if d <= upto]
+        for i, d in enumerate(dates):
+            if (brand, d) in done:
+                continue
+            cur = load_snapshot(brand, d)
+            daily, sizes = store_rows(d, brand, cur)
+            # backfill-ps may already have seeded this day from the legacy series.
+            if not any(r["brand"] == brand and r["date"] == d for r in read_csv(COMBINED / f"daily-{d[:7]}.csv")):
+                append_csv(COMBINED / f"daily-{d[:7]}.csv", DAILY_HEADER, daily)
+            if not any(r["brand"] == brand and r["date"] == d for r in read_csv(COMBINED / f"sizes-{d[:7]}.csv")):
+                append_csv(COMBINED / f"sizes-{d[:7]}.csv", SIZES_HEADER, sizes)
+            prev_date, events, note = "", 0, "first snapshot"
+            if i > 0:
+                prev_date = dates[i - 1]
+                prev = load_snapshot(brand, prev_date)
+                rows, note = change_rows(d, brand, prev, cur)
+                append_csv(COMBINED / f"rate_changes-{d[:7]}.csv", CHANGES_HEADER, rows)
+                events = len(rows)
+            append_csv(COMBINED / "record_runs.csv", LEDGER_HEADER,
+                       [[dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+                         brand, d, prev_date, len(cur), events, note]])
+            done.add((brand, d))
+            print(f"recorded {brand} {d}: {len(cur):,} stores, {events:,} rate events"
+                  + (f" ({note})" if note and note != "first snapshot" else ""))
+
+
+def cmd_backfill_ps() -> None:
+    """Seed daily-*.csv from the legacy Public Storage series (history/YYYY-MM.csv).
+
+    Those files predate the brand column and carry no state; the state is filled from the
+    newest Public Storage snapshot. Days already present for publicstorage are skipped, so this
+    is safe to run any number of times.
+    """
+    latest = snapshot_dates("publicstorage")
+    state_by_id = {}
+    if latest:
+        for s in load_snapshot("publicstorage", latest[-1]):
+            state_by_id[s["store_id"]] = s["state"]
+    elif (ROOT / "enriched_locations.json").exists():
+        for s in normalize("publicstorage", read_json(ROOT / "enriched_locations.json")):
+            state_by_id[s["store_id"]] = s["state"]
+    for legacy in sorted(HISTORY.glob("????-??.csv")):
+        month = legacy.stem
+        target = COMBINED / f"daily-{month}.csv"
+        have = {r["date"] for r in read_csv(target) if r["brand"] == "publicstorage"}
+        rows, dates = [], set()
+        for r in read_csv(legacy):
+            if r["date"] in have:
+                continue
+            dates.add(r["date"])
+            rows.append([r["date"], "publicstorage", r["store_id"], state_by_id.get(r["store_id"], ""),
+                         r["listings"], r["units_avail"], r["cheapest_10x10"], r["median_price"], ""])
+        append_csv(target, DAILY_HEADER, rows)
+        print(f"backfill {month}: {len(dates)} days, {len(rows):,} rows")
+    # Legacy state-by-size series, same treatment.
+    for legacy in sorted(HISTORY.glob("sizes-????-??.csv")):
+        month = legacy.stem.split("-", 1)[1]
+        target = COMBINED / f"sizes-{month}.csv"
+        have = {r["date"] for r in read_csv(target) if r["brand"] == "publicstorage"}
+        rows = [[r["date"], "publicstorage", r["state"], r["size"], r["listings"], r["units_avail"], r["median_price"]]
+                for r in read_csv(legacy) if r["date"] not in have]
+        append_csv(target, SIZES_HEADER, rows)
+
+
+# --------------------------------------------------------------------------- dashboard data
+COMMON_SIZES = ["5x5", "5x10", "10x10", "10x15", "10x20", "10x25", "10x30"]
+
+
+def median(xs):
+    xs = [x for x in xs if x is not None]
+    return round(statistics.median(xs), 2) if xs else None
+
+
+def cmd_build_dashboard(days_of_changes: int = 30) -> None:
+    latest_path, man_path = COMBINED / "latest.json", COMBINED / "latest.manifest.json"
+    if not latest_path.exists():
+        raise SystemExit("build-dashboard: run `merge` first")
+    stores, manifest = read_json(latest_path), read_json(man_path)
+
+    # 1. Compact store list. Units collapse to one entry per size: the cheapest advertised
+    #    price, its street price, promo, and total advertised count for that size.
+    out_stores = []
+    size_brand = defaultdict(list)             # (brand, size) -> prices
+    state_brand = defaultdict(lambda: {"n": 0, "tens": [], "prices": [], "avail": 0})
+    for s in stores:
+        by_size = {}
+        avail_units = [u for u in s["units"] if u["available"] and u["price"]]
+        for u in avail_units:
+            e = by_size.get(u["size"])
+            cc = "climate" in u["attrs"].lower()
+            if e is None or u["price"] < e[0]:
+                by_size[u["size"]] = [u["price"], u["street_price"], (e[2] if e else 0) + u["count"],
+                                      u["promo"] or u["promo2"], cc]
+            else:
+                e[2] += u["count"]
+            size_brand[(s["brand"], u["size"])].append(u["price"])
+        tens = [u["price"] for u in avail_units if u["size"] == "10x10"]
+        prices = [u["price"] for u in avail_units]
+        sb = state_brand[(s["state"], s["brand"])]
+        sb["n"] += 1
+        sb["avail"] += sum(u["count"] for u in avail_units)
+        if tens:
+            sb["tens"].append(min(tens))
+        sb["prices"].extend(prices)
+        out_stores.append({
+            "b": s["brand"], "id": s["store_id"], "sn": s["site_number"], "n": s["name"],
+            "a": s["address"], "c": s["city"], "s": s["state"], "z": s["zip"],
+            "lat": s["lat"], "lng": s["lng"], "u": s["url"], "r": s["rating"], "rv": s["reviews"],
+            "l": len(avail_units), "av": sum(u["count"] for u in avail_units),
+            "t": min(tens) if tens else None, "m": median(prices),
+            "sz": dict(sorted(by_size.items(), key=lambda kv: (parse_size(kv[0])[2] or 1e9, kv[0]))),
+        })
+
+    # 2. National size x brand medians (only sizes with a real sample).
+    size_table = {}
+    for (b, sz), ps in size_brand.items():
+        if len(ps) >= 20:
+            size_table.setdefault(sz, {})[b] = {"median": median(ps), "n": len(ps),
+                                               "p25": round(sorted(ps)[len(ps) // 4], 2),
+                                               "p75": round(sorted(ps)[3 * len(ps) // 4], 2)}
+    size_order = sorted(size_table, key=lambda z: (parse_size(z)[2] or 1e9, z))
+
+    # 3. State x brand.
+    states = {}
+    for (st, b), a in state_brand.items():
+        if not st:
+            continue
+        states.setdefault(st, {})[b] = {"stores": a["n"], "avail": a["avail"],
+                                        "median_10x10": median(a["tens"]), "median_price": median(a["prices"])}
+
+    # 4. Trends from the recorded daily series: one point per brand per day.
+    trend = defaultdict(lambda: {"stores": 0, "avail": 0, "tens": [], "med": []})
+    for f in sorted(COMBINED.glob("daily-????-??.csv")):
+        for r in read_csv(f):
+            t = trend[(r["date"], r["brand"])]
+            t["stores"] += 1
+            t["avail"] += int(r["units_avail"] or 0)
+            if r["cheapest_10x10"]:
+                t["tens"].append(float(r["cheapest_10x10"]))
+            if r["median_price"]:
+                t["med"].append(float(r["median_price"]))
+    trends = defaultdict(list)
+    for (d, b), t in sorted(trend.items()):
+        trends[b].append({"d": d, "stores": t["stores"], "avail": t["avail"],
+                          "t": median(t["tens"]), "m": median(t["med"])})
+
+    # 5. Rate-change activity: per brand per day counts, plus the biggest recent movers.
+    cutoff = (dt.date.fromisoformat(manifest["date"]) - dt.timedelta(days=days_of_changes)).isoformat()
+    activity = defaultdict(lambda: {"up": 0, "down": 0, "promo": 0, "listed": 0, "delisted": 0})
+    movers = []
+    name_of = {(s["b"], s["id"]): s for s in out_stores}
+    for f in sorted(COMBINED.glob("rate_changes-????-??.csv")):
+        if f.stem.split("-", 1)[1] < cutoff[:7]:
+            continue
+        for r in read_csv(f):
+            if r["date"] < cutoff:
+                continue
+            a = activity[(r["date"], r["brand"])]
+            if r["field"] == "price":
+                o, n = float(r["old"]), float(r["new"])
+                a["up" if n > o else "down"] += 1
+                st = name_of.get((r["brand"], r["store_id"]))
+                movers.append({"d": r["date"], "b": r["brand"], "id": r["store_id"], "sz": r["size"],
+                               "old": o, "new": n, "pct": round((n - o) / o * 100, 1) if o else None,
+                               "n": (st["n"] or f"#{st['sn']}") if st else "",
+                               "c": st["c"] if st else "", "s": st["s"] if st else ""})
+            elif r["field"] in activity[(r["date"], r["brand"])]:
+                a[r["field"]] += 1
+            elif r["field"] == "promo":
+                a["promo"] += 1
+    movers.sort(key=lambda m: -abs(m["pct"] or 0))
+    activity_rows = [{"d": d, "b": b, **v} for (d, b), v in sorted(activity.items())]
+
+    payload = {
+        "built_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        "date": manifest["date"],
+        "brands": {b: {"label": BRANDS[b]["label"], "short": BRANDS[b]["short"], **manifest["brands"][b]}
+                   for b in BRAND_ORDER},
+        "brand_order": BRAND_ORDER,
+        "size_order": size_order,
+        "size_table": size_table,
+        "states": states,
+        "trends": trends,
+        "activity": activity_rows,
+        "movers": movers[:300],
+        "stores": out_stores,
+    }
+    atomic_write_json(DASHBOARD_DATA, payload)
+    mb = DASHBOARD_DATA.stat().st_size / 1e6
+    print(f"dashboard-data.json: {len(out_stores):,} stores, {len(size_order)} sizes, "
+          f"{len(states)} states, {sum(len(v) for v in trends.values())} trend points, {mb:.1f} MB")
+
+
+# --------------------------------------------------------------------------- status / run / daily
+def cmd_status(date: str) -> None:
+    print(f"{'brand':<15} {'latest':<11} {'age':>4} {'stores':>7} {'units':>8}  source of truth")
+    for brand in BRAND_ORDER:
+        dates = snapshot_dates(brand)
+        if not dates:
+            print(f"{BRANDS[brand]['label']:<15} {'—':<11} {'':>4} {'':>7} {'':>8}  no snapshot in history/{brand}/")
+            continue
+        d = dates[-1]
+        recs = load_snapshot(brand, d)
+        age = (dt.date.fromisoformat(date) - dt.date.fromisoformat(d)).days
+        print(f"{BRANDS[brand]['label']:<15} {d:<11} {age:>3}d {len(recs):>7,} "
+              f"{sum(len(r['units']) for r in recs):>8,}  history/{brand}/ ({len(dates)} days)")
+    man = COMBINED / "latest.manifest.json"
+    if man.exists():
+        m = read_json(man)
+        print(f"\ncombined: {m['stores']:,} stores as of {m['date']} (built {m['built_at'][:19]}Z)")
+    ledger = read_csv(COMBINED / "record_runs.csv")
+    if ledger:
+        last = ledger[-1]
+        print(f"ledger:   {len(ledger)} recordings, last {last['brand']} {last['date']} ({last['events']} events)")
+
+
+def cmd_run(brand: str, extra: list[str], date: str) -> int:
+    cmd = [a.format(date=date) for a in BRANDS[brand]["run"]] + extra
+    snapshot_dir(brand).mkdir(parents=True, exist_ok=True)
+    print("$", " ".join(cmd), flush=True)
+    rc = subprocess.call(cmd, cwd=ROOT)
+    if rc not in (0, 3):  # U-Haul returns 3 for complete-with-warnings
+        print(f"{brand}: collector exited {rc}; not snapshotting", file=sys.stderr)
+        return rc
+    cmd_snapshot(brand, None, date, trust_date=True)
+    return 0
+
+
+def cmd_daily(date: str, max_age_days: int) -> None:
+    print("== import"); cmd_import(date)
+    print("== merge"); cmd_merge(date, max_age_days)
+    print("== record"); cmd_record(date)
+    print("== dashboard"); cmd_build_dashboard()
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--date", default=today(), help="run date (YYYY-MM-DD), default today")
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("status")
+    sub.add_parser("audit")
+    p = sub.add_parser("snapshot"); p.add_argument("brand", choices=BRAND_ORDER)
+    p.add_argument("--source", type=Path); p.add_argument("--force", action="store_true")
+    p.add_argument("--trust-date", action="store_true", help="file under --date even if the source looks older")
+    sub.add_parser("import")
+    p = sub.add_parser("merge"); p.add_argument("--max-age-days", type=int, default=3)
+    sub.add_parser("record")
+    sub.add_parser("backfill-ps")
+    p = sub.add_parser("build-dashboard"); p.add_argument("--days", type=int, default=30)
+    p = sub.add_parser("daily"); p.add_argument("--max-age-days", type=int, default=3)
+    p = sub.add_parser("run"); p.add_argument("brand", choices=BRAND_ORDER)
+    p.add_argument("extra", nargs=argparse.REMAINDER)
+    a = ap.parse_args(argv)
+
+    if a.cmd == "status":
+        cmd_status(a.date)
+    elif a.cmd == "audit":
+        cmd_audit()
+    elif a.cmd == "snapshot":
+        cmd_snapshot(a.brand, a.source, a.date, a.force, trust_date=a.trust_date)
+    elif a.cmd == "import":
+        cmd_import(a.date)
+    elif a.cmd == "merge":
+        cmd_merge(a.date, a.max_age_days)
+    elif a.cmd == "record":
+        cmd_record(a.date)
+    elif a.cmd == "backfill-ps":
+        cmd_backfill_ps()
+    elif a.cmd == "build-dashboard":
+        cmd_build_dashboard(a.days)
+    elif a.cmd == "daily":
+        cmd_daily(a.date, a.max_age_days)
+    elif a.cmd == "run":
+        extra = [x for x in a.extra if x != "--"]
+        return cmd_run(a.brand, extra, a.date)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

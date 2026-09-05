@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storage Rate Monitor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f6f4;--surface:#fcfcfb;--surface-2:#f0efec;--line:#e4e3df;--ink:#0b0b0b;--ink-2:#52514e;--ink-3:#8a8985;
+  --ps:#2a78d6;--cs:#eb6834;--ss:#1baf7a;--uh:#eda100;--up:#e34948;--down:#008300;--accent:#2a78d6;
+  --radius:10px;--font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--bg:#111110;--surface:#1a1a19;--surface-2:#242422;--line:#33332f;--ink:#fff;--ink-2:#c3c2b7;--ink-3:#8f8e87;
+  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--up:#e66767;--down:#3aa63a;--accent:#3987e5;}}
+:root[data-theme="dark"]{
+  color-scheme:dark;--bg:#111110;--surface:#1a1a19;--surface-2:#242422;--line:#33332f;--ink:#fff;--ink-2:#c3c2b7;--ink-3:#8f8e87;
+  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--up:#e66767;--down:#3aa63a;--accent:#3987e5;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 var(--font)}
+header{display:flex;align-items:center;gap:18px;padding:12px 22px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+header h1{font-size:16px;margin:0;font-weight:650;letter-spacing:.01em}
+header .meta{color:var(--ink-3);font-size:12px;margin-left:auto}
+nav{display:flex;gap:2px}
+nav button{background:none;border:0;padding:7px 12px;border-radius:8px;color:var(--ink-2);font:inherit;cursor:pointer}
+nav button.active{background:var(--surface-2);color:var(--ink);font-weight:600}
+main{padding:18px 22px;max-width:1500px;margin:0 auto}
+section[hidden]{display:none}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(460px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;min-width:0}
+.card h3{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.card .sub{color:var(--ink-3);font-size:12px;margin:-4px 0 10px}
+.tile{display:flex;flex-direction:column;gap:4px;border-top:3px solid var(--line)}
+.tile .label{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.tile .value{font-size:30px;font-weight:600;letter-spacing:-.01em}
+.tile .row{display:flex;gap:14px;color:var(--ink-3);font-size:12px;flex-wrap:wrap}
+.tile .row b{color:var(--ink);font-weight:600}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.stale{color:var(--up);font-weight:600}
+.chart{position:relative;height:300px}
+.chart.tall{height:380px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+#t-stores td:nth-child(2){white-space:normal;min-width:160px}
+th{color:var(--ink-2);font-weight:600;font-size:12px;position:sticky;top:0;background:var(--surface);cursor:pointer;user-select:none}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.click{cursor:pointer}
+tr.click:hover{background:var(--surface-2)}
+.scroll{overflow:auto;max-height:560px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filters input,.filters select{font:inherit;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:13px;color:var(--ink-2)}
+.chip.on{background:var(--surface-2);color:var(--ink);border-color:var(--ink-3)}
+.chip .dot{opacity:.35}.chip.on .dot{opacity:1}
+#map{height:420px;border-radius:var(--radius);border:1px solid var(--line)}
+.split{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.8fr);gap:14px}
+@media (max-width:1000px){.split{grid-template-columns:1fr}}
+.detail h2{font-size:16px;margin:0 0 2px}
+.detail .addr{color:var(--ink-2);margin-bottom:8px}
+.detail a{color:var(--accent)}
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:11px;margin-left:6px}
+.up{color:var(--up)}.down{color:var(--down)}
+.muted{color:var(--ink-3)}
+.empty{color:var(--ink-3);padding:30px;text-align:center}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.hint{font-size:12px;color:var(--ink-3);margin-top:8px}
+.range{display:flex;gap:4px}
+.range button{font:inherit;font-size:12px;padding:4px 9px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:6px;cursor:pointer}
+.range button.on{background:var(--surface-2);color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>Storage Rate Monitor</h1>
+  <nav id="nav">
+    <button data-view="overview" class="active">Overview</button>
+    <button data-view="compare">Compare</button>
+    <button data-view="markets">Markets</button>
+    <button data-view="stores">Stores</button>
+    <button data-view="trends">Trends</button>
+    <button data-view="changes">Rate changes</button>
+  </nav>
+  <div class="meta" id="meta">loading…</div>
+</header>
+<main>
+  <section id="v-overview">
+    <div class="grid g4" id="tiles"></div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><h3>Cheapest advertised 10×10 — median across stores</h3><div class="sub">Web rate, available units only, national</div><div class="chart"><canvas id="c-tens"></canvas></div></div>
+      <div class="card"><h3>Median web rate by unit size</h3><div class="sub">Common sizes; only brand × size cells with at least 20 listings</div><div class="chart"><canvas id="c-sizes"></canvas></div></div>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><h3>Advertised availability — last 30 days</h3><div class="sub">Sum of advertised unit counts across every store, per brand (indexed to the first day shown = 100)</div><div class="chart"><canvas id="c-avail30"></canvas></div></div>
+      <div class="card"><h3>Rate-change activity — last 14 days</h3><div class="sub">Price events per day; increases above the line, cuts below</div><div class="chart"><canvas id="c-activity"></canvas></div></div>
+    </div>
+  </section>
+
+  <section id="v-compare" hidden>
+    <div class="card"><h3>Web rate by size, brand by brand</h3><div class="sub">Median (interquartile range) of the advertised web rate for available units, nationally. Hover a bar for the sample size.</div><div class="chart tall"><canvas id="c-compare"></canvas></div></div>
+    <div class="card" style="margin-top:14px"><h3>The same table</h3><div class="scroll"><table id="t-compare"></table></div></div>
+    <div class="card" style="margin-top:14px"><h3>Discount depth — web rate vs. street rate</h3><div class="sub">How far below the posted street rate each brand advertises online, for brands that expose both</div><div class="chart"><canvas id="c-discount"></canvas></div></div>
+  </section>
+
+  <section id="v-markets" hidden>
+    <div class="card"><h3>State by state</h3><div class="sub">Median cheapest 10×10 per store, and store count, per brand. Click a column header to sort; click a row to open that state in Stores.</div><div class="scroll"><table id="t-states"></table></div></div>
+  </section>
+
+  <section id="v-stores" hidden>
+    <div class="filters" id="store-filters">
+      <span id="brand-chips"></span>
+      <select id="f-state"><option value="">All states</option></select>
+      <select id="f-size"><option value="">Any size</option></select>
+      <input id="f-q" placeholder="Search city, zip, address, store #" size="30">
+      <select id="f-sort">
+        <option value="t">Sort: cheapest 10×10</option>
+        <option value="m">Sort: median price</option>
+        <option value="av">Sort: units advertised</option>
+        <option value="c">Sort: city</option>
+      </select>
+      <span class="muted" id="store-count"></span>
+    </div>
+    <div class="split">
+      <div>
+        <div id="map"></div>
+        <div class="card" style="margin-top:14px"><div class="scroll" style="max-height:480px"><table id="t-stores"></table></div></div>
+      </div>
+      <div class="card detail" id="detail"><div class="empty">Pick a store from the map or the table.</div></div>
+    </div>
+  </section>
+
+  <section id="v-trends" hidden>
+    <div class="filters"><span class="muted">Range</span><div class="range" id="trend-range"><button data-days="14">14d</button><button data-days="30" class="on">30d</button><button data-days="90">90d</button><button data-days="0">All</button></div></div>
+    <div class="grid g2">
+      <div class="card"><h3>Median cheapest 10×10 per store</h3><div class="chart"><canvas id="c-t-tens"></canvas></div></div>
+      <div class="card"><h3>Median store price (all sizes)</h3><div class="chart"><canvas id="c-t-med"></canvas></div></div>
+      <div class="card"><h3>Advertised units available</h3><div class="chart"><canvas id="c-t-avail"></canvas></div></div>
+      <div class="card"><h3>Stores reporting</h3><div class="sub">A dip here is a collection gap, not a market event</div><div class="chart"><canvas id="c-t-stores"></canvas></div></div>
+    </div>
+    <p class="hint">Public Storage history reaches back to April 2026 from the legacy series; the other brands start the day their first two snapshots were recorded.</p>
+  </section>
+
+  <section id="v-changes" hidden>
+    <div class="filters"><span id="chg-chips"></span><select id="chg-dir"><option value="">Both directions</option><option value="up">Increases</option><option value="down">Cuts</option></select><span class="muted" id="chg-count"></span></div>
+    <div class="card"><h3>Biggest web-rate moves — last 30 days</h3><div class="scroll"><table id="t-movers"></table></div></div>
+  </section>
+</main>
+
+<script>
+const BRAND_COLOR={publicstorage:'--ps',cubesmart:'--cs',storagesense:'--ss',uhaul:'--uh'};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const color=b=>css(BRAND_COLOR[b]||'--accent');
+const fmt$=v=>v==null?'—':'$'+Math.round(v).toLocaleString();
+const fmtN=v=>v==null?'—':Math.round(v).toLocaleString();
+const el=id=>document.getElementById(id);
+let D=null, charts={}, map=null, markers=null, sel={brands:new Set(), state:'', size:'', q:'', sort:'t'}, chg={brands:new Set(), dir:''}, trendDays=30;
+
+Chart.defaults.font.family=css('--font'); Chart.defaults.color=css('--ink-2');
+Chart.defaults.borderColor=css('--line'); Chart.defaults.plugins.legend.labels.boxWidth=10;
+Chart.defaults.plugins.legend.labels.usePointStyle=true;
+Chart.defaults.elements.bar.borderRadius={topLeft:4,topRight:4};
+Chart.defaults.elements.line.borderWidth=2; Chart.defaults.elements.point.radius=0; Chart.defaults.elements.point.hoverRadius=5;
+Chart.defaults.interaction={mode:'index',intersect:false}; Chart.defaults.animation=false;
+
+function mk(id,cfg){ if(charts[id]) charts[id].destroy(); charts[id]=new Chart(el(id),cfg); }
+function brandsIn(){ return D.brand_order.filter(b=>D.brands[b].included); }
+function label(b){ return D.brands[b].label; }
+
+// ------------------------------------------------------------- overview
+function overview(){
+  const tiles=el('tiles'); tiles.innerHTML='';
+  for(const b of D.brand_order){
+    const m=D.brands[b]; const st=D.stores.filter(s=>s.b===b);
+    const tens=st.map(s=>s.t).filter(v=>v!=null).sort((a,c)=>a-c);
+    const med=tens.length?tens[Math.floor(tens.length/2)]:null;
+    const avail=st.reduce((a,s)=>a+s.av,0);
+    const stale=m.snapshot_date&&!m.included;
+    tiles.insertAdjacentHTML('beforeend',`<div class="card tile" style="border-top-color:${color(b)}">
+      <div class="label"><span class="dot" style="background:${color(b)}"></span>${m.label}<span class="pill">${m.snapshot_date||'no data'}${m.age_days>0?` · ${m.age_days}d old`:''}</span></div>
+      <div class="value">${m.included?fmtN(m.stores):'—'}<span class="muted" style="font-size:13px;font-weight:400"> stores</span></div>
+      <div class="row"><span>median 10×10 <b>${fmt$(med)}</b></span><span>units advertised <b>${fmtN(avail)}</b></span><span>listings <b>${fmtN(m.units)}</b></span></div>
+      ${stale?'<div class="stale">stale — excluded from the merge</div>':''}
+      ${!m.snapshot_date?'<div class="muted">no complete snapshot yet</div>':''}
+    </div>`);
+  }
+  const bs=brandsIn();
+  const tensBy=bs.map(b=>{const t=D.stores.filter(s=>s.b===b).map(s=>s.t).filter(v=>v!=null).sort((a,c)=>a-c);return t.length?t[Math.floor(t.length/2)]:null;});
+  mk('c-tens',{type:'bar',data:{labels:bs.map(label),datasets:[{data:tensBy,backgroundColor:bs.map(color),maxBarThickness:24}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt$(c.raw)}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}}}}});
+  const sizes=['5x5','5x10','10x10','10x15','10x20','10x30'].filter(z=>D.size_table[z]);
+  mk('c-sizes',{type:'bar',data:{labels:sizes.map(z=>z.replace('x','×')),datasets:bs.map(b=>({label:label(b),data:sizes.map(z=>D.size_table[z][b]?.median??null),backgroundColor:color(b),maxBarThickness:18}))},
+    options:{plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt$(c.raw)} (n=${D.size_table[sizes[c.dataIndex]][bs[c.datasetIndex]]?.n??0})`}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
+  // availability 30d indexed
+  const cutoff=addDays(D.date,-30);
+  const sets=[];
+  for(const b of bs){const pts=(D.trends[b]||[]).filter(p=>p.d>=cutoff&&p.avail>0);if(pts.length<2)continue;const base=pts[0].avail;sets.push({label:label(b),data:pts.map(p=>({x:p.d,y:+(p.avail/base*100).toFixed(1)})),borderColor:color(b),backgroundColor:color(b)});}
+  mk('c-avail30',{type:'line',data:{datasets:sets},options:{parsing:false,scales:{x:{type:'category',labels:dateLabels(cutoff,D.date),grid:{display:false}},y:{ticks:{callback:v=>v}}},plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw.y} (index)`}}}}});
+  if(!sets.length) el('c-avail30').parentElement.innerHTML='<div class="empty">Trend appears after two or more recorded days per brand.</div>';
+  // activity 14d
+  const c14=addDays(D.date,-14); const days=dateLabels(c14,D.date);
+  const act=D.activity.filter(a=>a.d>=c14);
+  const ds=[];
+  for(const b of bs){ds.push({label:label(b)+' ↑',data:days.map(d=>act.find(a=>a.d===d&&a.b===b)?.up||0),backgroundColor:color(b),stack:'up',maxBarThickness:18});
+                     ds.push({label:label(b)+' ↓',data:days.map(d=>-(act.find(a=>a.d===d&&a.b===b)?.down||0)),backgroundColor:color(b)+'99',stack:'up',maxBarThickness:18});}
+  mk('c-activity',{type:'bar',data:{labels:days.map(d=>d.slice(5)),datasets:ds},options:{scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:v=>Math.abs(v).toLocaleString()}}},plugins:{legend:{display:true},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${Math.abs(c.raw).toLocaleString()}`}}}}});
+  if(!act.length) el('c-activity').parentElement.innerHTML='<div class="empty">No rate events recorded in the last 14 days yet.</div>';
+}
+function addDays(d,n){const x=new Date(d+'T00:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10);}
+function dateLabels(a,b){const out=[];for(let d=a;d<=b;d=addDays(d,1))out.push(d);return out;}
+
+// ------------------------------------------------------------- compare
+function compare(){
+  // Sizes worth comparing: carried by at least two brands, or a big sample at one.
+  const bs=brandsIn(), sizes=D.size_order.filter(z=>bs.filter(b=>D.size_table[z][b]).length>=2||bs.some(b=>(D.size_table[z][b]?.n||0)>=300));
+  mk('c-compare',{type:'bar',data:{labels:sizes.map(z=>z.replace('x','×')),datasets:bs.map(b=>({label:label(b),data:sizes.map(z=>D.size_table[z][b]?.median??null),backgroundColor:color(b),maxBarThickness:16}))},
+    options:{plugins:{tooltip:{callbacks:{label:c=>{const e=D.size_table[sizes[c.dataIndex]][bs[c.datasetIndex]];return e?`${c.dataset.label}: ${fmt$(e.median)}  (IQR ${fmt$(e.p25)}–${fmt$(e.p75)}, n=${e.n.toLocaleString()})`:'';}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
+  let h=`<thead><tr><th>Size</th>${bs.map(b=>`<th class="num">${label(b)}</th>`).join('')}</tr></thead><tbody>`;
+  for(const z of sizes){h+=`<tr><td>${z.replace('x','×')}</td>${bs.map(b=>{const e=D.size_table[z][b];return `<td class="num">${e?`${fmt$(e.median)} <span class="muted">n=${e.n.toLocaleString()}</span>`:'—'}</td>`;}).join('')}</tr>`;}
+  el('t-compare').innerHTML=h+'</tbody>';
+  // discount depth from store size dicts
+  const disc={};
+  for(const s of D.stores){for(const [z,e] of Object.entries(s.sz)){if(e[1]&&e[0]&&e[1]>e[0]){(disc[s.b]??=[]).push((1-e[0]/e[1])*100);}}}
+  const db=bs.filter(b=>(disc[b]||[]).length>50);
+  if(!db.length){el('c-discount').parentElement.innerHTML='<div class="empty">No brand in this snapshot exposes a street rate alongside the web rate.</div>';return;}
+  const med=a=>{a=[...a].sort((x,y)=>x-y);return a[Math.floor(a.length/2)];};
+  mk('c-discount',{type:'bar',data:{labels:db.map(label),datasets:[{data:db.map(b=>+med(disc[b]).toFixed(1)),backgroundColor:db.map(color),maxBarThickness:24}]},
+    options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`median ${c.raw}% below street (n=${disc[db[c.dataIndex]].length.toLocaleString()} size cells)`}}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v+'%'}}}}});
+}
+
+// ------------------------------------------------------------- markets
+let stateSort={key:'st',dir:1};
+function markets(){
+  const bs=brandsIn();
+  const rows=Object.entries(D.states).map(([st,v])=>({st,...Object.fromEntries(bs.flatMap(b=>[[b+'_m',v[b]?.median_10x10??null],[b+'_n',v[b]?.stores??0]])),total:bs.reduce((a,b)=>a+(v[b]?.stores||0),0)}));
+  const k=stateSort.key;rows.sort((a,c)=>{const x=a[k],y=c[k];if(x==null)return 1;if(y==null)return -1;return (x>y?1:x<y?-1:0)*stateSort.dir;});
+  let h=`<thead><tr><th data-k="st">State</th><th class="num" data-k="total">Stores</th>${bs.map(b=>`<th class="num" data-k="${b}_m"><span class="dot" style="background:${color(b)}"></span> ${D.brands[b].short} 10×10</th><th class="num" data-k="${b}_n">${D.brands[b].short} stores</th>`).join('')}</tr></thead><tbody>`;
+  for(const r of rows){h+=`<tr class="click" data-st="${r.st}"><td>${r.st}</td><td class="num">${r.total}</td>${bs.map(b=>`<td class="num">${fmt$(r[b+'_m'])}</td><td class="num muted">${r[b+'_n']||'—'}</td>`).join('')}</tr>`;}
+  const t=el('t-states');t.innerHTML=h+'</tbody>';
+  t.querySelectorAll('th').forEach(th=>th.onclick=()=>{const key=th.dataset.k;stateSort.dir=stateSort.key===key?-stateSort.dir:1;stateSort.key=key;markets();});
+  t.querySelectorAll('tr.click').forEach(tr=>tr.onclick=()=>{sel.state=tr.dataset.st;sel.q='';el('f-q').value='';el('f-state').value=sel.state;show('stores');stores();});
+}
+
+// ------------------------------------------------------------- stores
+function initStores(){
+  const chips=el('brand-chips');
+  for(const b of D.brand_order){sel.brands.add(b);chips.insertAdjacentHTML('beforeend',`<span class="chip on" data-b="${b}"><span class="dot" style="background:${color(b)}"></span>${label(b)}</span>`);}
+  chips.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const b=c.dataset.b;sel.brands.has(b)?sel.brands.delete(b):sel.brands.add(b);c.classList.toggle('on');stores();});
+  const states=[...new Set(D.stores.map(s=>s.s).filter(Boolean))].sort();
+  el('f-state').innerHTML='<option value="">All states</option>'+states.map(s=>`<option>${s}</option>`).join('');
+  el('f-size').innerHTML='<option value="">Any size</option>'+D.size_order.map(z=>`<option value="${z}">${z.replace('x','×')}</option>`).join('');
+  el('f-state').onchange=e=>{sel.state=e.target.value;stores();};
+  el('f-size').onchange=e=>{sel.size=e.target.value;stores();};
+  el('f-sort').onchange=e=>{sel.sort=e.target.value;stores();};
+  let t;el('f-q').oninput=e=>{clearTimeout(t);t=setTimeout(()=>{sel.q=e.target.value.trim().toLowerCase();stores();},200);};
+  map=L.map('map',{preferCanvas:true}).setView([38.5,-96],4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:18}).addTo(map);
+  markers=L.layerGroup().addTo(map);
+}
+function filtered(){
+  return D.stores.filter(s=>sel.brands.has(s.b)&&(!sel.state||s.s===sel.state)&&(!sel.size||s.sz[sel.size])&&(!sel.q||`${s.c} ${s.z} ${s.a} ${s.sn} ${s.n} ${s.id}`.toLowerCase().includes(sel.q)));
+}
+function metric(s){ if(sel.size) return s.sz[sel.size]?.[0]??null; return sel.sort==='m'?s.m:sel.sort==='av'?s.av:s.t; }
+function stores(){
+  let rows=filtered();
+  const k=sel.sort;
+  rows.sort((a,b)=>{if(k==='c')return (a.s+a.c).localeCompare(b.s+b.c);const x=metric(a),y=metric(b);if(x==null)return 1;if(y==null)return -1;return k==='av'?y-x:x-y;});
+  el('store-count').textContent=`${rows.length.toLocaleString()} stores`;
+  const col=sel.size?`${sel.size.replace('x','×')} from`:'Cheapest 10×10';
+  let h=`<thead><tr><th></th><th>Store</th><th>City</th><th>St</th><th class="num">${col}</th><th class="num">Median</th><th class="num">Units</th><th class="num">Rating</th></tr></thead><tbody>`;
+  for(const s of rows.slice(0,400)){h+=`<tr class="click" data-id="${s.b}|${s.id}"><td><span class="dot" style="background:${color(s.b)}"></span></td><td>${s.n||`#${s.sn}`}</td><td>${s.c}</td><td>${s.s}</td><td class="num">${fmt$(sel.size?s.sz[sel.size]?.[0]:s.t)}</td><td class="num">${fmt$(s.m)}</td><td class="num">${fmtN(s.av)}</td><td class="num">${s.r??'—'}</td></tr>`;}
+  const t=el('t-stores');t.innerHTML=h+'</tbody>'+(rows.length>400?`<tfoot><tr><td colspan="8" class="muted">Showing 400 of ${rows.length.toLocaleString()} — narrow the filters.</td></tr></tfoot>`:'');
+  t.querySelectorAll('tr.click').forEach(tr=>tr.onclick=()=>detail(tr.dataset.id));
+  markers.clearLayers();
+  const pts=rows.filter(s=>s.lat&&s.lng).slice(0,4000);
+  for(const s of pts){L.circleMarker([s.lat,s.lng],{radius:5,color:css('--surface'),weight:1.5,fillColor:color(s.b),fillOpacity:.9}).on('click',()=>detail(`${s.b}|${s.id}`)).bindTooltip(`${label(s.b)} · ${s.c}, ${s.s} · 10×10 ${fmt$(s.t)}`).addTo(markers);}
+  if(pts.length&&(sel.state||sel.q)) map.fitBounds(pts.map(s=>[s.lat,s.lng]),{padding:[20,20],maxZoom:11});
+}
+function detail(key){
+  const [b,id]=key.split('|');const s=D.stores.find(x=>x.b===b&&x.id===id);if(!s)return;
+  const rows=Object.entries(s.sz).map(([z,e])=>`<tr><td>${z.replace('x','×')}${e[4]?'<span class="pill">climate</span>':''}</td><td class="num">${fmt$(e[0])}</td><td class="num muted">${e[1]?fmt$(e[1]):'—'}</td><td class="num">${e[2]}</td><td class="muted">${e[3]||''}</td></tr>`).join('');
+  el('detail').innerHTML=`<div class="label" style="color:${color(b)};font-size:12px;font-weight:600">${label(b)}</div><h2>${s.n||'#'+s.sn}</h2><div class="addr">${s.a}, ${s.c}, ${s.s} ${s.z}${s.sn?` · site #${s.sn}`:''}${s.r?` · ★ ${s.r} (${fmtN(s.rv)})`:''}</div>
+    <div class="row muted" style="margin-bottom:10px">${s.l} listings · ${fmtN(s.av)} units advertised · median ${fmt$(s.m)}</div>
+    <table><thead><tr><th>Size</th><th class="num">Web</th><th class="num">Street</th><th class="num">Avail</th><th>Promo</th></tr></thead><tbody>${rows||'<tr><td colspan="5" class="muted">No priced units advertised</td></tr>'}</tbody></table>
+    <p><a href="${s.u}" target="_blank" rel="noopener">Open listing ↗</a></p>`;
+  if(s.lat&&s.lng) map.setView([s.lat,s.lng],Math.max(map.getZoom(),10));
+}
+
+// ------------------------------------------------------------- trends
+function trends(){
+  const bs=brandsIn();const cutoff=trendDays?addDays(D.date,-trendDays):'0000';
+  const series=(key,scale)=>bs.map(b=>({label:label(b),data:(D.trends[b]||[]).filter(p=>p.d>=cutoff&&p[key]!=null).map(p=>({x:p.d,y:p[key]})),borderColor:color(b),backgroundColor:color(b)}));
+  const allDates=[...new Set(bs.flatMap(b=>(D.trends[b]||[]).map(p=>p.d)))].filter(d=>d>=cutoff).sort();
+  const base=(yfmt,min0)=>({parsing:false,scales:{x:{type:'category',labels:allDates,grid:{display:false},ticks:{maxTicksLimit:10,callback:(v,i)=>allDates[i]?.slice(5)}},y:{beginAtZero:!!min0,ticks:{callback:yfmt}}},plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${yfmt(c.raw.y)}`}}}});
+  mk('c-t-tens',{type:'line',data:{datasets:series('t')},options:base(v=>'$'+Math.round(v))});
+  mk('c-t-med',{type:'line',data:{datasets:series('m')},options:base(v=>'$'+Math.round(v))});
+  mk('c-t-avail',{type:'line',data:{datasets:series('avail')},options:base(v=>Math.round(v).toLocaleString(),true)});
+  mk('c-t-stores',{type:'line',data:{datasets:series('stores')},options:base(v=>Math.round(v).toLocaleString(),true)});
+}
+el('trend-range').querySelectorAll('button').forEach(b=>b.onclick=()=>{el('trend-range').querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');trendDays=+b.dataset.days;trends();});
+
+// ------------------------------------------------------------- changes
+function initChanges(){
+  const chips=el('chg-chips');
+  for(const b of D.brand_order){chg.brands.add(b);chips.insertAdjacentHTML('beforeend',`<span class="chip on" data-b="${b}"><span class="dot" style="background:${color(b)}"></span>${label(b)}</span>`);}
+  chips.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const b=c.dataset.b;chg.brands.has(b)?chg.brands.delete(b):chg.brands.add(b);c.classList.toggle('on');changes();});
+  el('chg-dir').onchange=e=>{chg.dir=e.target.value;changes();};
+}
+function changes(){
+  const rows=D.movers.filter(m=>chg.brands.has(m.b)&&(!chg.dir||(chg.dir==='up'?m.new>m.old:m.new<m.old)));
+  el('chg-count').textContent=`${rows.length.toLocaleString()} of the ${D.movers.length.toLocaleString()} largest moves`;
+  if(!rows.length){el('t-movers').innerHTML='<tbody><tr><td class="empty">No price events yet — they appear once a brand has two consecutive daily snapshots.</td></tr></tbody>';return;}
+  let h='<thead><tr><th>Date</th><th></th><th>Store</th><th>City</th><th>Size</th><th class="num">Was</th><th class="num">Now</th><th class="num">Change</th></tr></thead><tbody>';
+  for(const m of rows.slice(0,300)){const up=m.new>m.old;h+=`<tr class="click" data-id="${m.b}|${m.id}"><td>${m.d}</td><td><span class="dot" style="background:${color(m.b)}"></span></td><td>${m.n||m.id}</td><td>${m.c}${m.s?', '+m.s:''}</td><td>${m.sz.replace('x','×')}</td><td class="num">${fmt$(m.old)}</td><td class="num">${fmt$(m.new)}</td><td class="num ${up?'up':'down'}">${up?'+':''}${m.pct}%</td></tr>`;}
+  el('t-movers').innerHTML=h+'</tbody>';
+  el('t-movers').querySelectorAll('tr.click').forEach(tr=>tr.onclick=()=>{show('stores');detail(tr.dataset.id);});
+}
+
+// ------------------------------------------------------------- nav / boot
+const rendered={};
+function show(v){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  document.querySelectorAll('main > section').forEach(s=>s.hidden=s.id!=='v-'+v);
+  if(v==='stores'){setTimeout(()=>map.invalidateSize(),50);}
+  if(!rendered[v]){rendered[v]=true;({overview,compare,markets,stores,trends,changes})[v]();}
+  location.hash=v;
+}
+el('nav').onclick=e=>{if(e.target.dataset.view)show(e.target.dataset.view);};
+window.addEventListener('hashchange',()=>{const v=location.hash.slice(1);if(D&&v&&!document.querySelector('nav button[data-view="'+v+'"]').classList.contains('active'))show(v);});
+fetch('dashboard-data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(r.status+' '+r.statusText);return r.json();}).then(d=>{
+  D=d;
+  const parts=d.brand_order.map(b=>`${d.brands[b].short} ${d.brands[b].snapshot_date||'—'}`).join(' · ');
+  el('meta').textContent=`${d.stores.length.toLocaleString()} stores · ${parts} · built ${d.built_at.replace('T',' ').slice(0,16)}Z`;
+  initStores();initChanges();
+  show(location.hash.slice(1)||'overview');
+}).catch(e=>{el('meta').textContent='';document.querySelector('main').innerHTML=`<div class="card"><h3>Could not load dashboard-data.json</h3><p>${e.message}</p><p class="muted">Build it with <code>python storage_pipeline.py daily</code>, then serve this folder (for example <code>python -m http.server 8777</code>) and open <code>http://localhost:8777/dashboard.html</code>. Opening the file directly from disk blocks the fetch.</p></div>`;});
+</script>
+</body>
+</html>

@@ -108,8 +108,27 @@ def log_header(path):
 
 
 def sku_map(stores):
-    """SKU -> (store_id, site_number, size, price, promo, brand), priced units only.
+    """(brand, SKU) -> (store_id, site_number, size, price, promo, brand), priced only.
 
+    KEYED ON (brand, sku), NOT sku — changed 2026-09-01, before a second and
+    third operator start collecting.
+
+    This map is flat across every store in the file, so the key has to be
+    unique across every store in the file. A bare SKU is only unique inside one
+    operator's own numbering. Public Storage's are 'V_1518528'; Extra Space's
+    are '2555_1275' (unit-type and site joined); CubeSmart's are unknown until
+    it runs. Nothing stops two operators minting the same string, and if they
+    ever did, the second one silently overwrote the first — one unit's price
+    would vanish from the diff and another unit's price change would be
+    attributed to the wrong store, with no error and nothing on the row to show
+    it happened.
+
+    The odds are low. The failure is invisible, permanent, and would sit inside
+    the one file this project exists to produce, so it is not worth carrying.
+    Pairing the brand with the SKU costs nothing and removes the class.
+
+    ON THE PRICE FILTER
+    -------------------
     A unit is excluded until it carries a real price, so its first real price
     reads as a first sighting (no row) rather than as a change.
 
@@ -123,13 +142,15 @@ def sku_map(stores):
     """
     out = {}
     for s in stores:
+        brand = s.get("brand") or ""
         for u in s.get("units", []):
             sku = u.get("sku")
             price = u.get("price")
             if sku and isinstance(price, (int, float)) and price > 0:
-                out[sku] = (str(s.get("store_id")), s.get("site_number") or "",
-                            u.get("size") or "", price, u.get("promo") or "",
-                            s.get("brand") or "")
+                out[(brand, sku)] = (str(s.get("store_id")),
+                                     s.get("site_number") or "",
+                                     u.get("size") or "", price,
+                                     u.get("promo") or "", brand)
     return out
 
 def main():
@@ -146,6 +167,35 @@ def main():
 
     old = sku_map(json.loads(OLD.read_text(encoding="utf-8")))
     new = sku_map(json.loads(NEW.read_text(encoding="utf-8")))
+
+    # Keying on (brand, sku) would otherwise break the guarantee this file's
+    # header makes: that a baseline predating the operator tag still diffs.
+    # Such a baseline keys as ("", sku) and matches nothing.
+    #
+    # It is only safe to repair when the new side is a single operator — then
+    # the untagged baseline can only have come from that operator. With two or
+    # more it is genuinely unknowable which brand an untagged SKU belonged to,
+    # and guessing would attribute one operator's price change to another. So
+    # it says so and diffs nothing, rather than inventing an answer.
+    if old and all(k[0] == "" for k in old):
+        brands = {k[0] for k in new}
+        if len(brands) == 1:
+            only = next(iter(brands))
+            old = {(only, sku): v for (_, sku), v in old.items()}
+            print(f"Note: {OLD} predates the operator tag. Its SKUs have been "
+                  f"read as '{only}', the only operator in {NEW}.")
+        else:
+            print(f"REFUSING: {OLD} carries no operator tag and {NEW} holds "
+                  f"{len(brands)} operators ({', '.join(sorted(brands))}). An "
+                  f"untagged SKU cannot be assigned to one of them without "
+                  f"guessing, and a wrong guess credits one operator's price "
+                  f"change to another. Re-run the scraper so the baseline is "
+                  f"tagged. Nothing was written.", file=sys.stderr)
+            record(date, "refused-untagged-baseline",
+                   f"{OLD} untagged while {NEW} holds {len(brands)} operators.",
+                   len(old), len(new), 0, 0)
+            return 1
+
     matched = len(set(old) & set(new))
     status, note = "ok", ""
 
@@ -202,8 +252,9 @@ def main():
         return 1
 
     events = []
-    for sku, (sid, site, size, price, promo, brand) in new.items():
-        prev = old.get(sku)
+    for key, (sid, site, size, price, promo, brand) in new.items():
+        sku = key[1]                      # key is (brand, sku); the row wants the sku
+        prev = old.get(key)
         if not prev:
             continue
         old_price, old_promo = prev[3], prev[4]

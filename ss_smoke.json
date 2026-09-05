@@ -1,0 +1,851 @@
+[
+  {
+    "brand": "storagesense",
+    "store_id": "sense_820",
+    "site_number": "820",
+    "name": "Storage Sense - Hartselle",
+    "address": "1800 Teague Road Northwest",
+    "city": "Hartselle",
+    "state": "AL",
+    "zip": "35640",
+    "phone": "256-751-1292",
+    "lat": 34.4631367,
+    "lng": -86.9484834,
+    "url": "https://www.storagesense.com/location/USA/AL/Hartselle/sense-hartselle-820/",
+    "units": [
+      {
+        "size": "12x25",
+        "price": 24,
+        "street_price": 30,
+        "available": true,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4693395",
+        "attrs": "Uncovered Parking, Parking, Ground Level, Vehicle Parking",
+        "sqft": 300.0,
+        "width": 12.0,
+        "depth": 25.0,
+        "size_class": "",
+        "rates": {
+          "web": 24,
+          "street": 30
+        }
+      },
+      {
+        "size": "16x40",
+        "price": 32,
+        "street_price": 40,
+        "available": true,
+        "count": 0,
+        "promo": "50% off 1st Month!",
+        "promo2": "",
+        "sku": "sense_4693234",
+        "attrs": "Uncovered Parking, Parking, Ground Level, Vehicle Parking",
+        "sqft": 640.0,
+        "width": 16.0,
+        "depth": 40.0,
+        "size_class": "",
+        "rates": {
+          "web": 32,
+          "street": 40
+        }
+      },
+      {
+        "size": "5x5",
+        "price": 99,
+        "street_price": 124,
+        "available": true,
+        "count": 2,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4693016",
+        "attrs": "Climate/Temp, Inside, Interior Door, Roll up Door, Ground Level, Small",
+        "sqft": 25.0,
+        "width": 5.0,
+        "depth": 5.0,
+        "size_class": "Small",
+        "rates": {
+          "web": 99,
+          "street": 124
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 49,
+        "street_price": 62,
+        "available": true,
+        "count": 0,
+        "promo": "50% off 1st Month!",
+        "promo2": "",
+        "sku": "sense_4683464",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Small",
+        "sqft": 50.0,
+        "width": 5.0,
+        "depth": 10.0,
+        "size_class": "Small",
+        "rates": {
+          "web": 49,
+          "street": 62
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 49,
+        "street_price": 62,
+        "available": true,
+        "count": 0,
+        "promo": "50% off 1st Month!",
+        "promo2": "",
+        "sku": "sense_4688639",
+        "attrs": "Enhanced Security, Exterior Door, Drive Up, Roll up Door, Ground Level, Small",
+        "sqft": 50.0,
+        "width": 5.0,
+        "depth": 10.0,
+        "size_class": "Small",
+        "rates": {
+          "web": 49,
+          "street": 62
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 74,
+        "street_price": 93,
+        "available": true,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4691163",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Medium",
+        "sqft": 100.0,
+        "width": 10.0,
+        "depth": 10.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 74,
+          "street": 93
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 84,
+        "street_price": 105,
+        "available": true,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4692132",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Medium",
+        "sqft": 120.0,
+        "width": 10.0,
+        "depth": 12.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 84,
+          "street": 105
+        }
+      },
+      {
+        "size": "10x12",
+        "price": 84,
+        "street_price": 105,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4692154",
+        "attrs": "Enhanced Security, Exterior Door, Drive Up, Roll up Door, Ground Level, Medium",
+        "sqft": 120.0,
+        "width": 10.0,
+        "depth": 12.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 84,
+          "street": 105
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 99,
+        "street_price": 124,
+        "available": true,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4686624",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Medium",
+        "sqft": 150.0,
+        "width": 10.0,
+        "depth": 15.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 99,
+          "street": 124
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 99,
+        "street_price": 124,
+        "available": true,
+        "count": 0,
+        "promo": "50% off 1st Month!",
+        "promo2": "",
+        "sku": "sense_4692209",
+        "attrs": "Enhanced Security, Exterior Door, Drive Up, Roll up Door, Ground Level, Medium",
+        "sqft": 150.0,
+        "width": 10.0,
+        "depth": 15.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 99,
+          "street": 124
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 164,
+        "street_price": 205,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4689893",
+        "attrs": "Climate/Temp, Inside, Interior Door, Roll up Door, Ground Level, Medium",
+        "sqft": 150.0,
+        "width": 10.0,
+        "depth": 15.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 164,
+          "street": 205
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 124,
+        "street_price": 155,
+        "available": true,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4687794",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 200.0,
+        "width": 10.0,
+        "depth": 20.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 124,
+          "street": 155
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 124,
+        "street_price": 155,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4685555",
+        "attrs": "Enhanced Security, Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 200.0,
+        "width": 10.0,
+        "depth": 20.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 124,
+          "street": 155
+        }
+      },
+      {
+        "size": "10x22",
+        "price": 154,
+        "street_price": 193,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4683345",
+        "attrs": "Power, Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 220.0,
+        "width": 10.0,
+        "depth": 22.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 154,
+          "street": 193
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 159,
+        "street_price": 199,
+        "available": true,
+        "count": 2,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4688212",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 250.0,
+        "width": 10.0,
+        "depth": 25.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 159,
+          "street": 199
+        }
+      },
+      {
+        "size": "10x25",
+        "price": 159,
+        "street_price": 199,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4691963",
+        "attrs": "Enhanced Security, Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 250.0,
+        "width": 10.0,
+        "depth": 25.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 159,
+          "street": 199
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 199,
+        "street_price": 249,
+        "available": true,
+        "count": 2,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4688173",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 300.0,
+        "width": 10.0,
+        "depth": 30.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 199,
+          "street": 249
+        }
+      },
+      {
+        "size": "15x20",
+        "price": 199,
+        "street_price": 249,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4687527",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 300.0,
+        "width": 15.0,
+        "depth": 20.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 199,
+          "street": 249
+        }
+      },
+      {
+        "size": "20x25",
+        "price": 299,
+        "street_price": 374,
+        "available": true,
+        "count": 2,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4683853",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 500.0,
+        "width": 20.0,
+        "depth": 25.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 299,
+          "street": 374
+        }
+      },
+      {
+        "size": "10x5",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4693465",
+        "attrs": "Climate/Temp, Inside, Interior Door, Roll up Door, Ground Level, Small",
+        "sqft": 50.0,
+        "width": 10.0,
+        "depth": 5.0,
+        "size_class": "Small",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "10x10",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4692973",
+        "attrs": "Climate/Temp, Inside, Interior Door, Roll up Door, Ground Level, Medium",
+        "sqft": 100.0,
+        "width": 10.0,
+        "depth": 10.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "10x20",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4689661",
+        "attrs": "Climate/Temp, Inside, Interior Door, Roll up Door, Ground Level, Large",
+        "sqft": 200.0,
+        "width": 10.0,
+        "depth": 20.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "10x22",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4683394",
+        "attrs": "Power, Enhanced Security, Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 220.0,
+        "width": 10.0,
+        "depth": 22.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "10x30",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4688301",
+        "attrs": "Enhanced Security, Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 300.0,
+        "width": 10.0,
+        "depth": 30.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "19x20",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4693165",
+        "attrs": "Power, Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 380.0,
+        "width": 19.0,
+        "depth": 20.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      }
+    ]
+  },
+  {
+    "brand": "storagesense",
+    "store_id": "sense_825",
+    "site_number": "825",
+    "name": "Storage Sense - Colorado Springs - PAFB",
+    "address": "7230 Space Village Ave.",
+    "city": "Colorado Springs",
+    "state": "CO",
+    "zip": "80929",
+    "phone": "719-638-4200",
+    "lat": 38.8397583,
+    "lng": -104.6932891,
+    "url": "https://www.storagesense.com/location/USA/CO/Colorado-Springs/sense-at-pafb-825/",
+    "units": [
+      {
+        "size": "12x20",
+        "price": 56,
+        "street_price": 70,
+        "available": true,
+        "count": 0,
+        "promo": "1st Month Free!",
+        "promo2": "",
+        "sku": "sense_4924383",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 240.0,
+        "width": 12.0,
+        "depth": 20.0,
+        "size_class": "",
+        "rates": {
+          "web": 56,
+          "street": 70
+        }
+      },
+      {
+        "size": "12x30",
+        "price": 82,
+        "street_price": 103,
+        "available": true,
+        "count": 0,
+        "promo": "1st Month Free!",
+        "promo2": "",
+        "sku": "sense_4924410",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 360.0,
+        "width": 12.0,
+        "depth": 30.0,
+        "size_class": "",
+        "rates": {
+          "web": 82,
+          "street": 103
+        }
+      },
+      {
+        "size": "12x40",
+        "price": 92,
+        "street_price": 115,
+        "available": true,
+        "count": 0,
+        "promo": "1st Month Free!",
+        "promo2": "",
+        "sku": "sense_4924366",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 480.0,
+        "width": 12.0,
+        "depth": 40.0,
+        "size_class": "",
+        "rates": {
+          "web": 92,
+          "street": 115
+        }
+      },
+      {
+        "size": "5x10",
+        "price": 59,
+        "street_price": 74,
+        "available": true,
+        "count": 2,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4622685",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Small",
+        "sqft": 50.0,
+        "width": 5.0,
+        "depth": 10.0,
+        "size_class": "Small",
+        "rates": {
+          "web": 59,
+          "street": 74
+        }
+      },
+      {
+        "size": "10x10",
+        "price": 75,
+        "street_price": 94,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4617234",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Medium",
+        "sqft": 100.0,
+        "width": 10.0,
+        "depth": 10.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 75,
+          "street": 94
+        }
+      },
+      {
+        "size": "10x15",
+        "price": 112,
+        "street_price": 140,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4619380",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Medium",
+        "sqft": 150.0,
+        "width": 10.0,
+        "depth": 15.0,
+        "size_class": "Medium",
+        "rates": {
+          "web": 112,
+          "street": 140
+        }
+      },
+      {
+        "size": "12x15",
+        "price": 32,
+        "street_price": 40,
+        "available": true,
+        "count": 1,
+        "promo": "1st Month Free!",
+        "promo2": "",
+        "sku": "sense_4924454",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 180.0,
+        "width": 12.0,
+        "depth": 15.0,
+        "size_class": "",
+        "rates": {
+          "web": 32,
+          "street": 40
+        }
+      },
+      {
+        "size": "10x20",
+        "price": 169,
+        "street_price": 212,
+        "available": true,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4618687",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 200.0,
+        "width": 10.0,
+        "depth": 20.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 169,
+          "street": 212
+        }
+      },
+      {
+        "size": "10x30",
+        "price": 322,
+        "street_price": 403,
+        "available": true,
+        "count": 1,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4616354",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 300.0,
+        "width": 10.0,
+        "depth": 30.0,
+        "size_class": "Large",
+        "rates": {
+          "web": 322,
+          "street": 403
+        }
+      },
+      {
+        "size": "12x50",
+        "price": 149,
+        "street_price": 187,
+        "available": true,
+        "count": 2,
+        "promo": "1st Month Free!",
+        "promo2": "",
+        "sku": "sense_4924405",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 600.0,
+        "width": 12.0,
+        "depth": 50.0,
+        "size_class": "",
+        "rates": {
+          "web": 149,
+          "street": 187
+        }
+      },
+      {
+        "size": "10x20",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4924457",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 200.0,
+        "width": 10.0,
+        "depth": 20.0,
+        "size_class": "",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "11x25",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4622496",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 275.0,
+        "width": 11.0,
+        "depth": 25.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "12x24",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4924413",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 288.0,
+        "width": 12.0,
+        "depth": 24.0,
+        "size_class": "",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "11x30",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4619753",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 330.0,
+        "width": 11.0,
+        "depth": 30.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "11x45",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4619995",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 495.0,
+        "width": 11.0,
+        "depth": 45.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "20x30",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4619678",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 600.0,
+        "width": 20.0,
+        "depth": 30.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "22x30",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4619731",
+        "attrs": "Exterior Door, Drive Up, Roll up Door, Ground Level, Large",
+        "sqft": 660.0,
+        "width": 22.0,
+        "depth": 30.0,
+        "size_class": "Large",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      },
+      {
+        "size": "12x60",
+        "price": null,
+        "street_price": null,
+        "available": false,
+        "count": 0,
+        "promo": "",
+        "promo2": "",
+        "sku": "sense_4924433",
+        "attrs": "Parking, Ground Level, Vehicle Parking",
+        "sqft": 720.0,
+        "width": 12.0,
+        "depth": 60.0,
+        "size_class": "",
+        "rates": {
+          "web": null,
+          "street": null
+        }
+      }
+    ]
+  }
+]

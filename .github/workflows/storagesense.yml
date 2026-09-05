@@ -1,0 +1,86 @@
+name: Storage Sense Conservative Refresh
+
+on:
+  # Deliberately off the hour. One complete, slow snapshot per day captures
+  # every advertised rate without treating the public website like an API.
+  schedule:
+    - cron: '43 17 * * *'
+  workflow_dispatch:
+    inputs:
+      budget:
+        description: 'Maximum facilities to refresh (0 = every facility; default)'
+        required: false
+        default: '0'
+
+permissions:
+  contents: write
+
+# A queued run is safer than cancellation: it preserves the previous run's
+# five-second request spacing and prevents two collectors hitting the host.
+concurrency:
+  group: storagesense-collector
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    # 620 requests at a five-second floor take ~52 minutes before response
+    # time. Leave room without allowing an accidental all-day job.
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # continue-on-error is intentional: a 403/429 still writes a durable
+      # cooldown/report, which must be committed before the run is marked red.
+      - name: Collect one polite full daily snapshot
+        id: collect
+        continue-on-error: true
+        run: >-
+          python storagesense_scraper.py
+          --out history/storagesense_locations.json
+          --state history/storagesense_state.json
+          --report history/storagesense_last_run.json
+          --delay 5
+          --budget ${{ inputs.budget || '0' }}
+          --refresh-hours 0
+
+      # EVERY PATH THE COLLECTOR WRITES MUST BE NAMED HERE.
+      #
+      # This job lists files rather than `history/` because it shares that
+      # directory with the daily Public Storage scrape, and sweeping the whole
+      # tree would put that job's output inside a commit labelled "Storage
+      # Sense refresh". The cost of that correctness is a standing obligation:
+      # anything the collector learns to write is invisible until it is added
+      # to this list.
+      #
+      # That obligation was already missed once. The snapshot directory and
+      # both CSVs were added on 2026-09-02, the same day the collector started
+      # writing them — until then they were written on the runner and thrown
+      # away at teardown. The failure is silent by construction: the step
+      # succeeds, the job goes green, and the history simply never appears.
+      - name: Commit collection state and report
+        run: >-
+          bash .github/push_with_retry.sh
+          "Storage Sense refresh: $(date +'%Y-%m-%d')"
+          history/storagesense_locations.json
+          history/storagesense_state.json
+          history/storagesense_last_run.json
+          history/storagesense
+          history/storagesense_rate_changes.csv
+          history/storagesense_availability.csv
+
+      - name: Surface a deliberate stop after its state is safe
+        if: steps.collect.outcome == 'failure'
+        run: |
+          cat history/storagesense_last_run.json || true
+          exit 1

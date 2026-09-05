@@ -9,6 +9,7 @@ Designed for FindStorage.pages.dev:
 - Maps all store & unit fields to match enriched_locations.json exactly.
 """
 from __future__ import annotations
+import hashlib
 import json
 import re
 from typing import Any, Dict, List, Optional
@@ -61,6 +62,33 @@ def _clean_price(price_val: Any) -> Optional[int]:
         return int(round(val)) if val > 0 else None
     except (ValueError, TypeError):
         return None
+
+
+def _positionless_sku(site: str, li) -> str:
+    """A deterministic SKU for a unit whose page carries no id of its own.
+
+    Built from the site number plus the unit's own rendered description --
+    size, dimensions and features -- so it is identical tomorrow if the unit is
+    identical tomorrow, and different from a genuinely different unit at the
+    same site. It deliberately does not include price: a repricing must read as
+    a changed price on the same SKU, not as one unit vanishing and another
+    appearing.
+
+    Marked `cubeh_` rather than `cube_` so a derived key is never mistaken for
+    a real CubeSmart id when reading the log a year from now.
+    """
+    parts = [site]
+    for attr in ("data-unitsize", "data-unitdimensions", "data-unittype",
+                 "data-unitfeatures", "class"):
+        v = li.get(attr)
+        if v:
+            parts.append(" ".join(v) if isinstance(v, list) else str(v))
+    # Falls back to the element's visible text, which still describes the unit,
+    # only more loosely. Whitespace is collapsed so a template reflow does not
+    # silently mint a new SKU for an unchanged unit.
+    parts.append(re.sub(r"\s+", " ", li.get_text(" ", strip=True))[:400])
+    digest = hashlib.sha1("|".join(parts).encode("utf-8")).hexdigest()[:16]
+    return f"cubeh_{site}_{digest}"
 
 
 def parse_facility_html(html_text: str, facility_url: str, site_number: Optional[str] = None) -> dict:
@@ -154,8 +182,20 @@ def parse_facility_html(html_text: str, facility_url: str, site_number: Optional
 
     for li in unit_lis:
         sku_guid = li.get("id") or ""
-        sku = f"cube_{sku_guid}" if sku_guid else f"cube_{resolved_site}_{len(units)+1}"
-        
+        # NEVER fall back to a positional SKU. Until 2026-09-01 this read
+        # f"cube_{resolved_site}_{len(units)+1}" -- the unit's position in the
+        # list. The SKU is the join key the rate log diffs on, so a position is
+        # the one thing it must not be: rent a single unit, it drops off the
+        # page, and every unit below it shifts up one slot. The next morning
+        # the diff sees the whole facility reprice at once. Every row would be
+        # false, every row would look exactly like a real repricing event, and
+        # nothing on the row could tell you which day it happened.
+        #
+        # A hash of the unit's own stable attributes is not as good as a real
+        # id, but it moves only when the unit itself changes, which is the
+        # property that actually matters here.
+        sku = f"cube_{sku_guid}" if sku_guid else _positionless_sku(resolved_site, li)
+
         # Prices
         listing_div = li.find(class_=re.compile(r"csUnitFacilityListing", re.I))
         

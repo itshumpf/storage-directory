@@ -9,8 +9,16 @@ scrape_run.log
 # Python
 __pycache__/
 *.pyc
+.vendor/
+
+# IRS Form 990 bulk archives (large downloaded data)
+data/irs-990/
 
 # Internal review documents — NOT for publication.
 # The deploy step copies *.html from the repo root into dist/, so anything
 # in the root is public. Review material lives here and is never committed.
 private/
+
+# Rebuildable merge of every brand's freshest snapshot (~18 MB/day). The
+# per-brand snapshots under history/<brand>/ are the record; this is derived.
+history/combined/latest.json

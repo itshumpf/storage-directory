@@ -1,0 +1,69 @@
+name: U-Haul Complete Daily Snapshot
+
+on:
+  # Deliberately away from the Public Storage and Storage Sense jobs. At the
+  # five-second floor, ~2,100 serial facility requests take at least 3 hours.
+  schedule:
+    # Starts around 00:29 CST / 01:29 CDT so the long serial crawl finishes
+    # near the existing Public Storage morning observation window.
+    - cron: '29 6 * * *'
+  workflow_dispatch:
+    inputs:
+      delay:
+        description: 'Minimum seconds between requests (cannot be below 5)'
+        required: false
+        default: '5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: uhaul-complete-snapshot
+  # Never cancel a collector midway through a site-wide run. A queued run can
+  # resume its date-matched checkpoint after the preceding process exits.
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run offline parser contract tests
+        run: python test_uhaul.py
+
+      - name: Collect every sitemap-listed U.S. facility
+        id: collect
+        continue-on-error: true
+        run: python uhaul_scraper.py --delay "${{ inputs.delay || '5' }}"
+
+      # The checkpoint and report must survive a failed/incomplete run so the
+      # next attempt resumes instead of repeating polite requests. A complete
+      # run additionally creates one immutable dated snapshot and updates the
+      # rolling convenience file and derived change log.
+      - name: Preserve collection state
+        run: >-
+          bash .github/push_with_retry.sh
+          "U-Haul collection: $(date +'%Y-%m-%d')"
+          history/uhaul_checkpoint.json
+          history/uhaul_last_run.json
+          history/uhaul_locations.json
+          history/uhaul
+          history/uhaul_rate_changes.csv
+
+      - name: Surface incomplete snapshot after state is safe
+        if: steps.collect.outcome == 'failure'
+        run: |
+          cat history/uhaul_last_run.json || true
+          exit 1
