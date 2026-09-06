@@ -135,7 +135,7 @@ def parse_facility_html(html_text: str, facility_url: str, site_number: Optional
     # Extract store attributes
     resolved_site = site_number
     if not resolved_site:
-        m = re.search(r"/(\d{3,6})\.html", facility_url)
+        m = re.search(r"/(\d{1,6})\.html", facility_url)   # 1-2 digit site numbers exist (2026-09-05)
         resolved_site = m.group(1) if m else ""
     
     if not resolved_site:

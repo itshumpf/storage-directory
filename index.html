@@ -121,6 +121,11 @@
   .id-group { display: flex; gap: 5px; flex-wrap: wrap; }
   .badge { font-family: 'DM Mono', monospace; font-size: 0.67rem; padding: 3px 7px; border-radius: 4px; font-weight: 500; }
   .badge-site { background: rgba(232,82,10,0.15); color: var(--orange); }
+  .badge-brand { color: #fff; font-weight: 600; letter-spacing: 0.02em; }
+  .chip.brand { display: inline-flex; align-items: center; gap: 6px; }
+  .chip.brand .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; opacity: 0.35; }
+  .chip.brand.active .dot { opacity: 1; }
+  .unit-price-full { text-decoration: line-through; opacity: 0.55; }
   .badge-id { background: rgba(136,133,128,0.12); color: var(--muted); }
   .badge-avail-yes { background: rgba(76,175,125,0.15); color: var(--green); }
   .badge-avail-low { background: rgba(245,200,66,0.15); color: var(--yellow); }
@@ -235,12 +240,11 @@
 <div class="notice-overlay" id="notice-overlay" role="dialog" aria-modal="true"
      aria-labelledby="notice-title">
   <div class="notice-box">
-    <h2 id="notice-title">This directory is no longer updated.</h2>
-    <p>Data collection ended 25 August 2026.</p>
-    <p class="notice-sub">Everything here is a historical snapshot. Prices,
-      availability and store counts reflect the final collection date and
-      should not be relied on as current.</p>
-    <button class="notice-btn" onclick="dismissNotice()">Continue to archive</button>
+    <h2 id="notice-title">Private preview — five operators.</h2>
+    <p>Public Storage, CubeSmart, Storage Sense, U-Haul and StorageMart, refreshed daily.</p>
+    <p class="notice-sub">Advertised online rates, collected once a day from each operator's
+      public website. Not published; not affiliated with or endorsed by any operator.</p>
+    <button class="notice-btn" onclick="dismissNotice()">Continue</button>
   </div>
 </div>
 
@@ -272,7 +276,7 @@
 
 <div class="hero">
   <h1>Storage Unit<br><span>Locator & Pricing</span></h1>
-  <p>4,664 U.S. self-storage locations across 43 states — every store's 5-digit site number, address and phone, including locations with no vacancy. Unit pricing as advertised on 24 August 2026, the final collection date.</p>
+  <p id="hero-copy">Loading…</p>
 
   <!-- UNIFIED SMART SEARCH BAR -->
   <div class="search-bar">
@@ -295,6 +299,11 @@
     <select id="state-filter" onchange="handleSearch()"><option value="">All States</option></select>
     <select id="size-filter" onchange="handleSearch()"><option value="">All Sizes</option></select>
     <button class="btn-search" id="btn-search" onclick="executeSearch()">Search</button>
+  </div>
+
+  <!-- OPERATOR CHIPS -->
+  <div class="filter-row" id="brand-row">
+    <span class="filter-label">Operators:</span>
   </div>
 
   <!-- CHIPS + VIEW TOGGLE -->
@@ -332,7 +341,7 @@
 <div class="main-content">
   <div id="no-data-banner">
     <h3>📂 No data file found</h3>
-    <p>Place <code>enriched_locations.json</code> in the same folder as this file, then reload. Add <code>?demo=1</code> to preview with sample data.</p>
+    <p>Run <code>python storage_pipeline.py daily</code> to write <code>all_locations.json</code>, then reload. Add <code>?demo=1</code> to preview with sample data.</p>
   </div>
   <div id="loading"><div><div class="loader"></div></div>Loading store data...</div>
   <div class="map-container" id="map-container"><div id="map"></div></div>
@@ -365,14 +374,31 @@ function dismissNotice() {
 const PER_PAGE = 24;
 let allStores = [], filtered = [], activeFilter = 'all', currentView = 'grid';
 let distCenter = null, distRadius = 20;
+
+// ── OPERATORS ────────────────────────────────────────────────
+// Every record carries a brand tag (stamped by its collector); the directory
+// treats it as a first-class filter and colours everything by it.
+const BRANDS = {
+  publicstorage: { label: 'Public Storage', short: 'PS', color: '#4a9eff' },
+  cubesmart:     { label: 'CubeSmart',      short: 'CS', color: '#eb6834' },
+  storagesense:  { label: 'Storage Sense',  short: 'SS', color: '#1baf7a' },
+  uhaul:         { label: 'U-Haul',         short: 'UH', color: '#eda100' },
+  storagemart:   { label: 'StorageMart',    short: 'SM', color: '#e87ba4' },
+};
+const brandOf = s => BRANDS[s.brand] ? s.brand : 'publicstorage';
+const brandColor = s => BRANDS[brandOf(s)].color;
+let activeBrands = new Set(Object.keys(BRANDS));
+let dataUpdated = null;
 let leafletMap = null, markerCluster = null, mapInitialized = false;
 
 // ── LOAD ─────────────────────────────────────────────────────
 async function loadData() {
   const isDemo = new URLSearchParams(location.search).get('demo');
   if (isDemo) { allStores = generateDemoData(); init(); return; }
-  for (const fname of ['enriched_locations.json', 'locations.json']) {
-    try { const r = await fetch(fname); if (!r.ok) continue; allStores = await r.json(); init(); return; } catch(e) {}
+  // all_locations.json: every operator, written by storage_pipeline.py.
+  // enriched_locations.json: the original Public Storage-only file, as a fallback.
+  for (const fname of ['all_locations.json', 'enriched_locations.json', 'locations.json']) {
+    try { const r = await fetch(fname); if (!r.ok) continue; dataUpdated = r.headers.get('last-modified'); allStores = await r.json(); init(); return; } catch(e) {}
   }
   document.getElementById('loading').style.display = 'none';
   document.getElementById('no-data-banner').style.display = 'block';
@@ -407,7 +433,23 @@ function init() {
   const states = [...new Set(allStores.map(s => s.state))].sort();
   document.getElementById('hdr-stores').textContent = allStores.length.toLocaleString();
   document.getElementById('hdr-states').textContent = states.length;
-  document.getElementById('hdr-updated').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const upd = dataUpdated ? new Date(dataUpdated) : new Date();
+  document.getElementById('hdr-updated').textContent = upd.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const present = Object.keys(BRANDS).filter(b => allStores.some(s => brandOf(s) === b));
+  activeBrands = new Set(present);
+  const row = document.getElementById('brand-row');
+  for (const b of present) {
+    const n = allStores.filter(s => brandOf(s) === b).length;
+    const chip = document.createElement('div');
+    chip.className = 'chip brand active';
+    chip.innerHTML = `<span class="dot" style="background:${BRANDS[b].color}"></span>${BRANDS[b].label} <span style="opacity:.6">${n.toLocaleString()}</span>`;
+    chip.onclick = () => { activeBrands.has(b) ? activeBrands.delete(b) : activeBrands.add(b); chip.classList.toggle('active'); handleSearch(); };
+    row.appendChild(chip);
+  }
+  document.getElementById('hero-copy').textContent =
+    `${allStores.length.toLocaleString()} U.S. self-storage locations across ${states.length} states from ${present.length} operators — ` +
+    `${present.map(b => BRANDS[b].label).join(', ')}. Address, phone and every advertised unit rate, side by side, ` +
+    `as published on ${upd.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}.`;
   const sf = document.getElementById('state-filter');
   states.forEach(st => { const o = document.createElement('option'); o.value=st; o.textContent=st; sf.appendChild(o); });
   const sizes = [...new Set(allStores.flatMap(s => s.units.map(u => u.size)))].sort();
@@ -560,6 +602,7 @@ function handleSearch() {
     const matchQ = inDistanceMode || !q || s.store_id.includes(q) || (s.site_number||'').includes(q) ||
                    s.address.toLowerCase().includes(q) || s.city.toLowerCase().includes(q) ||
                    s.state.toLowerCase().includes(q) || (s.zip||'').includes(q) || (s.phone||'').includes(q);
+    const matchBrand = activeBrands.has(brandOf(s));
     const matchState = !state || s.state === state;
     const matchSize = !size || s.units.some(u => u.size === size);
     let matchChip = true;
@@ -576,7 +619,7 @@ function handleSearch() {
     } else if (distCenter) {
       matchDist = false;
     }
-    return matchQ && matchState && matchSize && matchChip && matchDist;
+    return matchQ && matchBrand && matchState && matchSize && matchChip && matchDist;
   });
 
   document.getElementById('result-count').textContent = filtered.length.toLocaleString();
@@ -664,7 +707,7 @@ function initMap() {
     iconCreateFunction: function(cluster) {
       const count = cluster.getChildCount();
       const size = count > 100 ? 50 : count > 20 ? 40 : 32;
-      return L.divIcon({ html: `<div style="background:var(--orange);color:white;width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:${size>40?'0.8rem':'0.72rem'};font-weight:500;border:2px solid rgba(255,255,255,0.3)">${count}</div>`, className:'', iconSize:[size,size] });
+      return L.divIcon({ html: `<div style="background:#6b6b66;color:white;width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:${size>40?'0.8rem':'0.72rem'};font-weight:500;border:2px solid rgba(255,255,255,0.3)">${count}</div>`, className:'', iconSize:[size,size] });
     }
   });
   leafletMap.addLayer(markerCluster);
@@ -676,13 +719,14 @@ function updateMap() {
   if (!mapInitialized || !markerCluster) return;
   markerCluster.clearLayers();
   const sorted = getSorted();
-  const orangeIcon = L.divIcon({
-    html: `<div style="width:10px;height:10px;background:var(--orange);border-radius:50%;border:2px solid rgba(255,255,255,0.6)"></div>`,
-    className:'', iconSize:[10,10], iconAnchor:[5,5]
+  const icons = {};
+  for (const b in BRANDS) icons[b] = L.divIcon({
+    html: `<div style="width:11px;height:11px;background:${BRANDS[b].color};border-radius:50%;border:2px solid rgba(255,255,255,0.7)"></div>`,
+    className:'', iconSize:[11,11], iconAnchor:[5,5]
   });
   sorted.forEach(store => {
     if (!store.lat || !store.lng) return;
-    const marker = L.marker([store.lat, store.lng], { icon: orangeIcon });
+    const marker = L.marker([store.lat, store.lng], { icon: icons[brandOf(store)] });
     marker.on('click', () => openPanel(store));
     markerCluster.addLayer(marker);
   });
@@ -734,17 +778,24 @@ function renderCard(store, clickable) {
   const displayUnits = Object.values(bySize).sort((a,b) => a.price - b.price);
 
   // Effective price accounts for % discounts
-  const effectivePrice = u => calcDiscountedPrice(u.price, u.promo, u.promo2) || u.price;
+  const effectivePrice = u => (u.street_price && u.street_price > u.price) ? u.price : (calcDiscountedPrice(u.price, u.promo, u.promo2) || u.price);
   const availUnits = displayUnits.filter(u => u.available);
   const effectiveCheapest = availUnits.length ? Math.min(...availUnits.map(effectivePrice)) : null;
   const mapsUrl = `https://www.google.com/maps/place/${encodeURIComponent((store.address||'')+' '+(store.city||'')+' '+(store.state||'')+' '+(store.zip||''))}`;
   const distBadge = store._distance != null ? `<span class="badge badge-dist">${store._distance.toFixed(1)}mi</span>` : '';
   const unitsHtml = displayUnits.length
     ? `<table class="units-table"><thead><tr><th>SIZE</th><th style="text-align:center">LEFT</th><th style="text-align:right">PRICE</th><th style="text-align:right">PROMO</th></tr></thead><tbody>${displayUnits.map(u=>{
-        const discounted = calcDiscountedPrice(u.price, u.promo, u.promo2);
+        // Operators that publish a street rate (CubeSmart, Storage Sense, StorageMart)
+        // already give `price` as the discounted online rate: show the street rate
+        // struck through and do NOT apply the promo again. Public Storage publishes
+        // one rate plus promo copy, which is what calcDiscountedPrice models.
+        const hasStreet = u.street_price && u.street_price > u.price;
+        const discounted = hasStreet ? null : calcDiscountedPrice(u.price, u.promo, u.promo2);
         const displayPrice = discounted || u.price;
         const isCheapest = displayPrice === effectiveCheapest && avail.length;
-        const priceCell = discounted
+        const priceCell = hasStreet
+          ? `<span class="unit-price ${isCheapest?'best':''}">$${u.price}/mo</span><span class="unit-price-full">$${u.street_price}/mo</span>`
+          : discounted
           ? `<span class="unit-price ${isCheapest?'best':''}">$${discounted}/mo</span><span class="unit-price-full">$${u.price}/mo</span>`
           : `<span class="unit-price ${isCheapest?'best':''}">$${u.price}/mo</span>`;
         const promoCell = `${u.promo?`<span class="unit-promo">${formatPromo(u.promo)}</span>`:''}${u.promo2?`<span class="unit-promo" style="color:var(--green)">${formatPromo(u.promo2)}</span>`:''}`;
@@ -755,8 +806,8 @@ function renderCard(store, clickable) {
   return `<div class="card${clickable?' clickable':''}" ${clickable?`onclick="openPanelById('${store.store_id}')"`:''}>
     <div class="card-header">
       <div class="id-group">
+        <span class="badge badge-brand" style="background:${brandColor(store)}">${BRANDS[brandOf(store)].label}</span>
         ${store.site_number?`<span class="badge badge-site">Site #${store.site_number}</span>`:''}
-        <span class="badge badge-id">ID: ${store.store_id}</span>
         ${distBadge}
       </div>
       <span class="badge ${avail.length?(unitsLeft<10?'badge-avail-low':'badge-avail-yes'):'badge-avail-no'}">${avail.length?(unitsLeft<10?`Almost full — ${unitsLeft} left`:`${avail.length} sizes · ${unitsLeft} units`):'Check site'}</span>

@@ -131,3 +131,14 @@ The dashboard is the replacement for the sunset FindStorage site: overview tiles
 size-by-size price comparison, state table, store search with map and per-size detail,
 trends, and a rate-change feed. It is a single file with no build step, reads only
 `dashboard-data.json`, and is not published anywhere.
+
+### FindStorage, five operators (2026-09-05)
+
+The original directory and reports now run on the combined dataset:
+
+- `index.html` reads `all_locations.json` (every operator; falls back to `enriched_locations.json`), with operator chips, brand-coloured cards and markers, and street rates struck through where an operator publishes one.
+- `analysis/build_trends.py` and `analysis/build_store_history.py` read `history/combined/` (falling back to the legacy files) and add per-operator chart sections; store-history popups cover every operator's stores.
+- `pricer.html` — one map, all operators: search a place, pick a size, see every store in range ranked by price with per-operator medians.
+- `dashboard.html` — the internal monitor (freshness, comparisons, trends, rate-change feed).
+
+If the Cloudflare/Netlify build copies specific files into `dist/`, add `all_locations.json`, `dashboard-data.json`, `dashboard.html` and `pricer.html` to that list.

@@ -102,7 +102,13 @@ def get_facility_urls(session: requests.Session) -> List[str]:
 
 
 def site_number_of(url: str) -> str | None:
-    m = re.search(r"/(\d{3,6})\.html$", url)
+    # 1 to 6 digits. On 2026-09-05 the sitemap grew from 1,519 to 1,580 and the
+    # 59 newcomers carry one- and two-digit numbers (/tucson-self-storage/3.html,
+    # /mesa-self-storage/69.html). The previous \d{3,6} treated every one of
+    # them as "no site number" — and the pre-rewrite crawler had silently
+    # dropped the same URLs as parse errors. The catalog check turned it into a
+    # stop instead of a hole.
+    m = re.search(r"/(\d{1,6})\.html$", url)
     return m.group(1) if m else None
 
 

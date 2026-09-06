@@ -2,7 +2,7 @@
 """
 storage_pipeline.py — one front door for every operator's collector.
 
-The four collectors (Public Storage, CubeSmart, Storage Sense, U-Haul) already
+The five collectors (Public Storage, CubeSmart, Storage Sense, U-Haul, StorageMart) already
 emit the same record shape — brand / store_id / site_number / address / lat /
 lng / url / units[{size, price, street_price, available, count, promo, promo2,
 sku, attrs}] — but each one lands it somewhere different and on its own clock.
@@ -13,6 +13,8 @@ This script is the seam that joins them:
     history/combined/latest.manifest.json  what went into it and how old each part is
     history/combined/daily-YYYY-MM.csv     per-store daily aggregates, all brands
     history/combined/sizes-YYYY-MM.csv     per-brand, per-state, per-size daily aggregates
+    history/combined/store-sizes-YYYY-MM.csv  per-store, per-size cheapest price + count (store popups, movers)
+    all_locations.json                     every brand in the full record shape — what index.html reads
     history/combined/rate_changes-YYYY-MM.csv
                                            per-SKU price / street / promo / listed / delisted events, all brands
     history/combined/record_runs.csv       what has been recorded (idempotency ledger)
@@ -74,7 +76,7 @@ BRANDS = {
     "cubesmart": {
         "label": "CubeSmart",
         "short": "CS",
-        "sources": ["cubesmart_locations.json", "cubesmart_{date}.json"],
+        "sources": ["history/cubesmart/{date}.json", "cubesmart_locations.json", "cubesmart_{date}.json"],
         "floor": 1200,
         # --out points at the dated snapshot so the crawler's own resume logic
         # continues *today's* file if it is interrupted, instead of skipping
@@ -99,6 +101,13 @@ BRANDS = {
         "floor": 1600,
         "run": [sys.executable, "uhaul_scraper.py", "--delay", "5"],
     },
+    "storagemart": {
+        "label": "StorageMart",
+        "short": "SM",
+        "sources": ["history/storagemart/{date}.json"],
+        "floor": 150,
+        "run": [sys.executable, "storagemart_scraper.py", "--delay", "5"],
+    },
 }
 BRAND_ORDER = list(BRANDS)
 MAX_DROP = 0.10  # a snapshot this much smaller than the last one is a partial crawl, not a market
@@ -106,6 +115,8 @@ MAX_DROP = 0.10  # a snapshot this much smaller than the last one is a partial c
 DAILY_HEADER = ["date", "brand", "store_id", "state", "listings", "units_avail",
                 "cheapest_10x10", "median_price", "median_ppsf"]
 SIZES_HEADER = ["date", "brand", "state", "size", "listings", "units_avail", "median_price"]
+STORE_SIZES_HEADER = ["date", "brand", "store_id", "size", "price", "available"]
+ALL_LOCATIONS = ROOT / "all_locations.json"   # every brand, full record shape — what index.html reads
 CHANGES_HEADER = ["date", "brand", "store_id", "site_number", "size", "sku", "field", "old", "new"]
 LEDGER_HEADER = ["recorded_at", "brand", "date", "previous_date", "stores", "events", "note"]
 
@@ -210,6 +221,8 @@ def normalize_store(brand: str, s: dict) -> dict | None:
             "sku": str(u.get("sku") or ""),
             "attrs": (u.get("attrs") or "").strip(),
             "sqft": sqft,
+            # Operator-specific extras ride along untouched when present.
+            **{k: u[k] for k in ("total", "promo_price", "standard_rate", "promo_terms") if k in u},
         })
     return {
         "brand": brand,
@@ -470,7 +483,20 @@ def store_rows(date: str, brand: str, recs: list[dict]):
                 a["prices"].append(u["price"])
     size_rows = [[date, brand, st, sz, a["n"], a["avail"], round(statistics.median(a["prices"]), 2)]
                  for (st, sz), a in sorted(sizes.items())]
-    return daily, size_rows
+    # (store, size) levels: cheapest advertised price and summed count for each
+    # size at each store — the series the store popup and the movers tables read.
+    store_size_rows = []
+    for s in recs:
+        per = {}
+        for u in s["units"]:
+            if not (u["available"] and u["price"] and u["size"]):
+                continue
+            e = per.setdefault(u["size"], [u["price"], 0])
+            e[0] = min(e[0], u["price"])
+            e[1] += u["count"]
+        for sz, (price, avail) in sorted(per.items()):
+            store_size_rows.append([date, brand, s["store_id"], sz, price, avail])
+    return daily, size_rows, store_size_rows
 
 
 def sku_map(recs: list[dict]) -> dict:
@@ -521,15 +547,27 @@ def cmd_record(upto: str) -> None:
     for brand in BRAND_ORDER:
         dates = [d for d in snapshot_dates(brand) if d <= upto]
         for i, d in enumerate(dates):
-            if (brand, d) in done:
+            # Each series file is independently idempotent (a (brand, date) that is
+            # already there is never appended again), so a series added later —
+            # store-sizes arrived 2026-09-05 — fills in for already-recorded days.
+            # The ledger gates only the rate-change diff.
+            missing = [name for name, hdr in (("daily", DAILY_HEADER), ("sizes", SIZES_HEADER),
+                                              ("store-sizes", STORE_SIZES_HEADER))
+                       if not any(r["brand"] == brand and r["date"] == d
+                                  for r in read_csv(COMBINED / f"{name}-{d[:7]}.csv"))]
+            if (brand, d) in done and not missing:
                 continue
             cur = load_snapshot(brand, d)
-            daily, sizes = store_rows(d, brand, cur)
-            # backfill-ps may already have seeded this day from the legacy series.
-            if not any(r["brand"] == brand and r["date"] == d for r in read_csv(COMBINED / f"daily-{d[:7]}.csv")):
+            daily, sizes, store_sizes = store_rows(d, brand, cur)
+            if "daily" in missing:
                 append_csv(COMBINED / f"daily-{d[:7]}.csv", DAILY_HEADER, daily)
-            if not any(r["brand"] == brand and r["date"] == d for r in read_csv(COMBINED / f"sizes-{d[:7]}.csv")):
+            if "sizes" in missing:
                 append_csv(COMBINED / f"sizes-{d[:7]}.csv", SIZES_HEADER, sizes)
+            if "store-sizes" in missing:
+                append_csv(COMBINED / f"store-sizes-{d[:7]}.csv", STORE_SIZES_HEADER, store_sizes)
+                print(f"filled store-sizes for {brand} {d}: {len(store_sizes):,} rows")
+            if (brand, d) in done:
+                continue
             prev_date, events, note = "", 0, "first snapshot"
             if i > 0:
                 prev_date = dates[i - 1]
@@ -573,6 +611,15 @@ def cmd_backfill_ps() -> None:
                          r["listings"], r["units_avail"], r["cheapest_10x10"], r["median_price"], ""])
         append_csv(target, DAILY_HEADER, rows)
         print(f"backfill {month}: {len(dates)} days, {len(rows):,} rows")
+    # Legacy per-store per-size levels, same treatment.
+    for legacy in sorted(HISTORY.glob("store-sizes-????-??.csv")):
+        month = legacy.stem.split("-", 2)[2]
+        target = COMBINED / f"store-sizes-{month}.csv"
+        have = {r["date"] for r in read_csv(target) if r["brand"] == "publicstorage"}
+        rows = [[r["date"], "publicstorage", r["store_id"], r["size"], r["price"], r["available"]]
+                for r in read_csv(legacy) if r["date"] not in have and r["price"]]
+        append_csv(target, STORE_SIZES_HEADER, rows)
+        print(f"backfill store-sizes {month}: {len(rows):,} rows")
     # Legacy state-by-size series, same treatment.
     for legacy in sorted(HISTORY.glob("sizes-????-??.csv")):
         month = legacy.stem.split("-", 1)[1]
@@ -611,9 +658,10 @@ def cmd_build_dashboard(days_of_changes: int = 30) -> None:
             cc = "climate" in u["attrs"].lower()
             if e is None or u["price"] < e[0]:
                 by_size[u["size"]] = [u["price"], u["street_price"], (e[2] if e else 0) + u["count"],
-                                      u["promo"] or u["promo2"], cc]
+                                      u["promo"] or u["promo2"], cc, (e[5] if e else 0) + int(u.get("total") or 0)]
             else:
                 e[2] += u["count"]
+                e[5] += int(u.get("total") or 0)
             size_brand[(s["brand"], u["size"])].append(u["price"])
         tens = [u["price"] for u in avail_units if u["size"] == "10x10"]
         prices = [u["price"] for u in avail_units]
@@ -695,7 +743,9 @@ def cmd_build_dashboard(days_of_changes: int = 30) -> None:
     payload = {
         "built_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "date": manifest["date"],
-        "brands": {b: {"label": BRANDS[b]["label"], "short": BRANDS[b]["short"], **manifest["brands"][b]}
+        "brands": {b: {"label": BRANDS[b]["label"], "short": BRANDS[b]["short"],
+                       **manifest["brands"].get(b, {"snapshot_date": None, "age_days": None, "included": False,
+                                                    "stores": 0, "priced_stores": 0, "units": 0})}
                    for b in BRAND_ORDER},
         "brand_order": BRAND_ORDER,
         "size_order": size_order,
@@ -707,6 +757,20 @@ def cmd_build_dashboard(days_of_changes: int = 30) -> None:
         "stores": out_stores,
     }
     atomic_write_json(DASHBOARD_DATA, payload)
+    # The directory's file: the full record shape index.html was written against,
+    # every brand, units trimmed to the keys the page reads.
+    # Kept under Cloudflare's 25 MiB per-asset limit: no SKUs (the page never
+    # shows them), no empty strings or nulls, integers where the value is one.
+    keep = ("size", "price", "street_price", "available", "count", "promo", "promo2", "attrs", "total")
+    tidy = lambda v: int(v) if isinstance(v, float) and v.is_integer() else v
+    slim = []
+    for s in stores:
+        rec = {k: tidy(v) for k, v in s.items() if k != "units" and v not in (None, "", [])}
+        rec["units"] = [{k: tidy(u[k]) for k in keep if k in u and u[k] not in (None, "", 0) or k in ("price", "available")}
+                        for u in s["units"]]
+        slim.append(rec)
+    atomic_write_json(ALL_LOCATIONS, slim)
+    print(f"all_locations.json: {len(slim):,} stores, {ALL_LOCATIONS.stat().st_size / 1e6:.1f} MB")
     mb = DASHBOARD_DATA.stat().st_size / 1e6
     print(f"dashboard-data.json: {len(out_stores):,} stores, {len(size_order)} sizes, "
           f"{len(states)} states, {sum(len(v) for v in trends.values())} trend points, {mb:.1f} MB")

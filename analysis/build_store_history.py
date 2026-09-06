@@ -6,10 +6,11 @@ the directory's per-store price-history popup.
 Run after update_history.py, from the repo root:
     python analysis/build_store_history.py
 
-Reads history/YYYY-MM.csv (via build_trends.load_history, for the dense
-cheapest-10x10 + all-sizes-median series) and history/store-sizes-YYYY-MM.csv
-(for the per-size series, sparse until enough daily runs accumulate), scoped
-to the stores present in the current enriched_locations.json. Pure stdlib.
+Reads the combined daily series (via build_trends.load_history, for the dense
+cheapest-10x10 + all-sizes-median series) and history/combined/store-sizes-*.csv
+(for the per-size series), every operator, scoped to the stores present in
+all_locations.json — falling back to the legacy Public Storage files and
+enriched_locations.json on a clone without pipeline output. Pure stdlib.
 
 Shape (compact, keys short on purpose — this file is fetched once per
 directory visit, not per store):
@@ -44,9 +45,11 @@ STORE_SIZE_CSV = re.compile(r"^store-sizes-\d{4}-\d{2}\.csv$")
 def load_store_size_history():
     """date -> store_id -> {size: price} from history/store-sizes-YYYY-MM.csv."""
     out = {}
-    for p in sorted(Path("history").glob("store-sizes-*.csv")):
-        if not STORE_SIZE_CSV.match(p.name):
-            continue
+    # RETARGETED 2026-09-05: the combined, brand-tagged series when the pipeline
+    # has produced it (every operator), else the legacy Public Storage files.
+    combined = sorted((Path("history") / "combined").glob("store-sizes-????-??.csv"))
+    files = combined or [p for p in sorted(Path("history").glob("store-sizes-*.csv")) if STORE_SIZE_CSV.match(p.name)]
+    for p in files:
         with open(p, newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 if not row.get("price"):
@@ -57,7 +60,7 @@ def load_store_size_history():
 
 
 def main():
-    src = Path("enriched_locations.json")
+    src = Path("all_locations.json") if Path("all_locations.json").exists() else Path("enriched_locations.json")
     if not src.exists():
         sys.exit(f"{src} not found — run this from the repo root after a scrape.")
     current_ids = []

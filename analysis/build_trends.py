@@ -60,18 +60,69 @@ P_LO, P_HI = 0.005, 0.995   # plausible-price percentiles, taken per unit size
 # rather than ordinary discovery drift.
 BREAK_MIN_STORES = 250
 
+# ---------------------------------------------------------------- multi-brand
+# RETARGETED 2026-09-05. The series used to come from history/YYYY-MM.csv, the
+# Public Storage-only log with no brand column. storage_pipeline.py now keeps
+# the same series for every operator under history/combined/ with a brand
+# column, and the legacy files are folded into it by `backfill-ps`. These
+# loaders read the combined files when they exist and the legacy ones when
+# they do not, so a clone without the pipeline output still builds.
+#
+# store_ids are unique across brands (Public Storage's are bare numbers, the
+# others are prefixed: cube_, sense_, uhaul_, smart_), so every function below
+# that keys on store_id works unchanged across the merged population. BRAND_OF
+# records which brand each store belongs to, for labelling and per-brand series.
+COMBINED = Path("history") / "combined"
+BRAND_OF = {}          # store_id -> brand, filled by the loaders
+BRAND_LABEL = {"publicstorage": "Public Storage", "cubesmart": "CubeSmart", "storagesense": "Storage Sense",
+               "uhaul": "U-Haul", "storagemart": "StorageMart"}
+BRAND_SHORT = {"publicstorage": "PS", "cubesmart": "CS", "storagesense": "SS", "uhaul": "UH", "storagemart": "SM"}
+BRAND_ORDER = list(BRAND_LABEL)
+BRAND_COLOR = {"publicstorage": "#2a78d6", "cubesmart": "#eb6834", "storagesense": "#1baf7a",
+               "uhaul": "#eda100", "storagemart": "#e87ba4"}
+
+
+def sid_key(sid):
+    """Sort key for store_ids: bare numbers (Public Storage) numerically, then
+    prefixed ids (cube_, sense_, uhaul_, smart_) by brand then number."""
+    if sid.isdigit():
+        return ("", int(sid))
+    head, _, tail = sid.partition("_")
+    return (head, int(tail) if tail.isdigit() else 0, tail)
+
+
+def _combined(prefix):
+    """Combined monthly files for a series, or [] if the pipeline has not run."""
+    return sorted(COMBINED.glob(f"{prefix}-????-??.csv")) if COMBINED.exists() else []
+
+
 def load_history():
     snaps = {}  # date -> {sid: dict}
+    files = _combined("daily")
+    if files:
+        for p in files:
+            with open(p, newline="", encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    BRAND_OF[row["store_id"]] = row["brand"]
+                    snaps.setdefault(row["date"], {})[row["store_id"]] = {
+                        "units": int(row["units_avail"] or 0),
+                        "ten": float(row["cheapest_10x10"]) if row["cheapest_10x10"] else None,
+                        "med": float(row["median_price"]) if row["median_price"] else None,
+                        "brand": row["brand"],
+                    }
+        return dict(sorted(snaps.items()))
     for p in sorted(Path("history").glob("*.csv")):
         if not MONTH_CSV.match(p.name):
             continue
         with open(p, newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 d = row["date"]
+                BRAND_OF[row["store_id"]] = "publicstorage"
                 snaps.setdefault(d, {})[row["store_id"]] = {
                     "units": int(row["units_avail"] or 0),
                     "ten": float(row["cheapest_10x10"]) if row["cheapest_10x10"] else None,
                     "med": float(row["median_price"]) if row["median_price"] else None,
+                    "brand": "publicstorage",
                 }
     return dict(sorted(snaps.items()))
 
@@ -82,9 +133,8 @@ def load_size_history():
     national median — the raw per-listing prices aren't retained at this
     granularity. Good for a trendline, not a precise figure."""
     agg = {}
-    for p in sorted(Path("history").glob("sizes-*.csv")):
-        if not SIZE_CSV.match(p.name):
-            continue
+    files = _combined("sizes") or [p for p in sorted(Path("history").glob("sizes-*.csv")) if SIZE_CSV.match(p.name)]
+    for p in files:
         with open(p, newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 d, sz = row["date"], row["size"]
@@ -201,11 +251,13 @@ def load_store_sizes():
     the several same-size units at one store into one listing, which is one fewer
     way for the same site to occupy four rows of a ten-row table."""
     panel = {}
-    for p in sorted(Path("history").glob("store-sizes-*.csv")):
-        if not STORE_SIZE_CSV.match(p.name):
-            continue
+    files = _combined("store-sizes") or [p for p in sorted(Path("history").glob("store-sizes-*.csv"))
+                                         if STORE_SIZE_CSV.match(p.name)]
+    for p in files:
         with open(p, newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
+                if row.get("brand"):
+                    BRAND_OF.setdefault(row["store_id"], row["brand"])
                 price = row["price"].strip()
                 panel.setdefault((row["store_id"], row["size"]), {})[row["date"]] = (
                     float(price) if price else None,
@@ -385,7 +437,7 @@ def unit_movers(snaps, dates, quarantine):
         return [], [], []
     span = prior + recent
     declines, rises, stopped = [], [], []
-    for sid in sorted(snaps[dates[-1]], key=int):
+    for sid in sorted(snaps[dates[-1]], key=sid_key):
         site = STORE_SITE.get(sid, "?")
         missing = [d for d in span if sid not in snaps.get(d, {})]
         if missing:
@@ -435,7 +487,7 @@ def ten_movers(snaps, dates, bounds, quarantine):
     span = prior + recent
     lo, hi, _n = bounds.get("10x10", (0.0, float("inf"), 0))
     out = []
-    for sid in sorted(snaps[dates[-1]], key=int):
+    for sid in sorted(snaps[dates[-1]], key=sid_key):
         site = STORE_SITE.get(sid, "?")
         missing = [d for d in span if sid not in snaps.get(d, {})]
         if missing:
@@ -546,6 +598,50 @@ def svg_line(series, fmt="{:,.0f}", prefix="", breaks=()):
 <text x="{PAD}" y="{TOP+H-PAD-6}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(lo)}</text>
 </svg>"""
 
+def svg_multi_line(series_by_brand, fmt="{:,.0f}", prefix=""):
+    """{brand: [(date, value)]} on one axis, one colour per operator, legend on top.
+
+    Each operator's line is drawn on its own dates (they start on different days),
+    against a shared x-axis of every date any of them has. No break rules here:
+    a new operator joining is a new line, not a step in an existing one."""
+    series_by_brand = {b: v for b, v in series_by_brand.items() if v}
+    if not series_by_brand:
+        return "<p class='empty'>No data yet.</p>"
+    dates = sorted({d for v in series_by_brand.values() for d, _ in v})
+    idx = {d: i for i, d in enumerate(dates)}
+    vals = [v for ser in series_by_brand.values() for _, v in ser]
+    lo, hi = min(vals), max(vals)
+    span = (hi - lo) or 1
+    W, H, PAD, TOP = 760, 190, 34, 22
+    n = len(dates)
+    def x(i): return PAD + (W - 2 * PAD) * (i / max(n - 1, 1))
+    def y(v): return TOP + H - PAD - (H - 2 * PAD) * ((v - lo) / span)
+    lines, legend, lx = "", "", PAD
+    for b in BRAND_ORDER:
+        ser = series_by_brand.get(b)
+        if not ser:
+            continue
+        c = BRAND_COLOR[b]
+        pts = " ".join(f"{x(idx[d]):.1f},{y(v):.1f}" for d, v in ser)
+        lines += f"<polyline points='{pts}' fill='none' stroke='{c}' stroke-width='2.5' stroke-linejoin='round'/>"
+        if len(ser) == 1:
+            lines += f"<circle cx='{x(idx[ser[0][0]]):.1f}' cy='{y(ser[0][1]):.1f}' r='4' fill='{c}'/>"
+        ld, lv = ser[-1]
+        lines += f"<circle cx='{x(idx[ld]):.1f}' cy='{y(lv):.1f}' r='3.5' fill='{c}'/>"
+        label = BRAND_LABEL[b]
+        legend += (f"<rect x='{lx}' y='6' width='10' height='10' rx='2' fill='{c}'/>"
+                   f"<text x='{lx + 14}' y='15' fill='#c7d2dc' font-size='11'>{label}</text>")
+        lx += 14 + 6.3 * len(label) + 16
+    return f"""<svg viewBox="0 0 {W} {TOP + H}" role="img" style="width:100%;height:auto">
+{legend}<line x1="{PAD}" y1="{TOP+H-PAD}" x2="{W-PAD}" y2="{TOP+H-PAD}" stroke="#232c35"/>
+{lines}
+<text x="{PAD}" y="{TOP+16}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(hi)}</text>
+<text x="{PAD}" y="{TOP+H-PAD+16}" fill="#8fa0af" font-size="12">{dates[0]}</text>
+<text x="{W-PAD}" y="{TOP+H-PAD+16}" fill="#8fa0af" font-size="12" text-anchor="end">{dates[-1]}</text>
+<text x="{PAD}" y="{TOP+H-PAD-6}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(lo)}</text>
+</svg>"""
+
+
 def svg_stock_line(aligned):
     """Render align_stock_to_snapshots() output on the snapshot-date x-axis.
 
@@ -645,9 +741,17 @@ def main():
                  if (lat_d - datetime.date.fromisoformat(d)).days >= 7), dates[0] if len(dates) > 1 else None)
 
     meta = {}
-    for s in json.loads(Path("enriched_locations.json").read_text(encoding="utf-8")):
-        meta[str(s["store_id"])] = (s.get("site_number") or "?", s.get("address") or "",
-                                    s.get("city") or "", s.get("state") or "")
+    src = Path("all_locations.json") if Path("all_locations.json").exists() else Path("enriched_locations.json")
+    for s in json.loads(src.read_text(encoding="utf-8")):
+        b = s.get("brand") or "publicstorage"
+        BRAND_OF.setdefault(str(s["store_id"]), b)
+        # Site numbers collide across operators (CubeSmart 4936 vs a PS store),
+        # so the displayed "site" carries the brand tag for every operator but
+        # the original one.
+        site = s.get("site_number") or "?"
+        if b != "publicstorage":
+            site = f"{BRAND_SHORT.get(b, b)} {site}"
+        meta[str(s["store_id"])] = (site, s.get("address") or "", s.get("city") or "", s.get("state") or "")
     STORE_SITE.clear()
     STORE_SITE.update({sid: m[0] for sid, m in meta.items()})
     site_meta = {m[0]: m for m in meta.values()}     # site_number -> meta tuple
@@ -675,6 +779,20 @@ def main():
         tens = [v["ten"] for v in stores.values() if v["ten"]]
         if tens:
             price_series.append((d, statistics.median(tens)))
+
+    # the same two series, one line per operator
+    brand_tens, brand_stores = {}, {}
+    for d, stores in snaps.items():
+        by_b = {}
+        for v in stores.values():
+            by_b.setdefault(v.get("brand", "publicstorage"), []).append(v)
+        for b, rows in by_b.items():
+            tens = [v["ten"] for v in rows if v["ten"]]
+            if tens:
+                brand_tens.setdefault(b, []).append((d, statistics.median(tens)))
+            brand_stores.setdefault(b, []).append((d, len(rows)))
+    brands_present = [b for b in BRAND_ORDER if b in brand_stores]
+    latest_brand_counts = {b: brand_stores[b][-1] for b in brands_present}
 
     # PSA closes placed on the snapshot dates, so this chart's x-axis is the
     # same as the two above it and the three can be read across.
@@ -738,8 +856,8 @@ def main():
             for s, pm, rm, d, p in sorted(ten_moves, key=lambda t: t[3]) if d < 0][:10]
 
     if base:
-        added = sorted(set(snaps[latest]) - set(snaps[base]), key=int)
-        removed = sorted(set(snaps[base]) - set(snaps[latest]), key=int)
+        added = sorted(set(snaps[latest]) - set(snaps[base]), key=sid_key)
+        removed = sorted(set(snaps[base]) - set(snaps[latest]), key=sid_key)
     else:
         added = removed = []
 
@@ -905,8 +1023,14 @@ triggered it, so this count can be checked rather than taken on trust.</p>
     # ---- trends by size (state-by-size demand log) ----
     size_hist = load_size_history()
     size_dates = list(size_hist)
-    sizes_present = sorted({sz for d in size_hist.values() for sz in d},
-                           key=lambda s: SIZE_ORDER.index(s) if s in SIZE_ORDER else len(SIZE_ORDER))
+    # With five operators the size vocabulary runs past a hundred entries (7.5x10,
+    # 12x20, 15x40...). A panel per size for all of them made the page 2.5 MB.
+    # Keep the sizes that carry real volume on the latest day, common sizes first.
+    latest_sz = size_hist[size_dates[-1]] if size_dates else {}
+    MIN_SIZE_LISTINGS = 200
+    sizes_present = sorted({sz for sz, c in latest_sz.items() if c["listings"] >= MIN_SIZE_LISTINGS},
+                           key=lambda s: (SIZE_ORDER.index(s) if s in SIZE_ORDER else len(SIZE_ORDER),
+                                          -latest_sz[s]["listings"]))
     size_panels = ""
     for i, sz in enumerate(sizes_present):
         avail_sz = [(d, size_hist[d][sz]["avail"]) for d in size_dates if sz in size_hist[d]]
@@ -936,7 +1060,7 @@ needs at least two distinct days to show a line, and gains one day per successfu
 <p class='note'>Not enough data yet — this fills in once history/sizes-YYYY-MM.csv has logged a day.</p></section>"""
 
     sections = f"""{freshness_banner}{break_banner}
-<section><h2>National advertised inventory</h2>
+<section><h2>National advertised inventory — all tracked operators</h2>
 <p class='note'>Total units marked rentable across the network, per snapshot. This reflects advertised
 availability — units published as rentable — which may differ from physical vacancy; the two aren't
 directly comparable from public data. Read this as a measure of what is being advertised over time,
@@ -948,6 +1072,17 @@ not as an occupancy figure.</p>
 <p class='note'>Median of each store's cheapest available 10x10, per snapshot.</p>
 {break_caption}
 {svg_line(price_series, fmt="{:,.0f}", prefix="$", breaks=break_dates)}</section>
+
+<section><h2>By operator — median 10x10</h2>
+<p class='note'>The same measure, one line per operator. Operators start on the day their first
+snapshot was recorded, so the lines have different lengths; the national line above is the
+population-weighted blend of these, and it steps whenever an operator joins. Tracked today:
+{", ".join(f"{BRAND_LABEL[b]} {latest_brand_counts[b][1]:,}" for b in brands_present)}.</p>
+{svg_multi_line(brand_tens, fmt="{:,.0f}", prefix="$")}</section>
+
+<section><h2>By operator — stores reporting</h2>
+<p class='note'>Stores with a recorded snapshot each day, per operator. A dip is a collection gap, not a market event.</p>
+{svg_multi_line(brand_stores)}</section>
 
 <section><h2>Public Storage (NYSE: PSA) closing share price</h2>
 <p class='note'>PSA's official daily closing price, plotted on the same scraper snapshot dates as the

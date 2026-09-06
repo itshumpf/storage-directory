@@ -1,0 +1,61 @@
+name: StorageMart Daily Snapshot
+
+on:
+  # Off the hour, away from the others:
+  #   U-Haul 06:29 · Public Storage 11:17 · CubeSmart 13:37 · Storage Sense 17:43 (UTC)
+  # A few hundred facilities at a five-second floor is under an hour.
+  schedule:
+    - cron: '11 15 * * *'
+  workflow_dispatch:
+    inputs:
+      delay:
+        description: 'Minimum seconds between requests (cannot be below 5)'
+        required: false
+        default: '5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: storagemart-collector
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run offline parser and policy tests
+        run: python test_storagemart.py
+
+      - name: Collect one complete snapshot
+        id: collect
+        continue-on-error: true
+        run: python storage_pipeline.py run storagemart -- --delay "${{ inputs.delay || '5' }}"
+
+      # The partial and the report must survive a failed run so the next attempt
+      # resumes; a complete run adds the dated snapshot.
+      - name: Preserve collection state
+        run: >-
+          bash .github/push_with_retry.sh
+          "StorageMart snapshot: $(date +'%Y-%m-%d')"
+          history/storagemart
+          history/storagemart_last_run.json
+
+      - name: Surface a failed collection after the state is safe
+        if: steps.collect.outcome == 'failure'
+        run: |
+          cat history/storagemart_last_run.json || true
+          exit 1

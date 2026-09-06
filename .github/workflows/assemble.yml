@@ -18,6 +18,7 @@ on:
       - CubeSmart Daily Snapshot
       - Storage Sense Conservative Refresh
       - U-Haul Complete Daily Snapshot
+      - StorageMart Daily Snapshot
     types: [completed]
   schedule:
     - cron: '53 19 * * *'   # 14:53 CDT — after every collector's usual finish
@@ -58,9 +59,12 @@ jobs:
           "Combined dataset: $(date +'%Y-%m-%d')"
           history/publicstorage
           history/cubesmart
+          history/storagemart
           history/combined/latest.manifest.json
           history/combined/record_runs.csv
           history/combined/daily-*.csv
           history/combined/sizes-*.csv
           history/combined/rate_changes-*.csv
+          history/combined/store-sizes-*.csv
+          all_locations.json
           dashboard-data.json
