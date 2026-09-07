@@ -992,7 +992,7 @@ function detail(key){
   el('detail').innerHTML=`<div class="label" style="color:${color(b)};font-size:12px;font-weight:600">${label(b)}</div><h2>${s.n||'#'+s.sn}</h2><div class="addr">${s.a}, ${s.c}, ${s.s} ${s.z}${s.sn?` · site #${s.sn}`:''}${s.r?` · ★ ${s.r} (${fmtN(s.rv)})`:''}</div>
     <div class="row muted" style="margin-bottom:10px">${s.l} listings · ${fmtN(s.av)} units advertised · median ${fmt$(s.m)}</div>
     <table><thead><tr><th>Size</th><th class="num">Web</th><th class="num">Street</th><th class="num">Avail<span class="muted"> / total</span></th><th>Promo</th></tr></thead><tbody>${rows||'<tr><td colspan="5" class="muted">No priced units advertised</td></tr>'}</tbody></table>
-    <p><a href="${s.u}" target="_blank" rel="noopener">Open listing ↗</a></p>`;
+${s.u?`<p><a href="${s.u}" target="_blank" rel="noopener">Open listing ↗</a></p>`:''}`;
   if(s.lat&&s.lng) map.setView([s.lat,s.lng],Math.max(map.getZoom(),10));
 }
 

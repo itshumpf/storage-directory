@@ -61,6 +61,7 @@ ROOT = Path(__file__).resolve().parent
 HISTORY = ROOT / "history"
 COMBINED = HISTORY / "combined"
 DASHBOARD_DATA = ROOT / "dashboard-data.json"
+DASHBOARD_DATA_ANON = ROOT / "dashboard-data-anon.json"   # same shape, brands renamed "Storage Company N" for portfolio use
 
 # Fixed display order everywhere (charts, tables, legends). Never re-sorted by size.
 BRANDS = {
@@ -639,6 +640,35 @@ def median(xs):
     return round(statistics.median(xs), 2) if xs else None
 
 
+def _anonymized_dashboard_payload(payload: dict) -> dict:
+    """A portfolio-safe twin of the dashboard payload: real brand names replaced
+    with numbered stand-ins (stable day to day, since it is keyed off BRAND_ORDER),
+    and any brand name baked into a free-text facility name or listing URL scrubbed
+    too. Everything else -- prices, counts, trends, states -- is the real data; only
+    the labels and the two identifying text/url fields are touched, so this stays
+    correct automatically as build-dashboard runs on future days.
+    """
+    anon = json.loads(json.dumps(payload))  # cheap, dependency-free deep copy
+    numbered = {b: f"Storage Company {i + 1}" for i, b in enumerate(BRAND_ORDER)}
+    short_numbered = {b: f"C{i + 1}" for i, b in enumerate(BRAND_ORDER)}
+
+    def scrub(text: str, brand: str) -> str:
+        real = BRANDS.get(brand, {}).get("label")
+        if not text or not real:
+            return text
+        return re.sub(re.escape(real), numbered.get(brand, real), text, flags=re.IGNORECASE)
+
+    for b, cfg in anon["brands"].items():
+        cfg["label"] = numbered.get(b, cfg["label"])
+        cfg["short"] = short_numbered.get(b, cfg["short"])
+    for s in anon["stores"]:
+        s["n"] = scrub(s.get("n", ""), s["b"])
+        s["u"] = ""  # the real listing URL'''s domain would name the brand outright
+    for m in anon["movers"]:
+        m["n"] = scrub(m.get("n", ""), m["b"])
+    return anon
+
+
 def cmd_build_dashboard(days_of_changes: int = 30) -> None:
     latest_path, man_path = COMBINED / "latest.json", COMBINED / "latest.manifest.json"
     if not latest_path.exists():
@@ -757,6 +787,7 @@ def cmd_build_dashboard(days_of_changes: int = 30) -> None:
         "stores": out_stores,
     }
     atomic_write_json(DASHBOARD_DATA, payload)
+    atomic_write_json(DASHBOARD_DATA_ANON, _anonymized_dashboard_payload(payload))
     # The directory's file: the full record shape index.html was written against,
     # every brand, units trimmed to the keys the page reads.
     # Kept under Cloudflare's 25 MiB per-asset limit: no SKUs (the page never
@@ -774,6 +805,7 @@ def cmd_build_dashboard(days_of_changes: int = 30) -> None:
     mb = DASHBOARD_DATA.stat().st_size / 1e6
     print(f"dashboard-data.json: {len(out_stores):,} stores, {len(size_order)} sizes, "
           f"{len(states)} states, {sum(len(v) for v in trends.values())} trend points, {mb:.1f} MB")
+    print(f"dashboard-data-anon.json: same shape, brands numbered 1-{len(BRAND_ORDER)} for portfolio use")
 
 
 # --------------------------------------------------------------------------- status / run / daily

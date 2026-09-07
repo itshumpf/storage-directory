@@ -1,7 +1,20 @@
 {
-  "date": "2026-09-05",
-  "started_at": "2026-09-05T20:22:55.400763+00:00",
-  "status": "already_complete",
-  "snapshot": "history\\cubesmart\\2026-09-05.json",
-  "completed_at": "2026-09-05T20:22:55.400763+00:00"
+  "date": "2026-09-07",
+  "started_at": "2026-09-07T11:33:29.052867+00:00",
+  "status": "complete_with_warnings",
+  "snapshot": "history\\cubesmart\\2026-09-07.json",
+  "catalog_count": 1580,
+  "resumed_count": 0,
+  "current_index": 1580,
+  "current_site": "4642",
+  "current_url": "https://www.cubesmart.com/florida-self-storage/orlando-self-storage/4642.html",
+  "completed_count": 1578,
+  "completed_at": "2026-09-07T13:20:34.939792+00:00",
+  "facility_count": 1578,
+  "unit_count": 21094,
+  "priced_facility_count": 1542,
+  "dead": {
+    "5135": "RuntimeError: HTTP 500 after 4 attempts",
+    "4977": "RuntimeError: HTTP 500 after 4 attempts"
+  }
 }

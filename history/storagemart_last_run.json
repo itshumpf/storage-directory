@@ -1,7 +1,30 @@
 {
-  "completed_at": "2026-09-05T20:23:00.688187+00:00",
-  "date": "2026-09-05",
-  "snapshot": "history\\storagemart\\2026-09-05.json",
-  "started_at": "2026-09-05T20:23:00.688187+00:00",
-  "status": "already_complete"
+  "catalog_count": 206,
+  "completed_at": "2026-09-07T11:58:18.954009+00:00",
+  "completed_count": 198,
+  "current_index": 206,
+  "current_url": "https://www.storage-mart.com/kansas-city/merriam/66203-frontage-road",
+  "date": "2026-09-07",
+  "excluded_non_us": {
+    "https://www.storage-mart.com/calgary/okotoks/338-avenue": "facility 3306 is in CA, not a U.S. store",
+    "https://www.storage-mart.com/edmonton/127-street-northwest": "facility 2580 is in CA, not a U.S. store",
+    "https://www.storage-mart.com/en-gb/bedfordshire/5319-dunstable": "facility 5319 is in GB, not a U.S. store",
+    "https://www.storage-mart.com/en-gb/buckinghamshire/5318-aylesbury": "facility 5318 is in GB, not a U.S. store",
+    "https://www.storage-mart.com/en-gb/sussex/east-sussex/brighton/5206-wellington-rd": "facility 5206 is in GB, not a U.S. store",
+    "https://www.storage-mart.com/toronto/scarborough/3019-danforth-rd": "facility 3019 is in CA, not a U.S. store",
+    "https://www.storage-mart.com/toronto/woodbridge/3017-weston-rd": "facility 3017 is in CA, not a U.S. store"
+  },
+  "facility_count": 198,
+  "priced_facility_count": 198,
+  "resumed_count": 0,
+  "skipped": {
+    "https://www.storage-mart.com/brooklyn/11249-wallabout-st": "Dead: redirected to https://www.manhattanministorage.com/storage-units/brooklyn-ny/50-wallabout-st"
+  },
+  "snapshot": "history\\storagemart\\2026-09-07.json",
+  "started_at": "2026-09-07T11:33:34.123161+00:00",
+  "status": "complete_with_warnings",
+  "unit_group_count": 4126,
+  "warnings": [
+    "1 facilities skipped; see 'skipped'"
+  ]
 }
