@@ -5,11 +5,12 @@ cubesmart_scraper.py — Polite, resumable, all-or-nothing daily snapshot of Cub
     python cubesmart_scraper.py --delay 4 --limit 20  # smoke test: twenty stores, then stop (never publishes)
 
 Engineering principles, in the order they were learned:
-- Polite pacing: base delay (default 3s) plus randomized human-like jitter; a
-  403/429 backs off and retries the SAME page, and a streak of refusals stops
-  the run — a host that is saying no is not asked again.
-- Clean discovery: direct store URLs from https://www.cubesmart.com/sitemap-facility.xml.
-- Atomic checkpointing: the dated snapshot is written every 25 stores via temp-file swap.
+- Polite pacing: base delay (default 3s) plus randomized human-like jitter;
+  the first 403/429 stops the run immediately and is never retried in that
+  session — a host that is saying no is not asked again.
+- Clean discovery: one fresh, validated facility sitemap is saved per day and
+  only URLs in that daily catalog are visited. Same-day resumes reuse it.
+- Atomic checkpointing: a partial file is written every 25 stores via temp-file swap.
 - Resumption: a second run on the same day continues that day's file; it never
   skips a store because yesterday's file already had it.
 - All-or-nothing publication: the snapshot is only declared complete when every
@@ -57,9 +58,9 @@ CHECKPOINT_EVERY = 25
 MIN_SITEMAP = 500          # below this the sitemap itself is broken
 MIN_STORES = 1200          # absolute floor for a publishable snapshot
 MAX_DROP = 0.10            # vs the previous snapshot, same rule as every other collector
-MAX_DEAD_RATIO = 0.02      # 404s / off-site redirects tolerated before it is a template change
-MAX_ATTEMPTS = 4           # per page, for 403/429/5xx and transport errors
-MAX_CONSECUTIVE_REFUSALS = 5   # 403/429 streak (after retries) => the host is refusing us; stop
+MAX_DEAD_RATIO = 0.02      # proportional cap, further limited by MAX_DEAD_ABSOLUTE
+MAX_DEAD_ABSOLUTE = 5      # never probe dozens of stale sitemap links in one session
+MAX_ATTEMPTS = 3           # only 5xx and transport errors are retried
 
 # Console UTF-8 setup for Windows terminals
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
@@ -70,7 +71,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 
 class Refused(Exception):
-    """403/429 that survived every retry."""
+    """A 403/429 response; never retried in the same session."""
 
 
 class Dead(Exception):
@@ -99,6 +100,33 @@ def get_facility_urls(session: requests.Session) -> List[str]:
         raise RuntimeError(f"Sitemap returned suspicious count: {len(urls)} stores (expected ~1,500+)")
     print(f"   [OK] Discovered {len(urls):,} facilities in sitemap", flush=True)
     return urls
+
+
+def daily_catalog(session: requests.Session, snapshot_dir: Path, run_date: str) -> tuple[List[str], Path, bool]:
+    """Fetch the sitemap once per day, then reuse the exact catalog on resumes."""
+    path = snapshot_dir / "catalog" / f"{run_date}.json"
+    if path.exists():
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        urls = payload.get("urls") if isinstance(payload, dict) else None
+        if (not isinstance(urls, list) or len(urls) < MIN_SITEMAP
+                or not all(isinstance(u, str) and u.startswith("https://www.cubesmart.com/")
+                           and site_number_of(u) for u in urls)):
+            raise RuntimeError(f"Saved daily catalog is invalid: {path}")
+        print(f"1. Reusing today's saved sitemap catalog: {len(urls):,} facilities", flush=True)
+        return urls, path, True
+
+    urls = get_facility_urls(session)
+    invalid = [u for u in urls if not u.startswith("https://www.cubesmart.com/") or not site_number_of(u)]
+    if invalid:
+        raise RuntimeError(f"Sitemap contains {len(invalid)} invalid or off-site facility URLs")
+    _save_atomic(path, {
+        "date": run_date,
+        "source": SITEMAP_FACILITY_URL,
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "urls": urls,
+    })
+    print(f"   Saved today's fixed catalog -> {path}", flush=True)
+    return urls, path, False
 
 
 def site_number_of(url: str) -> str | None:
@@ -135,7 +163,7 @@ def previous_snapshot(snapshot_dir: Path, run_date: str) -> list:
 
 
 def fetch_store(session: requests.Session, url: str) -> str:
-    """One facility page, retried politely. Raises Dead / Refused / the transport error."""
+    """Fetch one page; a single 403/429 ends the session without retrying it."""
     site = site_number_of(url)
     for attempt in range(MAX_ATTEMPTS):
         try:
@@ -151,10 +179,10 @@ def fetch_store(session: requests.Session, url: str) -> str:
             return r.text
         if r.status_code in (404, 410):
             raise Dead(f"HTTP {r.status_code}")
-        if r.status_code in (403, 429, 500, 502, 503, 504):
+        if r.status_code in (403, 429):
+            raise Refused(f"HTTP {r.status_code}; stopped on the first refusal")
+        if r.status_code in (500, 502, 503, 504):
             if attempt == MAX_ATTEMPTS - 1:
-                if r.status_code in (403, 429):
-                    raise Refused(f"HTTP {r.status_code} after {MAX_ATTEMPTS} attempts")
                 raise RuntimeError(f"HTTP {r.status_code} after {MAX_ATTEMPTS} attempts")
             wait = 40 * (attempt + 1) + random.uniform(5, 15)
             print(f"  [!] HTTP {r.status_code} on {url} — backoff {wait:.0f}s", flush=True)
@@ -170,6 +198,7 @@ def run_crawl(snapshot_dir: Path, report_path: Path, delay: float, limit: int, r
     # Checkpoints go to the .partial file; the dated name is written once, on
     # completion, so a file called <date>.json always means a complete day.
     partial_path = snapshot_dir / f"{run_date}.partial.json"
+    dead_path = snapshot_dir / f"{run_date}.dead.json"
     report = {"date": run_date, "started_at": started.isoformat(), "status": "running",
               "snapshot": str(snapshot_path)}
     if snapshot_path.exists():
@@ -183,26 +212,48 @@ def run_crawl(snapshot_dir: Path, report_path: Path, delay: float, limit: int, r
     print("=" * 60, flush=True)
 
     dead: Dict[str, str] = {}
+    failed: Dict[str, str] = {}
     done: Dict[str, dict] = {}
     session = requests.Session()
     try:
-        urls = get_facility_urls(session)
+        urls, catalog_path, reused_catalog = daily_catalog(session, snapshot_dir, run_date)
         catalog = {site_number_of(u): u for u in urls if site_number_of(u)}
         if len(catalog) != len(urls):
             raise RuntimeError(f"{len(urls) - len(catalog)} sitemap URLs carry no site number; URL pattern changed")
-        done = load_snapshot(partial_path)
-        report.update({"catalog_count": len(catalog), "resumed_count": len(done)})
+        previous = previous_snapshot(snapshot_dir, run_date)
+        previous_ids = {str(r.get("site_number")) for r in previous if r.get("site_number")}
+        removed = sorted(previous_ids - set(catalog))
+        added = sorted(set(catalog) - previous_ids)
+        if previous_ids and len(removed) > len(previous_ids) * MAX_DROP:
+            raise RuntimeError(f"Fresh sitemap dropped {len(removed):,} of {len(previous_ids):,} prior stores; stopping before facility requests")
+
+        all_done = load_snapshot(partial_path)
+        stale_partial = sorted(set(all_done) - set(catalog))
+        done = {site: record for site, record in all_done.items() if site in catalog}
+        if dead_path.exists():
+            saved_dead = json.loads(dead_path.read_text(encoding="utf-8"))
+            if isinstance(saved_dead, dict):
+                dead = {str(site): str(reason) for site, reason in saved_dead.items() if str(site) in catalog}
+        report.update({"catalog_count": len(catalog), "catalog_path": str(catalog_path),
+                       "catalog_reused": reused_catalog, "catalog_added": len(added),
+                       "catalog_removed": len(removed), "stale_partial_dropped": len(stale_partial),
+                       "resumed_count": len(done), "known_dead_count": len(dead)})
         print(f"2. Resumption check: {len(done):,} facilities already in today's partial file", flush=True)
+        print(f"   Catalog delta: +{len(added):,} / -{len(removed):,} versus last complete snapshot", flush=True)
 
         order = list(catalog)
         random.shuffle(order)   # polite: never the same neighbourhood in a burst
-        max_dead = int(len(catalog) * MAX_DEAD_RATIO)
-        new_count, refusals = 0, 0
+        max_dead = max(1, min(MAX_DEAD_ABSOLUTE, int(len(catalog) * MAX_DEAD_RATIO)))
+        if len(dead) >= max_dead:
+            raise RuntimeError(f"Daily catalog already reached its {max_dead}-URL dead-link cap; stopping before more facility requests")
+        new_count = 0
         for i, site in enumerate(order, 1):
-            if site in done:
+            if site in done or site in dead:
                 continue
             if limit and new_count >= limit:
                 print(f"\nReached requested limit of {limit} facilities. Stopping without publishing.", flush=True)
+                if done:
+                    _save_atomic(partial_path, list(done.values()))
                 report.update({"status": "limited", "completed_count": len(done),
                                "completed_at": datetime.now(timezone.utc).isoformat()})
                 _save_atomic(report_path, report)
@@ -211,29 +262,25 @@ def run_crawl(snapshot_dir: Path, report_path: Path, delay: float, limit: int, r
             report.update({"current_index": i, "current_site": site, "current_url": url})
             try:
                 record = parse_facility_html(fetch_store(session, url), facility_url=url, site_number=site)
-                refusals = 0
             except Dead as e:
                 dead[site] = str(e)
+                _save_atomic(dead_path, dead)
                 print(f"  [dead] #{site}: {e}", flush=True)
-                if len(dead) > max_dead:
-                    raise RuntimeError(f"{len(dead)} dead facilities, more than {MAX_DEAD_RATIO:.0%} of the "
-                                       f"sitemap — a template or URL change, not closures") from e
+                if len(dead) >= max_dead:
+                    raise RuntimeError(f"{len(dead)} dead facilities reached today's cap of {max_dead}; "
+                                       "stopping instead of probing more stale links") from e
                 continue
             except Refused as e:
-                refusals += 1
                 print(f"  [refused] #{site}: {e}", flush=True)
-                if refusals >= MAX_CONSECUTIVE_REFUSALS:
-                    raise RuntimeError(f"{refusals} facilities refused in a row; the host is declining "
-                                       f"this session. Stopping — do not retry today without a cooldown.") from e
-                continue
+                raise RuntimeError("CubeSmart refused a facility request; stopped immediately and will not retry this session") from e
             except Exception as e:
                 # A parse failure on one page is worth a line, not the run;
                 # the completion check below decides whether the day is usable.
-                dead[site] = f"{type(e).__name__}: {e}"
+                failed[site] = f"{type(e).__name__}: {e}"
                 print(f"  [error] #{site}: {type(e).__name__}: {e}", flush=True)
-                if len(dead) > max_dead:
-                    raise RuntimeError(f"{len(dead)} facilities failed, more than {MAX_DEAD_RATIO:.0%} of the "
-                                       f"sitemap — parser drift, not bad luck") from e
+                if len(dead) + len(failed) >= max_dead:
+                    raise RuntimeError(f"{len(dead) + len(failed)} facilities failed, reaching today's cap of {max_dead}; "
+                                       "stopping before more requests") from e
                 continue
             done[record["site_number"]] = record
             new_count += 1
@@ -245,13 +292,12 @@ def run_crawl(snapshot_dir: Path, report_path: Path, delay: float, limit: int, r
             time.sleep(max(1.5, delay + random.uniform(-0.8, 1.8)))
 
         # ---- completion: every sitemap entry accounted for, and the counts make sense
-        missing = sorted(set(catalog) - set(done) - set(dead))
+        missing = sorted(set(catalog) - set(done) - set(dead) - set(failed))
         if missing:
             raise RuntimeError(f"Snapshot incomplete: {len(missing)} facilities never fetched")
         current = sorted(done.values(), key=lambda r: r["site_number"])
         if len(current) < MIN_STORES:
             raise RuntimeError(f"Safety floor failed: {len(current):,} stores < {MIN_STORES:,}")
-        previous = previous_snapshot(snapshot_dir, run_date)
         if previous and len(current) < len(previous) * (1 - MAX_DROP):
             raise RuntimeError(f"Store count fell more than {MAX_DROP:.0%}: {len(previous):,} -> {len(current):,}")
         prev_units = sum(len(s.get("units", [])) for s in previous)
@@ -264,17 +310,21 @@ def run_crawl(snapshot_dir: Path, report_path: Path, delay: float, limit: int, r
             partial_path.unlink()
         except FileNotFoundError:
             pass
+        try:
+            dead_path.unlink()
+        except FileNotFoundError:
+            pass
         report.update({
-            "status": "complete_with_warnings" if dead else "complete",
+            "status": "complete_with_warnings" if dead or failed else "complete",
             "completed_at": datetime.now(timezone.utc).isoformat(),
             "facility_count": len(current), "unit_count": units,
             "priced_facility_count": sum(1 for s in current if s["units"]),
-            "dead": dead,
+            "dead": dead, "failed": failed,
         })
         _save_atomic(report_path, report)
         print(f"\n[OK] Snapshot complete: {len(current):,} stores, {units:,} units -> {snapshot_path}"
-              + (f"  ({len(dead)} dead/failed, see report)" if dead else ""), flush=True)
-        return 3 if dead else 0
+              + (f"  ({len(dead) + len(failed)} dead/failed, see report)" if dead or failed else ""), flush=True)
+        return 3 if dead or failed else 0
     except Exception as exc:
         # Keep what was collected in the .partial file: a rerun today resumes
         # from it instead of repeating polite requests, and nothing downstream
@@ -282,7 +332,8 @@ def run_crawl(snapshot_dir: Path, report_path: Path, delay: float, limit: int, r
         if done:
             _save_atomic(partial_path, list(done.values()))
         report.update({"status": "failed", "completed_at": datetime.now(timezone.utc).isoformat(),
-                       "error": f"{type(exc).__name__}: {exc}", "completed_count": len(done), "dead": dead})
+                       "error": f"{type(exc).__name__}: {exc}", "completed_count": len(done),
+                       "dead": dead, "failed": failed})
         _save_atomic(report_path, report)
         print(f"\nSTOPPED without publishing: {exc}", flush=True)
         return 2

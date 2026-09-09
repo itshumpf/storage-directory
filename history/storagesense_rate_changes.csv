@@ -219,3 +219,71 @@ date,brand,store_id,site_number,size,sku,field,old,new,days_since_previous
 2026-09-07,storagesense,sense_2395,2395,5x10,sense_4621853,price,90,43,0.71
 2026-09-07,storagesense,sense_825,825,10x10,sense_4617234,price,94,75,0.71
 2026-09-07,storagesense,sense_1375,1375,5x10,sense_5347777,price,82,39,0.71
+2026-09-08,storagesense,sense_2339,2339,10x10,sense_4617838,promo,,1st Month Free!,1.1
+2026-09-08,storagesense,sense_2385,2385,10x10,sense_4630713,promo,1st Month Free!,,1.1
+2026-09-08,storagesense,sense_2385,2385,10x15,sense_4630308,promo,1st Month Free!,,1.1
+2026-09-09,storagesense,sense_164023,164023,11x34,sense_4961454,price,394,189,1.18
+2026-09-09,storagesense,sense_164130,164130,5x5,sense_5027066,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_164223,164223,10x10,sense_5187579,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_164223,164223,12x15,sense_5187374,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_164249,164249,10x6,sense_5336063,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_16966,16966,10x15,sense_4623901,price,138,66,1.19
+2026-09-09,storagesense,sense_17080,17080,5x5,sense_4677521,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_17284,17284,10x15,sense_4651409,promo,50% Off First 3 Full Months!,One Month Free!,1.19
+2026-09-09,storagesense,sense_1852,1852,10x10,sense_4711091,price,119,129,1.19
+2026-09-09,storagesense,sense_1852,1852,10x10,sense_4711091,street_price,149,162,1.19
+2026-09-09,storagesense,sense_1852,1852,10x10,sense_4711091,promo,1st Month Free!,50% Off 1 Month,1.19
+2026-09-09,storagesense,sense_1852,1852,10x15,sense_4708048,price,124,134,1.19
+2026-09-09,storagesense,sense_1852,1852,10x15,sense_4708048,street_price,155,168,1.19
+2026-09-09,storagesense,sense_1852,1852,10x15,sense_4708048,promo,1st Month Free!,50% Off 1 Month,1.19
+2026-09-09,storagesense,sense_1852,1852,15x15,sense_5054963,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_1852,1852,10x10,sense_5304809,promo,1st Month Free!,50% Off 1 Month,1.19
+2026-09-09,storagesense,sense_1852,1852,10x10,sense_5109189,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_1852,1852,10x15,sense_4709288,promo,1st Month Free!,50% Off 1 Month,1.19
+2026-09-09,storagesense,sense_1852,1852,10x20,sense_4708030,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_1852,1852,10x20,sense_4707840,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_1852,1852,10x25,sense_4911263,price,239,264,1.19
+2026-09-09,storagesense,sense_1852,1852,10x25,sense_4911263,street_price,299,330,1.19
+2026-09-09,storagesense,sense_1852,1852,10x25,sense_4911263,promo,1st Month Free!,50% Off 1 Month,1.19
+2026-09-09,storagesense,sense_1852,1852,10x25,sense_4709137,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_1852,1852,10x30,sense_4709611,price,299,379,1.19
+2026-09-09,storagesense,sense_1852,1852,10x30,sense_4709611,street_price,374,474,1.19
+2026-09-09,storagesense,sense_1852,1852,10x30,sense_4709611,promo,1st Month Free!,50% Off 1 Month,1.19
+2026-09-09,storagesense,sense_1852,1852,10x30,sense_4707792,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_1852,1852,12x30,sense_4708293,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_2100,2100,5x10,sense_4676218,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_2114,2114,10x10,sense_5083488,price,149,153,1.19
+2026-09-09,storagesense,sense_2119,2119,10x10,sense_4685217,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_2130,2130,10x20,sense_4685876,promo,1st Month Free!,Military,1.19
+2026-09-09,storagesense,sense_2136,2136,5x10,sense_4676744,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_2139,2139,5x10,sense_4678544,promo,1st Month Free!,,1.19
+2026-09-09,storagesense,sense_2290,2290,10x30,sense_4726395,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_2307,2307,10x15,sense_4650698,price,172,153,1.19
+2026-09-09,storagesense,sense_2325,2325,10x10,sense_5171095,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_2341,2341,10x10,sense_4623846,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_2359,2359,10x30,sense_4617531,price,199,249,1.19
+2026-09-09,storagesense,sense_2387,2387,10x35,sense_4634650,price,103,49,1.19
+2026-09-09,storagesense,sense_2411,2411,5x5,sense_5038907,price,34,16,1.19
+2026-09-09,storagesense,sense_2550,2550,12x22,sense_4839211,price,97,203,1.19
+2026-09-09,storagesense,sense_2690,2690,10x10,sense_4668841,promo,,1st Month Free!,1.18
+2026-09-09,storagesense,sense_2692,2692,10x20,sense_4652386,price,134,119,1.18
+2026-09-09,storagesense,sense_2782,2782,10x20,sense_4791103,price,219,199,1.18
+2026-09-09,storagesense,sense_2793,2793,10x10,sense_4713549,price,110,98,1.18
+2026-09-09,storagesense,sense_834,834,10x25,sense_4706025,promo,,1st Month Free!,1.18
+2026-09-09,storagesense,sense_838,838,10x20,sense_4646953,promo,,1st Month Free!,1.18
+2026-09-09,storagesense,sense_856,856,10x20,sense_4680695,price,125,60,1.18
+2026-09-09,storagesense,sense_862,862,10x10,sense_4966119,price,157,75,1.18
+2026-09-09,storagesense,sense_874,874,10x10,sense_4634364,promo,,1st Month Free!,1.18
+2026-09-09,storagesense,sense_1017,1017,7x10,sense_4838026,price,85,79,1.18
+2026-09-09,storagesense,sense_1050,1050,5x10,sense_4632230,price,68,60,1.18
+2026-09-09,storagesense,sense_1051,1051,10x10,sense_4662126,promo,,1st Month Free!,1.18
+2026-09-09,storagesense,sense_1077,1077,10x15,sense_4617879,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_1090,1090,10x20,sense_4696599,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_1117,1117,5x10,sense_4670438,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_1165,1165,10x10,sense_4643223,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_1245,1245,5x10,sense_4716306,promo,,1st Month Free!,1.19
+2026-09-09,storagesense,sense_1292,1292,10x25,sense_4915820,price,83,74,1.19
+2026-09-09,storagesense,sense_1373,1373,5x10,sense_4684731,promo,2nd month free,1st Month Free!,1.19
+2026-09-09,storagesense,sense_1558,1558,5x10,sense_4633542,promo,,50% off first 3 months!,1.19
+2026-09-09,storagesense,sense_1558,1558,10x10,sense_4632644,price,96,46,1.19
+2026-09-09,storagesense,sense_163706,163706,10x10,sense_4975441,price,52,46,1.19

@@ -1,20 +1,29 @@
 {
-  "date": "2026-09-07",
-  "started_at": "2026-09-07T11:33:29.052867+00:00",
+  "date": "2026-09-09",
+  "started_at": "2026-09-09T18:29:35.703477+00:00",
   "status": "complete_with_warnings",
-  "snapshot": "history\\cubesmart\\2026-09-07.json",
-  "catalog_count": 1580,
+  "snapshot": "history\\cubesmart\\2026-09-09.json",
+  "catalog_count": 1581,
+  "catalog_path": "history\\cubesmart\\catalog\\2026-09-09.json",
+  "catalog_reused": true,
+  "catalog_added": 3,
+  "catalog_removed": 0,
+  "stale_partial_dropped": 0,
   "resumed_count": 0,
-  "current_index": 1580,
-  "current_site": "4642",
-  "current_url": "https://www.cubesmart.com/florida-self-storage/orlando-self-storage/4642.html",
+  "known_dead_count": 0,
+  "current_index": 1581,
+  "current_site": "87",
+  "current_url": "https://www.cubesmart.com/california-self-storage/san-bernardino-self-storage/87.html",
   "completed_count": 1578,
-  "completed_at": "2026-09-07T13:20:34.939792+00:00",
+  "completed_at": "2026-09-09T20:12:11.554827+00:00",
   "facility_count": 1578,
-  "unit_count": 21094,
-  "priced_facility_count": 1542,
+  "unit_count": 21494,
+  "priced_facility_count": 1541,
   "dead": {
-    "5135": "RuntimeError: HTTP 500 after 4 attempts",
-    "4977": "RuntimeError: HTTP 500 after 4 attempts"
+    "5084": "redirected to https://www.cubesmart.com/arizona-self-storage/glendale-self-storage/"
+  },
+  "failed": {
+    "5135": "RuntimeError: HTTP 500 after 3 attempts",
+    "4977": "RuntimeError: HTTP 500 after 3 attempts"
   }
 }

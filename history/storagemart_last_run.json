@@ -1,10 +1,10 @@
 {
-  "catalog_count": 206,
-  "completed_at": "2026-09-07T11:58:18.954009+00:00",
+  "catalog_count": 205,
+  "completed_at": "2026-09-09T18:55:14.006450+00:00",
   "completed_count": 198,
-  "current_index": 206,
-  "current_url": "https://www.storage-mart.com/kansas-city/merriam/66203-frontage-road",
-  "date": "2026-09-07",
+  "current_index": 205,
+  "current_url": "https://www.storage-mart.com/lincoln/68507-cornhusker-hwy",
+  "date": "2026-09-09",
   "excluded_non_us": {
     "https://www.storage-mart.com/calgary/okotoks/338-avenue": "facility 3306 is in CA, not a U.S. store",
     "https://www.storage-mart.com/edmonton/127-street-northwest": "facility 2580 is in CA, not a U.S. store",
@@ -17,14 +17,10 @@
   "facility_count": 198,
   "priced_facility_count": 198,
   "resumed_count": 0,
-  "skipped": {
-    "https://www.storage-mart.com/brooklyn/11249-wallabout-st": "Dead: redirected to https://www.manhattanministorage.com/storage-units/brooklyn-ny/50-wallabout-st"
-  },
-  "snapshot": "history\\storagemart\\2026-09-07.json",
-  "started_at": "2026-09-07T11:33:34.123161+00:00",
-  "status": "complete_with_warnings",
-  "unit_group_count": 4126,
-  "warnings": [
-    "1 facilities skipped; see 'skipped'"
-  ]
+  "skipped": {},
+  "snapshot": "history\\storagemart\\2026-09-09.json",
+  "started_at": "2026-09-09T18:29:41.104791+00:00",
+  "status": "complete",
+  "unit_group_count": 4127,
+  "warnings": []
 }

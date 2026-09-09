@@ -41,15 +41,19 @@ def _record(site):
             "lng": 0, "url": SITE_URL.format(site), "units": [{"size": "10x10", "price": 100, "sku": f"cube_{site}_a"}]}
 
 
-def _drive(pages, sites, folder, run_date="2026-09-04", limit=0):
+def _drive(pages, sites, folder, run_date="2026-09-04", limit=0, fetched=None):
     """pages: site -> exception instance to raise, or None for a good page."""
     class FakeSession:
         pass
     saved = (cubesmart_scraper.requests.Session, cubesmart_scraper.get_facility_urls,
              cubesmart_scraper.fetch_store, cubesmart_scraper.parse_facility_html,
-             cubesmart_scraper.MIN_STORES, cubesmart_scraper.time.sleep)
+             cubesmart_scraper.MIN_STORES, cubesmart_scraper.MIN_SITEMAP,
+             cubesmart_scraper.time.sleep,
+             cubesmart_scraper.random.shuffle)
     def fake_fetch(session, url):
         site = cubesmart_scraper.site_number_of(url)
+        if fetched is not None:
+            fetched.append(site)
         if pages.get(site):
             raise pages[site]
         return site
@@ -58,7 +62,9 @@ def _drive(pages, sites, folder, run_date="2026-09-04", limit=0):
     cubesmart_scraper.fetch_store = fake_fetch
     cubesmart_scraper.parse_facility_html = lambda html, facility_url, site_number: _record(site_number)
     cubesmart_scraper.MIN_STORES = 10
+    cubesmart_scraper.MIN_SITEMAP = 10
     cubesmart_scraper.time.sleep = lambda *_: None
+    cubesmart_scraper.random.shuffle = lambda items: None
     try:
         root = Path(folder)
         code = cubesmart_scraper.run_crawl(root / "snap", root / "report.json", 3.0, limit, run_date)
@@ -66,7 +72,9 @@ def _drive(pages, sites, folder, run_date="2026-09-04", limit=0):
     finally:
         (cubesmart_scraper.requests.Session, cubesmart_scraper.get_facility_urls,
          cubesmart_scraper.fetch_store, cubesmart_scraper.parse_facility_html,
-         cubesmart_scraper.MIN_STORES, cubesmart_scraper.time.sleep) = saved
+         cubesmart_scraper.MIN_STORES, cubesmart_scraper.MIN_SITEMAP,
+         cubesmart_scraper.time.sleep,
+         cubesmart_scraper.random.shuffle) = saved
 
 
 def test_offline_one_dead_store_still_publishes():
@@ -93,26 +101,85 @@ def test_offline_refusal_streak_stops_the_run():
     sites = [str(4000 + i) for i in range(100)]
     pages = {s: cubesmart_scraper.Refused("HTTP 403 after 4 attempts") for s in sites}
     with TemporaryDirectory() as folder:
-        code, report, _ = _drive(pages, sites, folder)
-        assert code == 2 and "refused in a row" in report["error"], report
-        print("  [OK] a 403 streak stops the run instead of hammering the host")
+        fetched = []
+        code, report, _ = _drive(pages, sites, folder, fetched=fetched)
+        assert code == 2 and "stopped immediately" in report["error"] and len(fetched) == 1, report
+        print("  [OK] the first 403 stops the run instead of retrying or probing more stores")
 
 
 def test_offline_same_day_rerun_resumes_and_complete_day_makes_no_requests():
     sites = [str(4000 + i) for i in range(100)]
     with TemporaryDirectory() as folder:
-        # First attempt dies past the dead cap and leaves a partial file behind.
-        pages = {s: cubesmart_scraper.Dead("HTTP 404") for s in ("4010", "4040", "4070")}
-        _drive(pages, sites, folder)
+        # A deliberately limited first attempt leaves a partial file behind.
+        _drive({}, sites, folder, limit=7)
         partial = json.loads((Path(folder) / "snap" / "2026-09-04.partial.json").read_text())
         assert partial, "partial should hold what was collected"
-        # Second attempt, site healthy again: resumes, completes.
+        # Second attempt reuses the saved daily catalog and resumes.
         code, report, snap = _drive({}, sites, folder)
         assert code == 0 and report["resumed_count"] == len(partial), report
+        assert report["catalog_reused"] is True
         # Third attempt: already complete, no requests.
         code, report, _ = _drive({}, sites, folder)
         assert code == 0 and report["status"] == "already_complete"
         print("  [OK] same-day rerun resumes the partial; a complete day is idempotent")
+
+
+def test_offline_dead_urls_are_remembered_on_same_day_resume():
+    sites = [str(4000 + i) for i in range(100)]
+    with TemporaryDirectory() as folder:
+        first_fetches = []
+        _drive({"4002": cubesmart_scraper.Dead("HTTP 404")}, sites, folder, limit=7, fetched=first_fetches)
+        assert "4002" in json.loads((Path(folder) / "snap" / "2026-09-04.dead.json").read_text())
+        second_fetches = []
+        code, report, _ = _drive({}, sites, folder, fetched=second_fetches)
+        assert code == 3 and "4002" not in second_fetches and report["known_dead_count"] == 1, report
+        print("  [OK] a sitemap URL confirmed dead is not requested again on a same-day resume")
+
+
+def test_offline_fetch_store_does_not_retry_a_refusal():
+    class Response:
+        status_code = 403
+        url = SITE_URL.format("4000")
+
+    class Session:
+        calls = 0
+        def get(self, *args, **kwargs):
+            self.calls += 1
+            return Response()
+
+    session = Session()
+    try:
+        cubesmart_scraper.fetch_store(session, Response.url)
+        assert False, "expected Refused"
+    except cubesmart_scraper.Refused:
+        pass
+    assert session.calls == 1
+    print("  [OK] fetch_store makes exactly one request when CubeSmart returns 403")
+
+
+def test_offline_fresh_sitemap_removals_are_never_requested():
+    prior_sites = [str(4000 + i) for i in range(100)]
+    current_sites = prior_sites[5:]
+    with TemporaryDirectory() as folder:
+        snap = Path(folder) / "snap"; snap.mkdir()
+        (snap / "2026-09-03.json").write_text(json.dumps([_record(s) for s in prior_sites]))
+        fetched = []
+        code, report, _ = _drive({}, current_sites, folder, fetched=fetched)
+        assert code == 0 and report["catalog_removed"] == 5, report
+        assert not set(prior_sites[:5]) & set(fetched)
+        print("  [OK] stores absent from today's sitemap are not probed")
+
+
+def test_offline_large_sitemap_drop_stops_before_facility_requests():
+    prior_sites = [str(4000 + i) for i in range(100)]
+    with TemporaryDirectory() as folder:
+        snap = Path(folder) / "snap"; snap.mkdir()
+        (snap / "2026-09-03.json").write_text(json.dumps([_record(s) for s in prior_sites]))
+        fetched = []
+        code, report, _ = _drive({}, prior_sites[20:], folder, fetched=fetched)
+        assert code == 2 and "stopping before facility requests" in report["error"], report
+        assert fetched == []
+        print("  [OK] a suspicious sitemap contraction stops before store pages are touched")
 
 
 def test_offline_drop_against_previous_snapshot_does_not_publish():
@@ -120,8 +187,8 @@ def test_offline_drop_against_previous_snapshot_does_not_publish():
         snap = Path(folder) / "snap"; snap.mkdir()
         (snap / "2026-09-03.json").write_text(json.dumps([_record(str(4000 + i)) for i in range(100)]))
         code, report, _ = _drive({}, [str(4000 + i) for i in range(80)], folder)   # 80 < 90% of 100
-        assert code == 2 and "fell more than" in report["error"], report
-        print("  [OK] a 20% smaller sitemap day is refused against the previous snapshot")
+        assert code == 2 and "stopping before facility requests" in report["error"], report
+        print("  [OK] a 20% smaller sitemap day is refused before crawling")
 
 
 def test_offline_limit_never_publishes():
