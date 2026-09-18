@@ -1,0 +1,57 @@
+name: SmartStop Daily Snapshot
+
+on:
+  # 213 U.S. facilities at SmartStop's required ten-second floor takes about 36 minutes.
+  schedule:
+    - cron: '17 20 * * *'
+  workflow_dispatch:
+    inputs:
+      delay:
+        description: 'Minimum seconds between requests (cannot be below 10)'
+        required: false
+        default: '10'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: smartstop-collector
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run offline parser and policy tests
+        run: python test_smartstop.py
+
+      - name: Collect one complete snapshot
+        id: collect
+        continue-on-error: true
+        run: python storage_pipeline.py run smartstop -- --delay "${{ inputs.delay || '10' }}"
+
+      - name: Preserve collection state
+        run: >-
+          bash .github/push_with_retry.sh
+          "SmartStop snapshot: $(date +'%Y-%m-%d')"
+          history/smartstop
+          history/smartstop_last_run.json
+
+      - name: Surface a failed collection after the state is safe
+        if: steps.collect.outcome == 'failure'
+        run: |
+          cat history/smartstop_last_run.json || true
+          exit 1

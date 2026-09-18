@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "adapter": "storable_apollo",
+  "created_date": "2026-09-10",
+  "max_drop": 0.10,
+  "operators": [
+    {"operator_id": "argus_professional_storage_management", "sitemap_url": "https://www.innerspaceselfstorageaz.com/sitemap.xml", "minimum_facilities": 1, "minimum_url_score": 100},
+    {"operator_id": "creekside_self_storage_hammond", "sitemap_url": "https://www.creeksideselfstorage.com/sitemap.xml", "minimum_facilities": 1, "minimum_url_score": 100},
+    {"operator_id": "grand_island_secure_storage", "sitemap_url": "https://www.grandislandsecurestorage.com/sitemap.xml", "minimum_facilities": 1, "minimum_url_score": 100},
+    {"operator_id": "infinite_self_storage_joliet", "sitemap_url": "https://www.selfstoragejoliet.com/sitemap.xml", "minimum_facilities": 1, "minimum_url_score": 100},
+    {"operator_id": "one_800_self_storage", "sitemap_url": "https://www.1800selfstorage.com/sitemap.xml", "minimum_facilities": 15, "minimum_url_score": 100},
+    {"operator_id": "right_move_storage", "adapter": "storagely_html", "sitemap_url": "https://www.rightmovestorage.com/public/sitemaps/right-move-storage_sitemap.xml", "minimum_facilities": 45, "minimum_url_score": 80},
+    {"operator_id": "space_saver_self_storage", "sitemap_url": "https://www.fortwaltonselfstorage.com/sitemap.xml", "minimum_facilities": 1, "minimum_url_score": 100},
+    {"operator_id": "thomas_avenue_self_storage", "sitemap_url": "https://www.thomasavenueselfstorage.com/sitemap.xml", "minimum_facilities": 1, "minimum_url_score": 100},
+    {"operator_id": "thompson_lane_self_storage", "sitemap_url": "https://www.thompsonlane-storage.com/sitemap.xml", "minimum_facilities": 1, "minimum_url_score": 100}
+  ]
+}

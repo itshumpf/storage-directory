@@ -1,0 +1,20 @@
+{
+  "review_date": "2026-09-10",
+  "source": "robots.txt",
+  "operators": {
+    "san_diego_self_storage": "https://www.sandiegoselfstorage.com/sitemap.xml",
+    "fort_knox_storage": "https://fortknoxstorageunits.com/wp-sitemap.xml",
+    "hornet_storage_ii": null,
+    "atlantic_self_storage": "https://www.atlanticselfstorage.com/sitemap.xml",
+    "right_move_storage": "https://www.rightmovestorage.com/public/sitemaps/right-move-storage_sitemap.xml",
+    "price_self_storage": "https://www.priceselfstorage.com/sitemap.xml",
+    "thompson_lane_self_storage": "https://www.thompsonlane-storage.com/sitemap.xml",
+    "creekside_self_storage_hammond": "https://www.creeksideselfstorage.com/sitemap.xml",
+    "space_saver_self_storage": "https://www.fortwaltonselfstorage.com/sitemap.xml",
+    "one_800_self_storage": "https://www.1800selfstorage.com/sitemap.xml",
+    "grand_island_secure_storage": "https://www.grandislandsecurestorage.com/sitemap.xml",
+    "thomas_avenue_self_storage": "https://www.thomasavenueselfstorage.com/sitemap.xml",
+    "argus_professional_storage_management": "https://www.innerspaceselfstorageaz.com/sitemap.xml",
+    "infinite_self_storage_joliet": "https://www.selfstoragejoliet.com/sitemap.xml"
+  }
+}

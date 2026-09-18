@@ -1,6 +1,6 @@
 name: Assemble combined dataset
 
-# The seam between the four collectors. Each collector job still owns its own
+# The seam between the collectors. Each collector job still owns its own
 # brand and pushes its own snapshot; this job runs after ANY of them finishes
 # (and once a day regardless), merges every brand's freshest snapshot, records
 # the cross-brand daily series and rate-change log, and rebuilds the dashboard
@@ -19,6 +19,7 @@ on:
       - Storage Sense Conservative Refresh
       - U-Haul Complete Daily Snapshot
       - StorageMart Daily Snapshot
+      - SmartStop Daily Snapshot
     types: [completed]
   schedule:
     - cron: '53 19 * * *'   # 14:53 CDT — after every collector's usual finish
@@ -60,6 +61,7 @@ jobs:
           history/publicstorage
           history/cubesmart
           history/storagemart
+          history/smartstop
           history/combined/latest.manifest.json
           history/combined/record_runs.csv
           history/combined/daily-*.csv

@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-14",
+  "facility_urls": [
+    "https://www.creeksideselfstorage.com/self-storage-hammond-la-f4999"
+  ],
+  "operator_id": "creekside_self_storage_hammond",
+  "robots_allowed": true,
+  "robots_sha256": "28e3fe47af0a5c1c16a4e73ff8f896796be036af80d385215688de96b36f470f",
+  "robots_url": "https://www.creeksideselfstorage.com/robots.txt",
+  "sitemap_files": [
+    "https://www.creeksideselfstorage.com/sitemap.xml"
+  ],
+  "url_count": 9
+}

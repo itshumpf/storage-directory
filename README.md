@@ -101,7 +101,7 @@ Built by Braeden Keena.
 
 ## Multi-operator pipeline (September 2026)
 
-Collection now covers four operators. Each collector is unchanged and still owns its own
+Collection now covers six operators. Each collector still owns its own
 brand; `storage_pipeline.py` is the seam that joins them.
 
 | Brand | Collector | Snapshot lands in |
@@ -110,8 +110,10 @@ brand; `storage_pipeline.py` is the seam that joins them.
 | CubeSmart | `cubesmart_scraper.py` (Actions, `cubesmart.yml`) | `history/cubesmart/<date>.json` |
 | Storage Sense | `storagesense_scraper.py` (Actions, `storagesense.yml`) | `history/storagesense/<date>.json` |
 | U-Haul | `uhaul_scraper.py` (Actions, `uhaul.yml`) | `history/uhaul/<date>.json` |
+| StorageMart | `storagemart_scraper.py` (Actions, `storagemart.yml`) | `history/storagemart/<date>.json` |
+| SmartStop | `smartstop_scraper.py` (Actions, `smartstop.yml`) | `history/smartstop/<date>.json` |
 
-All four emit the same record shape, so one immutable dated snapshot per brand per day is the
+All six emit the same record shape, so one immutable dated snapshot per brand per day is the
 whole contract. `assemble.yml` runs after any collector finishes and does:
 
 ```bash
@@ -132,7 +134,7 @@ size-by-size price comparison, state table, store search with map and per-size d
 trends, and a rate-change feed. It is a single file with no build step, reads only
 `dashboard-data.json`, and is not published anywhere.
 
-### FindStorage, five operators (2026-09-05)
+### FindStorage, six operators (2026-09-09)
 
 The original directory and reports now run on the combined dataset:
 
@@ -142,3 +144,79 @@ The original directory and reports now run on the combined dataset:
 - `dashboard.html` — the internal monitor (freshness, comparisons, trends, rate-change feed).
 
 If the Cloudflare/Netlify build copies specific files into `dist/`, add `all_locations.json`, `dashboard-data.json`, `dashboard.html` and `pricer.html` to that list.
+
+### SmartStop collection policy
+
+SmartStop is discovered fresh each day from its declared XML sitemap. The sitemap currently
+contains 275 facility pages: 213 U.S. locations are collected and 62 Canadian locations are
+deliberately excluded. The collector fetches one server-rendered facility page per U.S. location, never runs faster than the declared
+10-second crawl delay, stops on the first 403/429 response, checkpoints progress, and only
+publishes after the complete daily catalog passes count and drop-safety checks. SmartStop's
+Schema.org feed exposes advertised offers, not physical vacancy totals, so the dashboard labels
+that inventory signal as **offers advertised**.
+
+### Independent-operator platform census
+
+The long-tail intake tools deliberately separate physical-property identity from operator and
+software-vendor identity:
+
+- `storable_adapter.py` normalizes the common Storable/storEDGE facility and unit-group model;
+  StorageMart now uses this shared core while retaining its own discovery and page validation.
+- `platform_probe.py` classifies only URLs supplied to it. It fetches robots.txt first, refuses
+  to fetch a disallowed page, waits at least 10 seconds, and makes at most one page request.
+- `independent_registry.py` deduplicates physical facilities by normalized address (or coordinates
+  when no usable address exists) while retaining operator aliases, platforms, and source URLs.
+- `independent_operators.json` is the operator registry. Batches 01 and 02 contain 50 disabled
+  discovery records; Batch 02's 25 new entries remain plain candidates until live review. A platform
+  hint is not confirmation. An operator cannot be enabled until its robots,
+  terms, representative-page behavior, parser fixture, and daily request budget have been reviewed.
+
+Example classification—the command will not bypass a missing or restrictive robots file:
+
+```powershell
+python platform_probe.py https://operator.example/units --out private/operator-probe.json
+```
+
+The independent cohort has a separate, fail-closed runner. Its default command is a zero-network
+plan; `probe` refreshes robots.txt and then requests one representative page per host after a
+minimum ten-second delay. Probe reports never become price snapshots.
+
+New operators can be dropped into `independent_candidates.txt`, one URL per line (or
+`Operator Name | URL`). Preview with `python independent_intake.py`; use
+`python independent_intake.py --apply` to deduplicate by domain and add only new entries to the
+registry. Every imported entry is disabled and starts at `candidate`, so text input alone can
+never authorize a request.
+
+Before a page probe, `independent_robots.py` performs a checkpointed robots-only audit of disabled
+candidates. It makes exactly one `/robots.txt` request per domain and never requests a homepage,
+sitemap, facility page, or inventory endpoint. Redirects, missing files, TLS failures, and
+refusals remain review items rather than being followed automatically.
+
+```powershell
+python independent_scraper.py plan
+python independent_robots.py
+python independent_scraper.py probe --operator atlantic_self_storage
+python independent_scraper.py catalog
+python independent_scraper.py smoke
+```
+
+`catalog` reads the same-day, robots-derived URLs in `independent_sitemaps.json`, follows only
+same-host sitemap indexes at the ten-second request floor, and freezes the complete URL lists in
+`history/independent/catalog/`. It does not request facility pages or publish a price snapshot.
+`smoke` then selects at most one canonical facility URL per operator from that same-day catalog,
+refreshes robots.txt, waits at least ten seconds, and records parser diagnostics without publishing.
+Its same-day report is resumable: an attempted host is never automatically retried.
+
+The first full independent pilot is deliberately separate from `collect_all.ps1` until it has
+produced and validated its first complete snapshot. It refreshes each host's robots.txt, requires
+the expected sitemap still to be declared there, freezes a daily per-operator catalog, then
+checkpoints every facility page. A 403/429 stops the whole run for the day; any other failure needs
+an explicit `--retry-failed`; and no snapshot is published until every selected URL parses.
+
+```powershell
+python independent_full_scraper.py --plan
+python independent_full_scraper.py
+```
+
+Full collection remains intentionally unavailable until a probe confirms the adapter and a daily
+facility catalog plus completeness floor have been defined for that operator.

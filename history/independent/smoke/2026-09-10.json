@@ -1,0 +1,274 @@
+{
+  "date": "2026-09-10",
+  "max_pages_per_operator": 1,
+  "publication_enabled": false,
+  "results": [
+    {
+      "catalog_status": "complete",
+      "name": "Argus Professional Storage Management",
+      "operator_id": "argus_professional_storage_management",
+      "status": "no_facility_url"
+    },
+    {
+      "completed_at": "2026-09-10T20:24:16.333779+00:00",
+      "confidence": "possible",
+      "crawl_delay": 10.0,
+      "evidence": [
+        "allFacilities"
+      ],
+      "name": "Atlantic Self Storage",
+      "operator_id": "atlantic_self_storage",
+      "page_status": 200,
+      "parse_error": "KeyError: 'Missing Storable facilities.allFacilities payload'",
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:24:04.765518+00:00",
+      "status": "classified",
+      "url": "https://www.atlanticselfstorage.com/storage-locations/fl/atlantic-beach/1089-atlantic-blvd"
+    },
+    {
+      "completed_at": "2026-09-10T20:24:28.866525+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "Creekside Self Storage of Hammond",
+      "operator_id": "creekside_self_storage_hammond",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:24:16.336146+00:00",
+      "status": "classified",
+      "url": "https://www.creeksideselfstorage.com/self-storage-hammond-la-f4999"
+    },
+    {
+      "completed_at": "2026-09-10T20:24:43.517299+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Fort Knox Storage",
+      "operator_id": "fort_knox_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "sitelink",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:24:28.868775+00:00",
+      "status": "classified",
+      "url": "https://fortknoxstorageunits.com/5-things-to-look-for-in-a-storage-unit/"
+    },
+    {
+      "completed_at": "2026-09-10T20:24:55.831261+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "Grand Island Secure Storage",
+      "operator_id": "grand_island_secure_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:24:43.519173+00:00",
+      "status": "classified",
+      "url": "https://www.grandislandsecurestorage.com/self-storage-grand-island-ny-f6311"
+    },
+    {
+      "catalog_status": "no_sitemap_declared",
+      "name": "Hornet Storage II",
+      "operator_id": "hornet_storage_ii",
+      "status": "no_facility_url"
+    },
+    {
+      "completed_at": "2026-09-10T20:25:08.498590+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "Infinite Self Storage",
+      "operator_id": "infinite_self_storage_joliet",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:24:55.834159+00:00",
+      "status": "classified",
+      "url": "https://www.selfstoragejoliet.com/1397-n-larkin-ave-joliet-il-60435"
+    },
+    {
+      "completed_at": "2026-09-10T20:25:22.370325+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "1-800 Self Storage",
+      "operator_id": "one_800_self_storage",
+      "page_status": 200,
+      "parse_error": "KeyError: 'Missing Storable facilities.allFacilities payload'",
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:25:08.500618+00:00",
+      "status": "classified",
+      "url": "https://www.1800selfstorage.com/1003-n-saginaw-st-durand-mi-48429"
+    },
+    {
+      "completed_at": "2026-09-10T20:25:43.871968+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Price Self Storage",
+      "operator_id": "price_self_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:25:22.373196+00:00",
+      "status": "classified",
+      "url": "https://www.priceselfstorage.com/locations/los-angeles-storage/"
+    },
+    {
+      "completed_at": "2026-09-10T20:25:55.441813+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Right Move Storage",
+      "operator_id": "right_move_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:25:43.875216+00:00",
+      "status": "classified",
+      "url": "https://www.rightmovestorage.com/storage-units/texas/port-arthur/9th-avenue"
+    },
+    {
+      "completed_at": "2026-09-10T20:26:07.182507+00:00",
+      "confidence": "possible",
+      "crawl_delay": 10.0,
+      "evidence": [
+        "rental-center.storedge.com"
+      ],
+      "name": "San Diego Self Storage",
+      "operator_id": "san_diego_self_storage",
+      "page_status": 200,
+      "parse_error": "KeyError: 'Missing Storable facilities.allFacilities payload'",
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:25:55.446293+00:00",
+      "status": "classified",
+      "url": "https://www.sandiegoselfstorage.com/self-storage/ca/carlsbad/carlsbad-self-storage/"
+    },
+    {
+      "completed_at": "2026-09-10T20:26:19.417148+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "rental-center.storedge.com",
+        "softwareProvider",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "Space Saver Self Storage",
+      "operator_id": "space_saver_self_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:26:07.184610+00:00",
+      "status": "classified",
+      "url": "https://www.fortwaltonselfstorage.com/self-storage-fort-walton-beach-fl-f1234"
+    },
+    {
+      "completed_at": "2026-09-10T20:26:31.451156+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "Thomas Avenue Self Storage",
+      "operator_id": "thomas_avenue_self_storage",
+      "page_status": 200,
+      "parse_error": "KeyError: 'Missing Storable facilities.allFacilities payload'",
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:26:19.420299+00:00",
+      "status": "classified",
+      "url": "https://www.thomasavenueselfstorage.com/1210-thomas-ave-leesburg-fl-34748"
+    },
+    {
+      "completed_at": "2026-09-10T20:26:43.861244+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "Thompson Lane Self-Storage",
+      "operator_id": "thompson_lane_self_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T20:26:31.453131+00:00",
+      "status": "classified",
+      "url": "https://www.thompsonlane-storage.com/2801-landers-ave-nashville-tn-37211"
+    }
+  ]
+}

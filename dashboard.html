@@ -691,15 +691,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
 :root{
   color-scheme:light;
   --bg:#f6f6f4;--surface:#fcfcfb;--surface-2:#f0efec;--line:#e4e3df;--ink:#0b0b0b;--ink-2:#52514e;--ink-3:#8a8985;
-  --ps:#2a78d6;--cs:#eb6834;--ss:#1baf7a;--uh:#eda100;--sm:#e87ba4;--up:#e34948;--down:#008300;--accent:#2a78d6;
+  --ps:#2a78d6;--cs:#eb6834;--ss:#1baf7a;--uh:#eda100;--sm:#e87ba4;--st:#8b5cf6;--in:#64748b;--up:#e34948;--down:#008300;--accent:#2a78d6;
   --radius:10px;--font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;--bg:#111110;--surface:#1a1a19;--surface-2:#242422;--line:#33332f;--ink:#fff;--ink-2:#c3c2b7;--ink-3:#8f8e87;
-  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--up:#e66767;--down:#3aa63a;--accent:#3987e5;}}
+  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--st:#9a73f7;--in:#7c8da5;--up:#e66767;--down:#3aa63a;--accent:#3987e5;}}
 :root[data-theme="dark"]{
   color-scheme:dark;--bg:#111110;--surface:#1a1a19;--surface-2:#242422;--line:#33332f;--ink:#fff;--ink-2:#c3c2b7;--ink-3:#8f8e87;
-  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--up:#e66767;--down:#3aa63a;--accent:#3987e5;}
+  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--st:#9a73f7;--in:#7c8da5;--up:#e66767;--down:#3aa63a;--accent:#3987e5;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 var(--font)}
 header{display:flex;align-items:center;gap:18px;padding:12px 22px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:20;flex-wrap:wrap}
@@ -757,6 +757,34 @@ tr.click:hover{background:var(--surface-2)}
 .range{display:flex;gap:4px}
 .range button{font:inherit;font-size:12px;padding:4px 9px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:6px;cursor:pointer}
 .range button.on{background:var(--surface-2);color:var(--ink);font-weight:600}
+.pilot-note{border-left:3px solid var(--accent);padding:10px 12px;background:var(--surface-2);color:var(--ink-2);margin-bottom:14px;border-radius:6px}
+.status{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+.status-candidate{background:#3987e526;color:#82b9fb}.status-probe_ready{background:#9a73f726;color:#bda4fb}.status-policy_pending{background:#c9850026;color:#efbd58}.status-policy_hold{background:#e6676726;color:#f09494}
+#t-independent td:nth-child(2),#t-independent td:nth-child(5){white-space:normal}
+.study-hero{padding:28px;border-top:4px solid var(--accent)}
+.study-kicker{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.study-hero h2{font-size:clamp(26px,4vw,46px);line-height:1.05;letter-spacing:-.035em;margin:0 0 12px;max-width:850px}
+.study-lede{font-size:17px;line-height:1.55;color:var(--ink-2);max-width:900px;margin:0}
+.study-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:22px}
+.study-metric{padding:14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.study-metric b{display:block;font-size:26px;letter-spacing:-.025em;color:var(--ink)}
+.study-metric span{display:block;font-size:12px;color:var(--ink-3);margin-top:3px}
+.study-copy{font-size:15px;line-height:1.65;color:var(--ink-2)}
+.study-copy h2{color:var(--ink);font-size:22px;letter-spacing:-.02em;margin:0 0 8px}
+.study-copy h3{color:var(--ink);font-size:15px;margin:0 0 6px}
+.study-copy p{margin:0 0 12px;max-width:900px}
+.study-copy strong{color:var(--ink)}
+.study-epochs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.study-epoch{border-top:3px solid var(--line)}
+.study-epoch.july{border-top-color:var(--down)}.study-epoch.august{border-top-color:var(--up)}.study-epoch.september{border-top-color:var(--accent)}
+.study-epoch .month{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.study-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.study-bar{height:12px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:9px 0 5px}
+.study-bar span{display:block;height:100%;min-width:0;background:var(--up);border-radius:99px}
+.study-verdict{border-left:4px solid var(--accent);padding:16px 18px;background:var(--surface-2);font-size:17px;line-height:1.55;color:var(--ink);border-radius:8px}
+.study-note{font-size:12px;color:var(--ink-3);line-height:1.55}
+.study-table th{cursor:default}.study-table td{white-space:normal}
+@media (max-width:850px){.study-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.study-epochs,.study-compare{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -767,8 +795,10 @@ tr.click:hover{background:var(--surface-2)}
     <button data-view="compare">Compare</button>
     <button data-view="markets">Markets</button>
     <button data-view="stores">Stores</button>
+    <button data-view="independent">Independent pilot</button>
     <button data-view="trends">Trends</button>
     <button data-view="changes">Rate changes</button>
+    <button data-view="study">Case study</button>
   </nav>
   <div class="meta" id="meta">loading…</div>
 </header>
@@ -780,8 +810,8 @@ tr.click:hover{background:var(--surface-2)}
       <div class="card"><h3>Median web rate by unit size</h3><div class="sub">Common sizes; only brand × size cells with at least 20 listings</div><div class="chart"><canvas id="c-sizes"></canvas></div></div>
     </div>
     <div class="grid g2" style="margin-top:14px">
-      <div class="card"><h3>Advertised availability — last 30 days</h3><div class="sub">Sum of advertised unit counts across every store, per brand (indexed to the first day shown = 100)</div><div class="chart"><canvas id="c-avail30"></canvas></div></div>
-      <div class="card"><h3>Rate-change activity — last 14 days</h3><div class="sub">Price events per day, one panel per brand, each on its own scale: increases above the line, cuts below</div><div class="multi" id="activity-multi"></div></div>
+      <div class="card"><h3>Advertised inventory signal — last 30 days</h3><div class="sub">Physical-unit counts where published; CubeSmart and SmartStop are advertised offer counts. Each brand is indexed to its first day shown = 100.</div><div class="chart"><canvas id="c-avail30"></canvas></div></div>
+      <div class="card"><h3>Rate-change activity — last 14 days</h3><div class="sub">Exact listing reprices; for U-Haul, changes in the cheapest offered room per facility and size. Increases above the line, cuts below.</div><div class="multi" id="activity-multi"></div></div>
     </div>
     <div class="grid g2" style="margin-top:14px">
       <div class="card"><h3>Median cheapest 10×10 — last 30 days</h3><div class="sub">Each store's cheapest available 10×10 web rate, median across stores, per brand</div><div class="chart"><canvas id="c-tens30"></canvas></div></div>
@@ -822,6 +852,27 @@ tr.click:hover{background:var(--surface-2)}
     </div>
   </section>
 
+  <section id="v-independent" hidden>
+    <div class="pilot-note"><b>Discovery workspace—not live market coverage.</b> These are operator-level leads. They are excluded from store totals, maps, prices, and trends until policy review passes and a complete daily snapshot exists.</div>
+    <div class="grid g4" id="independent-tiles"></div>
+    <div class="card" style="margin-top:14px">
+      <h3>Independent operator pilot</h3>
+      <div class="sub">Defaults to the 14 operators whose robots review passed and are ready for technical discovery. Terms are retained as information, not an execution gate.</div>
+      <div class="filters">
+        <select id="ind-status">
+          <option value="probe_ready">Probe ready</option>
+          <option value="candidate">Awaiting robots review</option>
+          <option value="policy_pending">Policy pending</option>
+          <option value="policy_hold">Policy hold</option>
+          <option value="">All discoveries</option>
+        </select>
+        <input id="ind-q" placeholder="Search operator, domain, or platform" size="34">
+        <span class="muted" id="ind-count"></span>
+      </div>
+      <div class="scroll"><table id="t-independent"></table></div>
+    </div>
+  </section>
+
   <section id="v-trends" hidden>
     <div class="filters"><span class="muted">Range</span><div class="range" id="trend-range"><button data-days="14">14d</button><button data-days="30" class="on">30d</button><button data-days="90">90d</button><button data-days="0">All</button></div></div>
     <div class="grid g2">
@@ -835,18 +886,88 @@ tr.click:hover{background:var(--surface-2)}
 
   <section id="v-changes" hidden>
     <div class="filters"><span id="chg-chips"></span><select id="chg-dir"><option value="">Both directions</option><option value="up">Increases</option><option value="down">Cuts</option></select><span class="muted" id="chg-count"></span></div>
-    <div class="card"><h3>Biggest web-rate moves — last 30 days</h3><div class="scroll"><table id="t-movers"></table></div></div>
+    <div class="card"><h3>Biggest web-rate moves — last 30 days</h3><div class="sub">U-Haul entries compare the cheapest offered room at each facility and size; other brands track the same listing across days.</div><div class="scroll"><table id="t-movers"></table></div></div>
+  </section>
+
+  <section id="v-study" hidden>
+    <div class="card study-hero">
+      <div class="study-kicker">Longitudinal pricing study · July–September 2026</div>
+      <h2>When “40% off” did not mean 40% cheaper</h2>
+      <p class="study-lede">Daily, exact-listing observations show Public Storage changing both sides of an offer: the promotion and the reference rate used to calculate the advertised savings. July supplies the control, August contains the exceptional event, and September shows the structure being unwound.</p>
+      <div class="study-metrics">
+        <div class="study-metric"><b>4,904 / 4,904</b><span>August promotion entrants whose reference rate also rose</span></div>
+        <div class="study-metric"><b>+$45</b><span>median reference-rate increase in that cohort</span></div>
+        <div class="study-metric"><b>9–18%</b><span>of September 13 savings tied to rates above July 31</span></div>
+        <div class="study-metric"><b>+1.1%</b><span>modeled four-month cost change on September 14</span></div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card study-copy">
+        <h2>One pattern, tested across three months</h2>
+        <p>A discount can grow because the customer pays less—or because the number crossed out above it grows. Daily snapshots let us separate those two mechanisms on the same SKU at the same facility.</p>
+        <div class="study-epochs">
+          <div class="study-epoch july card"><div class="month">July · control</div><p>Promotions routinely rotated without rate changes. On July 28, 428 listings entered the same four-month offer and <strong>none</strong> received a price increase.</p></div>
+          <div class="study-epoch august card"><div class="month">August · event</div><p>On August 1, every one of 4,904 listings entering “40% off For 4 Month” also received a higher reference rate. The median rise was <strong>$45</strong>.</p></div>
+          <div class="study-epoch september card"><div class="month">September · unwind</div><p>On September 14, 35,235 promotions changed while 30,762 matching rates fell. Promotional value weakened enough to offset the cheaper headline rates.</p></div>
+        </div>
+      </div>
+      <div class="card study-copy">
+        <h2>The control that makes August meaningful</h2>
+        <p>Public Storage’s publishing system can write prices and promotions independently. Promotion-only changes occur throughout the history, including a clean comparison just four days before the August event.</p>
+        <div class="study-compare">
+          <div class="card"><h3>July 28</h3><div><strong>0 of 428</strong> promotion entrants raised</div><div class="study-bar"><span style="width:0"></span></div><div class="study-note">Same “40% off For 4 Month” promotion</div></div>
+          <div class="card"><h3>August 1</h3><div><strong>4,904 of 4,904</strong> promotion entrants raised</div><div class="study-bar"><span style="width:100%"></span></div><div class="study-note">Maximum possible overlap</div></div>
+        </div>
+        <p class="study-note" style="margin-top:12px">This rules out an unavoidable coupled-write artifact. It establishes an unusual pricing decision, not why that decision was made.</p>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card study-copy">
+        <h2>One advertisement, reconstructed</h2>
+        <p>On August 24, a Costa Mesa location displayed “Month 1–4 40% OFF,” the full monthly rate struck through, “Months 5–12 In-Store Rent,” and a “Total Estimated 12-Month Savings.” The operator’s savings arithmetic was exactly four months at 40% off the displayed reference rate.</p>
+        <p><strong>August 1, measured on the 4,904-offer event cohort:</strong> headline value rose 35.3% and promotional value rose 216.4%, producing a 2.1% reduction in aggregate modeled four-month cost. That aggregate masks the distribution: the median offer cost $2 more, 55.8% of listings cost more over four months, and 96% cost more by month eight.</p>
+        <div class="scroll"><table class="study-table"><thead><tr><th>Unit</th><th class="num">Reference</th><th class="num">Months 1–4</th><th class="num">Claimed savings</th></tr></thead><tbody>
+          <tr><td>5×5</td><td class="num">$110</td><td class="num">$66</td><td class="num">$176</td></tr>
+          <tr><td>5×10</td><td class="num">$165</td><td class="num">$99</td><td class="num">$264</td></tr>
+          <tr><td>7.5×10</td><td class="num">$237</td><td class="num">$142</td><td class="num">$380</td></tr>
+        </tbody></table></div>
+        <p style="margin-top:12px">The $237 listing was observed at <strong>$161 on August 20</strong>, $237 on August 22–24, and <strong>$161 again on August 25</strong>. Against the adjacent $161 rate, the $142 promotional payment represents about $75 across four months—not $380. Roughly <strong>$304 of the displayed savings</strong> came from the temporarily higher reference rate.</p>
+      </div>
+      <div class="card study-copy">
+        <h2>September exposes the trade</h2>
+        <p>On September 14, Public Storage cut headline rates but simultaneously weakened or removed promotions. Across 59,045 matched, modelable offers:</p>
+        <div class="scroll"><table class="study-table"><thead><tr><th>Four-month accounting</th><th class="num">Before</th><th class="num">After</th><th class="num">Change</th></tr></thead><tbody>
+          <tr><td>Headline value before promotions</td><td class="num">$32.78M</td><td class="num">$27.96M</td><td class="num down">−14.7%</td></tr>
+          <tr><td>Promotional discount supplied</td><td class="num">$10.20M</td><td class="num">$5.13M</td><td class="num down">−49.7%</td></tr>
+          <tr><td><strong>Modeled customer cost</strong></td><td class="num">$22.58M</td><td class="num">$22.83M</td><td class="num up"><strong>+1.1%</strong></td></tr>
+        </tbody></table></div>
+        <p style="margin-top:12px">Lower monthly rates reduced modeled cost by 15.4%. Weaker promotions added 16.5%. The two effects nearly cancel, leaving the four-month customer cost slightly higher.</p>
+        <p class="study-note">This is an equal-weight analytical portfolio: one hypothetical rental per matched offer. It measures advertised terms, not transactions, and excludes fees, insurance, tax, and later tenant-rate changes.</p>
+      </div>
+    </div>
+
+    <div class="card study-copy" style="margin-top:14px">
+      <h2>What the evidence supports</h2>
+      <div class="study-verdict">Public Storage calculated advertised savings from reference rates that our daily observations show had recently increased—sometimes sharply and temporarily.</div>
+      <div class="study-verdict" style="margin-top:12px">Public Storage’s revenue-management system appears to be successfully manipulating the composition and presentation of customer offers, and may be improving short-term introductory economics. It has not yet demonstrated corresponding same-store revenue or NOI growth, and the stock market has not rewarded the company during the period observed.</div>
+      <p style="margin-top:14px">The study can establish the advertisement, its reference rate, its promotional terms, and the history of that exact listing. It does not observe completed transactions, establish intent, or make a legal determination about deceptive advertising.</p>
+      <p class="study-note">Method: immutable daily snapshots; exact facility-and-SKU matching; independent price and promotion event logs; four-month offer terms modeled from the published advertising; missing observations preserved as missing rather than interpolated.</p>
+    </div>
   </section>
 </main>
 
 <script>
-const BRAND_COLOR={publicstorage:'--ps',cubesmart:'--cs',storagesense:'--ss',uhaul:'--uh',storagemart:'--sm'};
+const BRAND_COLOR={publicstorage:'--ps',cubesmart:'--cs',storagesense:'--ss',uhaul:'--uh',storagemart:'--sm',smartstop:'--st',independent:'--in'};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const color=b=>css(BRAND_COLOR[b]||'--accent');
 const fmt$=v=>v==null?'—':'$'+Math.round(v).toLocaleString();
 const fmtN=v=>v==null?'—':Math.round(v).toLocaleString();
 const el=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let D=null, charts={}, map=null, markers=null, sel={brands:new Set(), state:'', size:'', q:'', sort:'t'}, chg={brands:new Set(), dir:''}, trendDays=30;
+let ind={status:'probe_ready',q:''};
 
 Chart.defaults.font.family=css('--font'); Chart.defaults.color=css('--ink-2');
 Chart.defaults.borderColor=css('--line'); Chart.defaults.plugins.legend.labels.boxWidth=10;
@@ -858,6 +979,7 @@ Chart.defaults.interaction={mode:'index',intersect:false}; Chart.defaults.animat
 function mk(id,cfg){ if(charts[id]) charts[id].destroy(); charts[id]=new Chart(el(id),cfg); }
 function brandsIn(){ return D.brand_order.filter(b=>D.brands[b].included); }
 function label(b){ return D.brands[b].label; }
+function inventoryLabel(b){ return b==='cubesmart'||b==='smartstop'?'offers advertised':'units advertised'; }
 
 // ------------------------------------------------------------- overview
 function overview(){
@@ -871,7 +993,7 @@ function overview(){
     tiles.insertAdjacentHTML('beforeend',`<div class="card tile" style="border-top-color:${color(b)}">
       <div class="label"><span class="dot" style="background:${color(b)}"></span>${m.label}<span class="pill">${m.snapshot_date||'no data'}${m.age_days>0?` · ${m.age_days}d old`:''}</span></div>
       <div class="value">${m.included?fmtN(m.stores):'—'}<span class="muted" style="font-size:13px;font-weight:400"> stores</span></div>
-      <div class="row"><span>median 10×10 <b>${fmt$(med)}</b></span><span>units advertised <b>${fmtN(avail)}</b></span><span>listings <b>${fmtN(m.units)}</b></span></div>
+      <div class="row"><span>median 10×10 <b>${fmt$(med)}</b></span><span>${inventoryLabel(b)} <b>${fmtN(avail)}</b></span><span>listings <b>${fmtN(m.units)}</b></span></div>
       ${stale?'<div class="stale">stale — excluded from the merge</div>':''}
       ${!m.snapshot_date?'<div class="muted">no complete snapshot yet</div>':''}
     </div>`);
@@ -886,7 +1008,7 @@ function overview(){
   // availability 30d indexed
   const cutoff=addDays(D.date,-30);
   const sets=[];
-  for(const b of bs){const pts=(D.trends[b]||[]).filter(p=>p.d>=cutoff&&p.avail>0);if(pts.length<2)continue;const base=pts[0].avail;sets.push({label:label(b),data:pts.map(p=>({x:p.d,y:+(p.avail/base*100).toFixed(1)})),borderColor:color(b),backgroundColor:color(b)});}
+  for(const b of bs){const pts=(D.trends[b]||[]).filter(p=>p.d>=cutoff), seen=pts.filter(p=>p.avail!=null&&p.avail>0);if(seen.length<2)continue;const base=seen[0].avail;sets.push({label:label(b),data:pts.map(p=>({x:p.d,y:p.avail==null?null:+(p.avail/base*100).toFixed(1)})),borderColor:color(b),backgroundColor:color(b),spanGaps:false});}
   mk('c-avail30',{type:'line',data:{datasets:sets},options:{parsing:false,scales:{x:{type:'category',labels:dateLabels(cutoff,D.date),grid:{display:false}},y:{ticks:{callback:v=>v}}},plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw.y} (index)`}}}}});
   if(!sets.length) el('c-avail30').parentElement.innerHTML='<div class="empty">Trend appears after two or more recorded days per brand.</div>';
   // activity 14d
@@ -896,9 +1018,10 @@ function overview(){
   // events does not flatten a brand with 30 and every bar is attributable.
   const wrap=el('activity-multi'); wrap.innerHTML='';
   for(const b of D.brand_order){
-    const ups=days.map(d=>act.find(a=>a.d===d&&a.b===b)?.up||0), downs=days.map(d=>-(act.find(a=>a.d===d&&a.b===b)?.down||0));
-    const tot=ups.reduce((x,y)=>x+y,0)-downs.reduce((x,y)=>x+y,0), peak=Math.max(1,...ups,...downs.map(Math.abs));
-    wrap.insertAdjacentHTML('beforeend',`<div class="panel"><div class="t"><span class="dot" style="background:${color(b)}"></span>${label(b)}<span class="muted">${tot?tot.toLocaleString()+' events':'no events'}</span></div><canvas id="c-act-${b}"></canvas></div>`);
+    const observed=new Set((D.trends[b]||[]).filter(p=>p.stores!=null).map(p=>p.d));
+    const ups=days.map(d=>observed.has(d)?(act.find(a=>a.d===d&&a.b===b)?.up||0):null), downs=days.map(d=>observed.has(d)?-(act.find(a=>a.d===d&&a.b===b)?.down||0):null);
+    const tot=ups.reduce((x,y)=>x+(y||0),0)-downs.reduce((x,y)=>x+(y||0),0), peak=Math.max(1,...ups.map(x=>x||0),...downs.map(x=>Math.abs(x||0))), observedDays=days.filter(d=>observed.has(d)).length;
+    wrap.insertAdjacentHTML('beforeend',`<div class="panel"><div class="t"><span class="dot" style="background:${color(b)}"></span>${label(b)}<span class="muted">${observedDays?(tot?tot.toLocaleString()+' events':'no events'):'no observations'}</span></div><canvas id="c-act-${b}"></canvas></div>`);
     mk('c-act-'+b,{type:'bar',data:{labels:days.map(d=>d.slice(5)),datasets:[
         {label:'increases',data:ups,backgroundColor:color(b),stack:'s',maxBarThickness:14},
         {label:'cuts',data:downs,backgroundColor:color(b)+'80',stack:'s',maxBarThickness:14,borderRadius:{bottomLeft:4,bottomRight:4}}]},
@@ -908,7 +1031,7 @@ function overview(){
   if(!act.length) wrap.innerHTML='<div class="empty">No rate events recorded in the last 14 days yet.</div>';
   // median 10x10 over the last 30 days, in dollars
   const tsets=[];
-  for(const b of bs){const pts=(D.trends[b]||[]).filter(p=>p.d>=cutoff&&p.t!=null);if(pts.length<2)continue;tsets.push({label:label(b),data:pts.map(p=>({x:p.d,y:p.t})),borderColor:color(b),backgroundColor:color(b)});}
+  for(const b of bs){const pts=(D.trends[b]||[]).filter(p=>p.d>=cutoff);if(pts.filter(p=>p.t!=null).length<2)continue;tsets.push({label:label(b),data:pts.map(p=>({x:p.d,y:p.t})),borderColor:color(b),backgroundColor:color(b),spanGaps:false});}
   mk('c-tens30',{type:'line',data:{datasets:tsets},options:{parsing:false,scales:{x:{type:'category',labels:dateLabels(cutoff,D.date),grid:{display:false}},y:{ticks:{callback:v=>'$'+v}}},plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt$(c.raw.y)}`}}}}});
   if(!tsets.length) el('c-tens30').parentElement.innerHTML='<div class="empty">Trend appears after two or more recorded days per brand.</div>';
   // promo coverage: share of size listings whose cheapest unit carries a promo
@@ -989,24 +1112,48 @@ function stores(){
 function detail(key){
   const [b,id]=key.split('|');const s=D.stores.find(x=>x.b===b&&x.id===id);if(!s)return;
   const rows=Object.entries(s.sz).map(([z,e])=>`<tr><td>${z.replace('x','×')}${e[4]?'<span class="pill">climate</span>':''}</td><td class="num">${fmt$(e[0])}</td><td class="num muted">${e[1]?fmt$(e[1]):'—'}</td><td class="num">${e[2]}${e[5]?`<span class="muted"> / ${e[5]}</span>`:''}</td><td class="muted">${e[3]||''}</td></tr>`).join('');
-  el('detail').innerHTML=`<div class="label" style="color:${color(b)};font-size:12px;font-weight:600">${label(b)}</div><h2>${s.n||'#'+s.sn}</h2><div class="addr">${s.a}, ${s.c}, ${s.s} ${s.z}${s.sn?` · site #${s.sn}`:''}${s.r?` · ★ ${s.r} (${fmtN(s.rv)})`:''}</div>
-    <div class="row muted" style="margin-bottom:10px">${s.l} listings · ${fmtN(s.av)} units advertised · median ${fmt$(s.m)}</div>
+  el('detail').innerHTML=`<div class="label" style="color:${color(b)};font-size:12px;font-weight:600">${label(b)}${s.op?` · ${esc(s.op.replaceAll('_',' '))}`:''}${s.pf?` · ${esc(s.pf)}`:''}</div><h2>${s.n||'#'+s.sn}</h2><div class="addr">${s.a}, ${s.c}, ${s.s} ${s.z}${s.sn?` · site #${s.sn}`:''}${s.r?` · ★ ${s.r} (${fmtN(s.rv)})`:''}</div>
+    <div class="row muted" style="margin-bottom:10px">${s.l} listings · ${fmtN(s.av)} ${inventoryLabel(b)} · median ${fmt$(s.m)}</div>
     <table><thead><tr><th>Size</th><th class="num">Web</th><th class="num">Street</th><th class="num">Avail<span class="muted"> / total</span></th><th>Promo</th></tr></thead><tbody>${rows||'<tr><td colspan="5" class="muted">No priced units advertised</td></tr>'}</tbody></table>
 ${s.u?`<p><a href="${s.u}" target="_blank" rel="noopener">Open listing ↗</a></p>`:''}`;
   if(s.lat&&s.lng) map.setView([s.lat,s.lng],Math.max(map.getZoom(),10));
 }
 
+// ------------------------------------------------------------- independent pilot
+function independent(){
+  const pilot=D.independent_pilot||{counts:{},operators:[]}, counts=pilot.counts||{};
+  const specs=[['candidate','Awaiting robots','--accent'],['probe_ready','Probe ready','--st'],['policy_pending','Policy pending','--uh'],['policy_hold','Policy hold','--up'],['enabled','Enabled','--down']];
+  el('independent-tiles').innerHTML=specs.map(([k,name,clr])=>`<div class="card tile" style="border-top-color:${css(clr)}"><div class="label">${name}</div><div class="value">${fmtN(counts[k]||0)}</div><div class="row">${k==='enabled'?'eligible for daily snapshots':k==='candidate'?'robots not reviewed':k==='probe_ready'?'robots passed; adapter discovery next':k==='policy_pending'?'needs a policy decision':'excluded from collection'}</div></div>`).join('');
+  renderIndependent();
+}
+function renderIndependent(){
+  const pilot=D.independent_pilot||{operators:[]};
+  let rows=pilot.operators.filter(o=>(!ind.status||o.status===ind.status)&&(!ind.q||`${o.name} ${o.domain} ${o.platform} ${o.evidence}`.toLowerCase().includes(ind.q)));
+  rows.sort((a,b)=>a.name.localeCompare(b.name));
+  el('ind-count').textContent=`${rows.length.toLocaleString()} operators`;
+  const statusName={candidate:'awaiting robots',probe_ready:'probe ready',policy_pending:'policy pending',policy_hold:'policy hold'};
+  let h='<thead><tr><th>Status</th><th>Operator</th><th>Platform hint</th><th>Checks</th><th>Evidence / decision</th></tr></thead><tbody>';
+  for(const o of rows){const checks=`robots ${o.robots_reviewed?'✓':'—'} · terms ${o.terms_reviewed?'✓':'—'}`;const note=o.policy_reason||o.evidence;h+=`<tr><td><span class="status status-${esc(o.status)}">${esc(statusName[o.status]||o.status)}</span></td><td><b>${esc(o.name)}</b><div class="muted">${o.url?`<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.domain)} ↗</a>`:esc(o.domain)}</div></td><td>${esc(o.platform)}</td><td class="muted">${checks}</td><td>${esc(note)}</td></tr>`;}
+  el('t-independent').innerHTML=h+(rows.length?'':'<tr><td colspan="5" class="empty">No operators match these filters.</td></tr>')+'</tbody>';
+}
+el('ind-status').onchange=e=>{ind.status=e.target.value;renderIndependent();};
+let indTimer;el('ind-q').oninput=e=>{clearTimeout(indTimer);indTimer=setTimeout(()=>{ind.q=e.target.value.trim().toLowerCase();renderIndependent();},150);};
+
 // ------------------------------------------------------------- trends
 function trends(){
   const bs=brandsIn();const cutoff=trendDays?addDays(D.date,-trendDays):'0000';
-  const series=(key,scale)=>bs.map(b=>({label:label(b),data:(D.trends[b]||[]).filter(p=>p.d>=cutoff&&p[key]!=null).map(p=>({x:p.d,y:p[key]})),borderColor:color(b),backgroundColor:color(b)}));
-  const allDates=[...new Set(bs.flatMap(b=>(D.trends[b]||[]).map(p=>p.d)))].filter(d=>d>=cutoff).sort();
+  const series=key=>bs.map(b=>({label:label(b),data:(D.trends[b]||[]).filter(p=>p.d>=cutoff).map(p=>({x:p.d,y:p[key]})),borderColor:color(b),backgroundColor:color(b),spanGaps:false}));
+  const observedDates=bs.flatMap(b=>(D.trends[b]||[]).map(p=>p.d)).filter(d=>d>=cutoff).sort();
+  const allDates=observedDates.length?dateLabels(observedDates[0],D.date):[];
   const base=(yfmt,min0)=>({parsing:false,scales:{x:{type:'category',labels:allDates,grid:{display:false},ticks:{maxTicksLimit:10,callback:(v,i)=>allDates[i]?.slice(5)}},y:{beginAtZero:!!min0,ticks:{callback:yfmt}}},plugins:{tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${yfmt(c.raw.y)}`}}}});
   mk('c-t-tens',{type:'line',data:{datasets:series('t')},options:base(v=>'$'+Math.round(v))});
   mk('c-t-med',{type:'line',data:{datasets:series('m')},options:base(v=>'$'+Math.round(v))});
   mk('c-t-avail',{type:'line',data:{datasets:series('avail')},options:base(v=>Math.round(v).toLocaleString(),true)});
   mk('c-t-stores',{type:'line',data:{datasets:series('stores')},options:base(v=>Math.round(v).toLocaleString(),true)});
 }
+
+// ------------------------------------------------------------- case study
+function study(){}
 el('trend-range').querySelectorAll('button').forEach(b=>b.onclick=()=>{el('trend-range').querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');trendDays=+b.dataset.days;trends();});
 
 // ------------------------------------------------------------- changes
@@ -1032,7 +1179,7 @@ function show(v){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
   document.querySelectorAll('main > section').forEach(s=>s.hidden=s.id!=='v-'+v);
   if(v==='stores'){setTimeout(()=>map.invalidateSize(),50);}
-  if(!rendered[v]){rendered[v]=true;({overview,compare,markets,stores,trends,changes})[v]();}
+  if(!rendered[v]){rendered[v]=true;({overview,compare,markets,stores,independent,trends,changes,study})[v]();}
   location.hash=v;
 }
 el('nav').onclick=e=>{if(e.target.dataset.view)show(e.target.dataset.view);};

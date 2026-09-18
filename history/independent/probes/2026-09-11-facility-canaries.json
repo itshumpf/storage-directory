@@ -1,0 +1,27 @@
+{
+  "probes": [
+    {
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "page_status": 200,
+      "platform": "unknown",
+      "robots_status": 200,
+      "robots_url": "https://www.rightmovestorage.com/robots.txt",
+      "status": "classified",
+      "url": "https://www.rightmovestorage.com/storage-units/texas/alvin/medic-lane"
+    },
+    {
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "page_status": 200,
+      "platform": "unknown",
+      "robots_status": 200,
+      "robots_url": "https://www.priceselfstorage.com/robots.txt",
+      "status": "classified",
+      "url": "https://www.priceselfstorage.com/azusa-self-storage/"
+    }
+  ],
+  "schema_version": 1
+}

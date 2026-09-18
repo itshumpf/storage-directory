@@ -1,0 +1,65 @@
+{
+  "date": "2026-09-13",
+  "publication_enabled": false,
+  "requests": "robots.txt only",
+  "results": [
+    {
+      "checked_at": "2026-09-14T00:58:23.865850+00:00",
+      "crawl_delay": null,
+      "domain": "10federalstorage.com",
+      "http_status": 200,
+      "name": "10 Federal Storage",
+      "operator_id": "10_federal_storage",
+      "representative_allowed": true,
+      "representative_url": "https://10federalstorage.com/",
+      "robots_sha256": "1e587189601115e03d78b4d9c6aad88c439447892e0fdd27e66f42f151af3eec",
+      "robots_url": "https://10federalstorage.com/robots.txt",
+      "sitemaps": [
+        "https://10federalstorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:58:24.606326+00:00",
+      "domain": "beyondselfstorage.com",
+      "error": "SSLError: HTTPSConnectionPool(host='beyondselfstorage.com', port=443): Max retries exceeded with url: /robots.txt (Caused by SSLError(SSLCertVerificationError(1, \"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'beyondselfstorage.com'. (_ssl.c:1081)\")))",
+      "name": "Beyond Self Storage",
+      "operator_id": "beyond_self_storage",
+      "representative_url": "https://beyondselfstorage.com/",
+      "robots_url": "https://beyondselfstorage.com/robots.txt",
+      "status": "unavailable"
+    },
+    {
+      "checked_at": "2026-09-14T00:58:25.676095+00:00",
+      "crawl_delay": null,
+      "domain": "coppersafestorage.com",
+      "http_status": 200,
+      "name": "Copper Storage Management",
+      "operator_id": "copper_storage_management",
+      "representative_allowed": true,
+      "representative_url": "https://www.coppersafestorage.com/",
+      "robots_sha256": "9330efea97281eb71cfc51f0dfe95a6296bd2e77c947afd0fca5e03256d2e787",
+      "robots_url": "https://www.coppersafestorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.coppersafestorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:58:25.122054+00:00",
+      "crawl_delay": null,
+      "domain": "platinumstorage.com",
+      "http_status": 200,
+      "name": "Platinum Storage Group",
+      "operator_id": "platinum_storage_group",
+      "representative_allowed": true,
+      "representative_url": "https://platinumstorage.com/",
+      "robots_sha256": "7d980d477b11412fdefe375b56744790baf5a192b0914b769b092ccaa5f0e6c5",
+      "robots_url": "https://platinumstorage.com/robots.txt",
+      "sitemaps": [
+        "https://platinumstorage.com/sitemap_index.xml"
+      ],
+      "status": "reviewed"
+    }
+  ]
+}

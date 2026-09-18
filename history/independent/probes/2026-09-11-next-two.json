@@ -1,0 +1,37 @@
+{
+  "date": "2026-09-11",
+  "publication_enabled": false,
+  "request_budget": 4,
+  "results": [
+    {
+      "completed_at": "2026-09-11T20:43:02.553208+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Price Self Storage",
+      "operator_id": "price_self_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-11T20:42:51.571169+00:00",
+      "status": "classified",
+      "url": "https://www.priceselfstorage.com/"
+    },
+    {
+      "completed_at": "2026-09-11T20:43:13.864128+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Right Move Storage",
+      "operator_id": "right_move_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-11T20:43:02.555722+00:00",
+      "status": "classified",
+      "url": "https://www.rightmovestorage.com/"
+    }
+  ]
+}

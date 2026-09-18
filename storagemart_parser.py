@@ -52,15 +52,13 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any
 from xml.etree import ElementTree
+
+from storable_adapter import NotUS, extract_storable_data, parse_storable_facility
 
 BRAND = "storagemart"
 BASE = "https://www.storage-mart.com"
 
-
-class NotUS(LookupError):
-    """A real facility page, just not a U.S. store. Excluded, not skipped."""
 
 # Facility URLs come in FOUR shapes (sitemap.xml read 2026-09-05, 984 URLs):
 #   /kansas-city/gardner/1658-east-warren-st-66030     store# + street + zip   (99 of these)
@@ -133,32 +131,9 @@ def parse_sitemap_xml(xml_text: str) -> list[dict]:
     return out
 
 
-def _phone(value: Any) -> str:
-    digits = re.sub(r"\D", "", str(value or ""))
-    if len(digits) == 11 and digits.startswith("1"):
-        digits = digits[1:]
-    if len(digits) == 10:
-        return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
-    return str(value or "").strip()
-
-
-def _num(v: Any) -> float | None:
-    try:
-        return float(v) if v not in (None, "") else None
-    except (TypeError, ValueError):
-        return None
-
-
 def extract_data(html_text: str) -> dict:
     """The window.__data object. Raises KeyError if the page does not carry it."""
-    i = html_text.find("window.__data=")
-    if i < 0:
-        i = html_text.find("window.__data =")
-    if i < 0:
-        raise KeyError("Missing window.__data — not a storEDGE facility page, or the template changed")
-    start = html_text.index("{", i)
-    obj, _end = json.JSONDecoder().raw_decode(html_text, start)
-    return obj
+    return extract_storable_data(html_text)
 
 
 def _self_storage_ld(html_text: str) -> dict:
@@ -172,18 +147,6 @@ def _self_storage_ld(html_text: str) -> dict:
     return {}
 
 
-def _promo(plans: list[dict]) -> tuple[str, list[dict]]:
-    """The promotion the site applies automatically, as copy and as terms."""
-    live = [p for p in plans or [] if p.get("turnedOn", True) and p.get("autoApply")]
-    if not live:
-        return "", []
-    live.sort(key=lambda p: (p.get("priority") is None, p.get("priority") or 0))
-    p = live[0]
-    terms = [{"month": d.get("monthNumber"), "type": d.get("discountType"), "amount": _num(d.get("amount"))}
-             for d in p.get("discountPlanDiscounts") or []]
-    return str(p.get("publicDescription") or p.get("name") or "").strip(), terms
-
-
 def parse_facility_html(html_text: str, catalog_store: dict) -> dict:
     if not html_text:
         raise ValueError("Facility HTML must be non-empty")
@@ -193,79 +156,9 @@ def parse_facility_html(html_text: str, catalog_store: dict) -> dict:
     facilities = (data.get("facilities") or {}).get("allFacilities") or []
     if not facilities:
         raise KeyError("window.__data carries no facilities.allFacilities — template changed")
-    fac = facilities[0]
-    store = str(fac.get("storeNumber") or "").strip()
-    if not store:
-        raise KeyError("facility carries no storeNumber — template changed")
-    addr = fac.get("address") or {}
-    # Country first: a Canadian page is an exclusion whatever else is true of it.
-    if (addr.get("country") or "US") != "US":
-        raise NotUS(f"facility {store} is in {addr.get('country')}, not a U.S. store")
-    # Identity guard: the page must claim the URL it was fetched from. This — not
-    # any number in the URL — is what stops one store's prices being filed under
-    # another. The first full run (2026-09-04) skipped five facilities because a
-    # leading number was treated as a store number and cross-checked: it was the
-    # street number (465 Oldham Pkwy is store 0155; 225 NE Venture Dr is store
-    # 1071, spelled ...-dr-1071). The URL number is a hint at best and is not
-    # checked; the catalog's site_number is informational until the page speaks.
-    own_paths = {p.get("path", "").rstrip("/") for p in fac.get("pagePaths") or []}
     asked = catalog_store["url"][len(BASE):].rstrip("/")
-    if own_paths and asked not in own_paths:
-        raise LookupError(f"page for store {store} does not list {asked} among its own paths {sorted(own_paths)}")
-    ld = _self_storage_ld(html_text)
-    ld_addr = ld.get("address") or {}
-
-    units = []
-    for g in fac.get("unitGroups") or []:
-        if not g.get("id"):
-            continue
-        avail = int(g.get("availableUnitsCount") or 0)
-        promo, terms = _promo(g.get("discountPlans") or [])
-        web = _num(g.get("discountedPrice"))
-        managed = _num(g.get("price"))
-        if web is None:
-            web = managed
-        width, length = _num(g.get("width")), _num(g.get("length"))
-        size = str(g.get("size") or "").strip() or (f"{width:g}x{length:g}" if width and length else "")
-        units.append({
-            "size": size,
-            "price": web,
-            "street_price": managed,
-            "standard_rate": _num(g.get("standardRate")),
-            "promo_price": _num(g.get("promoPrice")),
-            "available": avail > 0,
-            "count": avail,
-            "total": int(g.get("totalUnitsCount") or 0),
-            "promo": promo,
-            "promo2": "",
-            "promo_terms": terms,
-            "sku": f"smart_{g['id']}",
-            "attrs": ", ".join(str(a.get("name")) for a in g.get("amenities") or [] if a.get("name")),
-            "sqft": _num(g.get("area")) or (width * length if width and length else None),
-            "width": width,
-            "depth": length,
-            "height": _num(g.get("height")),
-            "category": str(g.get("categoryName") or ""),
-            "rates": {"web": web, "street": managed},
-        })
-    units.sort(key=lambda u: (u["sqft"] or 0, u["size"], u["sku"]))
-
-    return {
-        "brand": BRAND,
-        "store_id": f"smart_{store}",
-        "site_number": store,
-        "name": str(fac.get("name") or f"StorageMart {store}"),
-        "address": str(addr.get("address1") or ld_addr.get("streetAddress") or "").strip(),
-        "city": str(addr.get("city") or ld_addr.get("addressLocality") or catalog_store.get("city", "")).strip(),
-        "state": str(addr.get("state") or ld_addr.get("addressRegion") or "").strip().upper(),
-        "zip": str(addr.get("postal") or ld_addr.get("postalCode") or catalog_store.get("zip", "")).strip(),
-        "phone": _phone(fac.get("directPhone") or fac.get("phone") or ld.get("telephone")),
-        "lat": _num(addr.get("latitude")),
-        "lng": _num(addr.get("longitude")),
-        "url": catalog_store["url"],
-        "rating": _num(fac.get("rating")),
-        "reviews": None,
-        "facility_id": str(fac.get("id") or ""),
-        "software_provider": str((fac.get("settings") or {}).get("softwareProvider") or ""),
-        "units": units,
-    }
+    return parse_storable_facility(
+        facilities[0], catalog_store, brand=BRAND, store_id_prefix="smart", sku_prefix="smart",
+        fallback_name="StorageMart", expected_path=asked, json_ld=_self_storage_ld(html_text),
+        operator_id="storagemart",
+    )

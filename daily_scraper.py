@@ -6,6 +6,13 @@ Safety: will NEVER overwrite existing data with fewer stores
 import requests, json, re, time, os, sys, shutil
 from bs4 import BeautifulSoup
 
+# Windows PowerShell may give redirected child processes a legacy cp1252
+# stdout even though this script's progress messages contain Unicode.  Pin the
+# streams here so a harmless status message can never abort a completed crawl.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="backslashreplace")
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -21,6 +28,9 @@ BATCH_SIZE  = 20
 DELAY       = 0.4
 MIN_STORES  = 3300   # safety floor
 ENRICH_CAP  = 400    # max store pages fetched per run to backfill missing site numbers
+CHECKPOINT_VERSION = 1
+CHECKPOINT_EVERY = 100
+CHECKPOINT_DIR = ".scrape-checkpoints"
 
 ZIP_CODES = list(dict.fromkeys([
     "35203","35401","36104","99501","99701","85001","85201","85301","85701","86001","86301",
@@ -52,6 +62,93 @@ ZIP_CODES = list(dict.fromkeys([
     # KC area
     "66213","66217","66106","66062","66061","64108","64111","64114","64131","64138",
 ]))
+
+
+def _atomic_json(path, value):
+    """Write JSON without ever exposing a truncated destination file."""
+    directory = os.path.dirname(path)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+    temporary = f"{path}.tmp"
+    with open(temporary, "w", encoding="utf-8") as handle:
+        json.dump(value, handle)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(temporary, path)
+
+
+def _checkpoint_path():
+    mode = "deep" if "--deep" in sys.argv else "normal"
+    return os.path.join(
+        CHECKPOINT_DIR, f"publicstorage-{time.strftime('%Y-%m-%d')}-{mode}.json")
+
+
+def _load_attribute_checkpoint():
+    path = _checkpoint_path()
+    try:
+        with open(path, encoding="utf-8") as handle:
+            saved = json.load(handle)
+        if (saved.get("version") != CHECKPOINT_VERSION
+                or saved.get("date") != time.strftime("%Y-%m-%d")
+                or saved.get("phase") != "attributes"):
+            return {}, set()
+        results = saved.get("results") or {}
+        completed = {str(value) for value in saved.get("completed_store_ids") or []}
+        if not isinstance(results, dict):
+            return {}, set()
+        print(f"      Resuming attribute checkpoint: {len(completed)} store pages already attempted")
+        return results, completed
+    except FileNotFoundError:
+        return {}, set()
+    except (json.JSONDecodeError, OSError, TypeError) as exc:
+        print(f"      WARNING: ignoring unreadable attribute checkpoint: {exc}")
+        return {}, set()
+
+
+def _save_attribute_checkpoint(results, completed):
+    _atomic_json(_checkpoint_path(), {
+        "version": CHECKPOINT_VERSION,
+        "date": time.strftime("%Y-%m-%d"),
+        "phase": "attributes",
+        "completed_store_ids": sorted(completed),
+        "results": results,
+    })
+
+
+def _restore_attribute_results(store_list, results):
+    """Restore only data whose store and SKU still match today's fresh crawl."""
+    restored = 0
+    for store in store_list:
+        saved = results.get(str(store.get("store_id")))
+        if not isinstance(saved, dict):
+            continue
+        saved_units = saved.get("units") or {}
+        hit = False
+        for unit in store.get("units") or []:
+            attrs = saved_units.get(str(unit.get("sku")))
+            if not isinstance(attrs, dict):
+                continue
+            for key in ("attrs", "price_min", "price_max"):
+                if key in attrs:
+                    unit[key] = attrs[key]
+            hit = True
+        for key in ("rating", "reviews"):
+            if key in saved:
+                store[key] = saved[key]
+        restored += int(hit)
+    return restored
+
+
+def _capture_attribute_result(store):
+    result = {"units": {}}
+    for unit in store.get("units") or []:
+        fields = {key: unit[key] for key in ("attrs", "price_min", "price_max") if key in unit}
+        if fields and unit.get("sku"):
+            result["units"][str(unit["sku"])] = fields
+    for key in ("rating", "reviews"):
+        if key in store:
+            result[key] = store[key]
+    return result
 
 
 def get_city_page_urls():
@@ -448,10 +545,15 @@ def main():
     # Ties each SKU to its physical attributes (climate, floor, drive-up) and
     # the advertised min-max price envelope the pricing algorithm works within.
     print(f"\n[7/8] Fetching unit attributes & price ranges ({len(store_list)} store pages)...")
-    enriched = 0
+    checkpoint_results, completed_store_ids = _load_attribute_checkpoint()
+    enriched = _restore_attribute_results(store_list, checkpoint_results)
+    attempted_since_checkpoint = 0
     for i, s in enumerate(store_list):
         url = s.get("url", "")
         if not s["units"] or not url or not url.startswith("http"):
+            continue
+        sid = str(s.get("store_id"))
+        if sid in completed_store_ids:
             continue
         try:
             r = requests.get(url, headers=HEADERS, timeout=15)
@@ -470,9 +572,19 @@ def main():
                     s["rating"], s["reviews"] = rating
         except Exception as e:
             print(f"      store {s['store_id']}: ERROR {e}")
+        # A same-day resume must not hit an already-attempted store again,
+        # including pages that returned an error. Tomorrow starts fresh.
+        completed_store_ids.add(sid)
+        checkpoint_results[sid] = _capture_attribute_result(s)
+        attempted_since_checkpoint += 1
+        if attempted_since_checkpoint >= CHECKPOINT_EVERY:
+            _save_attribute_checkpoint(checkpoint_results, completed_store_ids)
+            attempted_since_checkpoint = 0
+            print(f"      checkpoint saved: {len(completed_store_ids)} store pages attempted")
         if (i + 1) % 250 == 0:
             print(f"      [{i+1}/{len(store_list)}] pages fetched, {enriched} stores enriched")
         time.sleep(DELAY)
+    _save_attribute_checkpoint(checkpoint_results, completed_store_ids)
     print(f"      Attributes captured for {enriched} stores")
 
     # Phase 8 — Save
@@ -489,8 +601,11 @@ def main():
         shutil.copy2(OUTPUT_FILE, BACKUP_FILE)
         print(f"      Backed up existing → {BACKUP_FILE}")
 
-    with open(OUTPUT_FILE, "w") as f:
-        json.dump(store_list, f)
+    _atomic_json(OUTPUT_FILE, store_list)
+    try:
+        os.remove(_checkpoint_path())
+    except FileNotFoundError:
+        pass
 
     diff = len(store_list) - existing_count
     print(f"\n✅ Done! {len(store_list)} stores saved ({'+' if diff>=0 else ''}{diff} from last run)")

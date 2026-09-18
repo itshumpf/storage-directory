@@ -1,0 +1,17 @@
+{
+  "catalog_count": 217,
+  "catalog_path": "history\\smartstop\\catalog\\2026-09-18.json",
+  "completed_at": "2026-09-18T14:15:12.300424+00:00",
+  "current_index": 217,
+  "current_url": "https://smartstopselfstorage.com/find-storage/ca/upland/1571-w-foothill-blvd",
+  "date": "2026-09-18",
+  "facility_count": 217,
+  "offer_count": 2510,
+  "priced_facility_count": 213,
+  "resumed_count": 0,
+  "skipped": {},
+  "snapshot": "history\\smartstop\\2026-09-18.json",
+  "started_at": "2026-09-18T13:35:02.745987+00:00",
+  "status": "complete",
+  "warnings": []
+}

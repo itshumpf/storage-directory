@@ -1,0 +1,35 @@
+# Independent operator inbox
+#
+# Add one website per line. Either form is accepted:
+# https://operator.example/
+# Operator Name | https://operator.example/
+#
+# Import is offline and fail-closed:
+# python independent_intake.py          # preview only
+# python independent_intake.py --apply  # add new domains as disabled candidates
+
+KO Storage | https://www.kostorage.com/
+Storage Star | https://www.storagestar.com/
+Express Storage | https://www.expstorage.com/
+10 Federal Storage | https://www.10federalstorage.com/
+Lock-It-Up Self Storage | https://www.lockitupstorage.com/
+Acorn Mini Storage | https://www.acornministorage.com/
+Beyond Self Storage | https://www.beyondselfstorage.com/
+Columbia Storage Group | https://www.columbiastoragegroup.com/
+Innovation Self Storage | https://www.innovationselfstorage.com/
+Interstate Self Storage | https://www.interstateself-storage.com/
+RH Rebel Storage | https://www.rhrebelstorage.com/
+Hometown Self Storage | https://www.hometownselfstoragetexas.com/
+Allender Storage | https://www.allenderstorage.com/
+Evergreen Self Storage | https://www.evergreen-self-storage.com/
+Lock It and Leave It Storage | https://www.lockitandleaveit.com/
+StoragePRO | https://www.storagepro.com/
+Storelocal Storage | https://www.storelocal.com/
+Platinum Storage Group | https://www.platinumstorage.com/
+SecureSpace | https://securespace.com/
+Prime Storage | https://primestorage.com/
+Compass Self Storage | https://www.compassselfstorage.com/
+StorQuest Self Storage | https://www.storquest.com/
+Copper Storage Management | https://coppersafestorage.com/
+Midgard Self Storage | https://www.midgardselfstorage.com/
+Smart Self Storage | https://www.smartselfstorage.com/

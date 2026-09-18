@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-13",
+  "max_pages_per_operator": 1,
+  "publication_enabled": false,
+  "results": [
+    {
+      "completed_at": "2026-09-14T01:24:43.273882+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        "static.storagely.link",
+        "storagely-prod-public-assets",
+        "storagely"
+      ],
+      "name": "Storage Star",
+      "operator_id": "storage_star",
+      "page_status": 200,
+      "parse": {
+        "address_complete": true,
+        "inventory_status": "available",
+        "parsed_facilities": 1,
+        "unit_groups": 11
+      },
+      "platform": "storagely",
+      "platform_hint": "unknown",
+      "robots_status": 200,
+      "started_at": "2026-09-14T01:24:27.770237+00:00",
+      "status": "classified",
+      "url": "https://www.storagestar.com/storage-units/alaska/anchorage/arctic-blvd"
+    }
+  ]
+}

@@ -200,6 +200,24 @@ def _sku_overlap(previous: list[dict], current: list[dict]) -> float | None:
     return len(old & new) / min(len(old), len(new))
 
 
+def _offer_key(store: dict, unit: dict) -> tuple:
+    return (store["store_id"], unit.get("size"), unit.get("width"), unit.get("depth"),
+            unit.get("height"), unit.get("attrs", ""), bool(unit.get("rent_now")),
+            bool(unit.get("reserve")))
+
+
+def _cheapest_offers(stores: list[dict]) -> dict[tuple, tuple]:
+    out = {}
+    for store in stores:
+        for unit in store.get("units", []):
+            if not (unit.get("available") and unit.get("price") and unit.get("size")):
+                continue
+            key = (store["store_id"], unit["size"])
+            if key not in out or unit["price"] < out[key][1]:
+                out[key] = (store, unit["price"])
+    return out
+
+
 def _append_changes(path: Path, today: str, previous: list[dict], current: list[dict]) -> None:
     if not previous:
         return
@@ -207,25 +225,51 @@ def _append_changes(path: Path, today: str, previous: list[dict], current: list[
     old = {(s["store_id"], u["sku"]): u for s in previous for u in s.get("units", [])}
     new = {(s["store_id"], u["sku"]): (s, u) for s in current for u in s.get("units", [])}
     rows = []
-    for store in current:
-        for unit in store.get("units", []):
-            before = old.get((store["store_id"], unit["sku"]))
-            if not before:
-                continue
-            for field in ("price", "street_price", "promo", "count", "available"):
-                if before.get(field) != unit.get(field):
-                    rows.append([today, BRAND, store["store_id"], store["site_number"], unit["size"],
-                                 unit["sku"], field, before.get(field), unit.get(field)])
+    exact = set(old) & set(new)
+
+    def compare(before, store, unit, sku):
+        # There is one advertised monthly price; no duplicate street-price event.
+        for field in ("price", "promo", "count", "available"):
+            if before.get(field) != unit.get(field):
+                rows.append([today, BRAND, store["store_id"], store["site_number"], unit["size"],
+                             sku, field, before.get(field), unit.get(field)])
+
+    for key in exact:
+        store, unit = new[key]
+        compare(old[key], store, unit, key[1])
+
+    old_groups, new_groups = {}, {}
+    for key in set(old) - exact:
+        old_groups.setdefault(_offer_key(old_stores[key[0]], old[key]), []).append(key)
+    for key in set(new) - exact:
+        store, unit = new[key]
+        new_groups.setdefault(_offer_key(store, unit), []).append(key)
+    matched_old, matched_new = set(), set()
+    for fingerprint in set(old_groups) & set(new_groups):
+        if len(old_groups[fingerprint]) == len(new_groups[fingerprint]) == 1:
+            old_key, new_key = old_groups[fingerprint][0], new_groups[fingerprint][0]
+            matched_old.add(old_key); matched_new.add(new_key)
+            store, unit = new[new_key]
+            compare(old[old_key], store, unit, new_key[1])
+
     for key, before in old.items():
-        if key not in new:
+        if key not in exact and key not in matched_old:
             store_id, sku = key
             old_store = old_stores[store_id]
             rows.append([today, BRAND, store_id, old_store["site_number"], before.get("size", ""),
                          sku, "listed", True, False])
     for key, (store, unit) in new.items():
-        if key not in old:
+        if key not in exact and key not in matched_new:
             rows.append([today, BRAND, store["store_id"], store["site_number"], unit.get("size", ""),
                          unit["sku"], "listed", False, True])
+
+    old_offers, new_offers = _cheapest_offers(previous), _cheapest_offers(current)
+    for key in sorted(set(old_offers) & set(new_offers)):
+        _old_store, old_price = old_offers[key]
+        store, new_price = new_offers[key]
+        if old_price != new_price:
+            rows.append([today, BRAND, key[0], store["site_number"], key[1],
+                         f"uhaul_offer_{key[1]}", "offer_price", old_price, new_price])
     if not rows:
         return
     path.parent.mkdir(parents=True, exist_ok=True)

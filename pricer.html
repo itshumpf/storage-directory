@@ -752,15 +752,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
 :root{
   color-scheme:light;
   --bg:#f6f6f4;--surface:#fcfcfb;--surface-2:#f0efec;--line:#e4e3df;--ink:#0b0b0b;--ink-2:#52514e;--ink-3:#8a8985;--accent:#2a78d6;
-  --ps:#2a78d6;--cs:#eb6834;--ss:#1baf7a;--uh:#eda100;--sm:#e87ba4;--good:#008300;
+  --ps:#2a78d6;--cs:#eb6834;--ss:#1baf7a;--uh:#eda100;--sm:#e87ba4;--st:#8b5cf6;--good:#008300;
   --font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;--bg:#111110;--surface:#1a1a19;--surface-2:#242422;--line:#33332f;--ink:#fff;--ink-2:#c3c2b7;--ink-3:#8f8e87;--accent:#3987e5;
-  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--good:#3aa63a;}}
+  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--st:#9a73f7;--good:#3aa63a;}}
 :root[data-theme="dark"]{
   color-scheme:dark;--bg:#111110;--surface:#1a1a19;--surface-2:#242422;--line:#33332f;--ink:#fff;--ink-2:#c3c2b7;--ink-3:#8f8e87;--accent:#3987e5;
-  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--good:#3aa63a;}
+  --ps:#3987e5;--cs:#d95926;--ss:#199e70;--uh:#c98500;--sm:#d55181;--st:#9a73f7;--good:#3aa63a;}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 var(--font);display:flex;flex-direction:column}
@@ -849,7 +849,7 @@ aside{display:flex;flex-direction:column;min-height:0;border-right:1px solid var
 </main>
 
 <script>
-const BRAND_COLOR={publicstorage:'--ps',cubesmart:'--cs',storagesense:'--ss',uhaul:'--uh',storagemart:'--sm'};
+const BRAND_COLOR={publicstorage:'--ps',cubesmart:'--cs',storagesense:'--ss',uhaul:'--uh',storagemart:'--sm',smartstop:'--st'};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const color=b=>css(BRAND_COLOR[b]||'--accent');
 const el=id=>document.getElementById(id);

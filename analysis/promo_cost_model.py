@@ -192,6 +192,24 @@ def main():
     for was, Po, Pn in recs:
         groups[was or "(no promotion)"].append((was, Po, Pn))
 
+    # Portfolio-style accounting for the event cohort.  This uses the same
+    # definitions as september14_offer_value.py so the two waves can be
+    # compared without mixing aggregate percentages and per-offer medians.
+    base0 = sum(4 * Po for was, Po, Pn in recs)
+    base1 = sum(4 * Pn for was, Po, Pn in recs)
+    cost0 = sum(cumulative(Po, was, 4, 0, 0) for was, Po, Pn in recs)
+    cost1 = sum(cumulative(Pn, args.promo, 4, 0, 0) for was, Po, Pn in recs)
+    savings0, savings1 = base0 - cost0, base1 - cost1
+    print("=== FOUR-MONTH ACCOUNTING FOR THE EVENT COHORT ===")
+    print(f"headline value before promotions: ${base0:,.0f} -> ${base1:,.0f} "
+          f"({base1 / base0 - 1:+.1%})")
+    print(f"promotional discount supplied:   ${savings0:,.0f} -> ${savings1:,.0f} "
+          f"({savings1 / savings0 - 1:+.1%})")
+    print(f"effective customer cost:          ${cost0:,.0f} -> ${cost1:,.0f} "
+          f"({cost1 / cost0 - 1:+.1%})")
+    print(f"promo share of headline value:    {savings0 / base0:.1%} -> "
+          f"{savings1 / base1:.1%}\n")
+
     def worse_share(rows, m):
         w = sum(1 for was, Po, Pn in rows
                 if cumulative(Pn, args.promo, m, args.admin, args.insurance)

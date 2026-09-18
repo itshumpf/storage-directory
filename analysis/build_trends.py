@@ -75,11 +75,12 @@ BREAK_MIN_STORES = 250
 COMBINED = Path("history") / "combined"
 BRAND_OF = {}          # store_id -> brand, filled by the loaders
 BRAND_LABEL = {"publicstorage": "Public Storage", "cubesmart": "CubeSmart", "storagesense": "Storage Sense",
-               "uhaul": "U-Haul", "storagemart": "StorageMart"}
-BRAND_SHORT = {"publicstorage": "PS", "cubesmart": "CS", "storagesense": "SS", "uhaul": "UH", "storagemart": "SM"}
+               "uhaul": "U-Haul", "storagemart": "StorageMart", "smartstop": "SmartStop"}
+BRAND_SHORT = {"publicstorage": "PS", "cubesmart": "CS", "storagesense": "SS", "uhaul": "UH", "storagemart": "SM",
+               "smartstop": "ST"}
 BRAND_ORDER = list(BRAND_LABEL)
 BRAND_COLOR = {"publicstorage": "#2a78d6", "cubesmart": "#eb6834", "storagesense": "#1baf7a",
-               "uhaul": "#eda100", "storagemart": "#e87ba4"}
+               "uhaul": "#eda100", "storagemart": "#e87ba4", "smartstop": "#8b5cf6"}
 
 
 def sid_key(sid):
@@ -335,7 +336,8 @@ class Quarantine:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         with open(p, "w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, ["scope", "site_number", "size", "reason", "detail"])
+            w = csv.DictWriter(f, ["scope", "site_number", "size", "reason", "detail"],
+                               lineterminator="\n")
             w.writeheader()
             w.writerows(self.rows)
         return p
@@ -552,13 +554,18 @@ def svg_line(series, fmt="{:,.0f}", prefix="", breaks=()):
     vals = [v for _, v in series]
     lo, hi = min(vals), max(vals)
     span = (hi - lo) or 1
-    n = len(series)
+    first_date = datetime.date.fromisoformat(series[0][0])
+    last_date = datetime.date.fromisoformat(series[-1][0])
+    dates = [(first_date + datetime.timedelta(days=i)).isoformat()
+             for i in range((last_date - first_date).days + 1)]
+    values = dict(series)
+    n = len(dates)
 
     # Every break label used to be drawn at one fixed y, which is also where the
     # axis-maximum label sits — so two breaks and the high-value label rendered
     # on top of each other as one unreadable run of text. Each label now gets its
     # own row, and the whole plot is pushed down far enough to hold them.
-    idx = {d: i for i, (d, _v) in enumerate(series)}
+    idx = {d: i for i, d in enumerate(dates)}
     live_breaks = [b for b in breaks if b in idx]
     ROW = 14
     TOP = ROW * len(live_breaks)          # 0 when there are no breaks
@@ -566,9 +573,18 @@ def svg_line(series, fmt="{:,.0f}", prefix="", breaks=()):
 
     def x(i): return PAD + (W - 2 * PAD) * (i / max(n - 1, 1))
     def y(v): return TOP + H - PAD - (H - 2 * PAD) * ((v - lo) / span)
-    pts = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, (_, v) in enumerate(series))
-    dots = "".join(f"<circle cx='{x(i):.1f}' cy='{y(v):.1f}' r='3.5' fill='#f0a44b'/>"
-                   for i, (_, v) in enumerate(series))
+    lines, run = "", []
+    for i, d in enumerate(dates):
+        if d not in values:
+            if len(run) > 1:
+                lines += f"<polyline points='{' '.join(run)}' fill='none' stroke='#f0a44b' stroke-width='2.5'/>"
+            run = []
+        else:
+            run.append(f"{x(i):.1f},{y(values[d]):.1f}")
+    if len(run) > 1:
+        lines += f"<polyline points='{' '.join(run)}' fill='none' stroke='#f0a44b' stroke-width='2.5'/>"
+    dots = "".join(f"<circle cx='{x(idx[d]):.1f}' cy='{y(v):.1f}' r='3.5' fill='#f0a44b'/>"
+                   for d, v in series)
     first_d, last_d = series[0][0], series[-1][0]
 
     # A rule through the plot at every break, labelled on the chart itself. The
@@ -591,7 +607,7 @@ def svg_line(series, fmt="{:,.0f}", prefix="", breaks=()):
         )
     return f"""<svg viewBox="0 0 {W} {HF}" role="img" style="width:100%;height:auto">
 <line x1="{PAD}" y1="{TOP+H-PAD}" x2="{W-PAD}" y2="{TOP+H-PAD}" stroke="#232c35"/>
-{rules}<polyline points="{pts}" fill="none" stroke="#f0a44b" stroke-width="2.5"/>{dots}
+{rules}{lines}{dots}
 <text x="{PAD}" y="{TOP+16}" fill="#8fa0af" font-size="12">{prefix}{fmt.format(hi)}</text>
 <text x="{PAD}" y="{TOP+H-PAD+16}" fill="#8fa0af" font-size="12">{first_d}</text>
 <text x="{W-PAD}" y="{TOP+H-PAD+16}" fill="#8fa0af" font-size="12" text-anchor="end">{last_d}</text>
@@ -607,7 +623,10 @@ def svg_multi_line(series_by_brand, fmt="{:,.0f}", prefix=""):
     series_by_brand = {b: v for b, v in series_by_brand.items() if v}
     if not series_by_brand:
         return "<p class='empty'>No data yet.</p>"
-    dates = sorted({d for v in series_by_brand.values() for d, _ in v})
+    observed_dates = sorted({d for v in series_by_brand.values() for d, _ in v})
+    first_date, last_date = map(datetime.date.fromisoformat, (observed_dates[0], observed_dates[-1]))
+    dates = [(first_date + datetime.timedelta(days=i)).isoformat()
+             for i in range((last_date - first_date).days + 1)]
     idx = {d: i for i, d in enumerate(dates)}
     vals = [v for ser in series_by_brand.values() for _, v in ser]
     lo, hi = min(vals), max(vals)
@@ -622,8 +641,17 @@ def svg_multi_line(series_by_brand, fmt="{:,.0f}", prefix=""):
         if not ser:
             continue
         c = BRAND_COLOR[b]
-        pts = " ".join(f"{x(idx[d]):.1f},{y(v):.1f}" for d, v in ser)
-        lines += f"<polyline points='{pts}' fill='none' stroke='{c}' stroke-width='2.5' stroke-linejoin='round'/>"
+        values = dict(ser)
+        run = []
+        for d in dates:
+            if d not in values:
+                if len(run) > 1:
+                    lines += f"<polyline points='{' '.join(run)}' fill='none' stroke='{c}' stroke-width='2.5' stroke-linejoin='round'/>"
+                run = []
+            else:
+                run.append(f"{x(idx[d]):.1f},{y(values[d]):.1f}")
+        if len(run) > 1:
+            lines += f"<polyline points='{' '.join(run)}' fill='none' stroke='{c}' stroke-width='2.5' stroke-linejoin='round'/>"
         if len(ser) == 1:
             lines += f"<circle cx='{x(idx[ser[0][0]]):.1f}' cy='{y(ser[0][1]):.1f}' r='4' fill='{c}'/>"
         ld, lv = ser[-1]

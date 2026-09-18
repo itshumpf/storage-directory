@@ -8,6 +8,7 @@ from tempfile import TemporaryDirectory
 
 from uhaul_parser import parse_facility_html, parse_sitemap_xml
 import uhaul_scraper
+from storage_pipeline import change_rows
 from uhaul_scraper import (MAX_SKIP_RATIO, MIN_US_FACILITIES, _load_checkpoint, _sku_overlap,
                            _write_checkpoint, run)
 
@@ -216,6 +217,7 @@ def test_parser_preserves_razor_source_values():
     assert record["address"] == "300 Peters St SW" and record["is_affiliate"] is False
     assert unit["sku"] == "uhaul_4ac3cedfee9c4df7ad3b4eeb0f43ad28"
     assert unit["price"] == 124.95 and unit["count"] == 2
+    assert unit["street_price"] is None and unit["rates"] == {"web": 124.95}
     assert unit["size"] == "5x10" and unit["height"] == 9
     assert unit["rent_now"] and unit["reserve"] and "No Climate" in unit["attrs"]
 
@@ -267,6 +269,28 @@ def test_sku_overlap_detects_identifier_churn():
     churned = [{"store_id": "uhaul_1", "units": [{"sku": "uhaul_x"}, {"sku": "uhaul_y"}]}]
     assert _sku_overlap(before, stable) == 1
     assert _sku_overlap(before, churned) == 0
+
+
+def test_replaced_guid_tracks_conservative_price_and_cheapest_offer_changes():
+    def snapshot(sku, price):
+        return [{"store_id": "uhaul_1", "site_number": "1", "units": [{
+            "sku": sku, "size": "10x10", "price": price, "street_price": price,
+            "promo": "", "promo2": "", "available": True, "count": 1,
+            "width": 10.0, "depth": 10.0, "height": 8.0,
+            "attrs": "Interior, Climate", "rent_now": True, "reserve": True,
+        }, {
+            "sku": "uhaul_stable", "size": "5x5", "price": 50, "street_price": 50,
+            "promo": "", "promo2": "", "available": True, "count": 1,
+            "width": 5.0, "depth": 5.0, "height": 8.0,
+            "attrs": "Interior, Climate", "rent_now": True, "reserve": True,
+        }]}]
+
+    rows, note = change_rows("2026-09-09", "uhaul", snapshot("uhaul_old", 100),
+                             snapshot("uhaul_new", 110))
+    assert note == ""
+    assert [r[6] for r in rows].count("price") == 1
+    assert [r[6] for r in rows].count("offer_price") == 1
+    assert not ({"listed", "delisted", "street_price"} & {r[6] for r in rows})
 
 
 def test_bootstrap_floor_rejects_the_known_incomplete_7_prefix_catalog():

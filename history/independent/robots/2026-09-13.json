@@ -1,0 +1,354 @@
+{
+  "date": "2026-09-13",
+  "publication_enabled": false,
+  "requests": "robots.txt only",
+  "results": [
+    {
+      "checked_at": "2026-09-14T00:56:18.354452+00:00",
+      "domain": "10federalstorage.com",
+      "http_status": 308,
+      "location": "https://10federalstorage.com/robots.txt",
+      "name": "10 Federal Storage",
+      "operator_id": "10_federal_storage",
+      "representative_url": "https://www.10federalstorage.com/",
+      "robots_url": "https://www.10federalstorage.com/robots.txt",
+      "status": "redirect_review"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:19.774117+00:00",
+      "crawl_delay": null,
+      "domain": "acornministorage.com",
+      "http_status": 200,
+      "name": "Acorn Mini Storage",
+      "operator_id": "acorn_mini_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.acornministorage.com/",
+      "robots_sha256": "d32cc4333ac18b39bf8a20c8a8f2bfc3a3a7b037129a00a870f8a3f2d4883959",
+      "robots_url": "https://www.acornministorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.acornministorage.com/sitemap_index.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:47.099520+00:00",
+      "domain": "allenderstorage.com",
+      "error": "ConnectTimeout: HTTPSConnectionPool(host='www.allenderstorage.com', port=443): Max retries exceeded with url: /robots.txt (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.allenderstorage.com', port=443) at 0x2748f9602d0>, 'Connection to www.allenderstorage.com timed out. (connect timeout=45)'))",
+      "name": "Allender Storage",
+      "operator_id": "allender_storage",
+      "representative_url": "https://www.allenderstorage.com/",
+      "robots_url": "https://www.allenderstorage.com/robots.txt",
+      "status": "unavailable"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:21.562212+00:00",
+      "domain": "beyondselfstorage.com",
+      "error": "SSLError: HTTPSConnectionPool(host='www.beyondselfstorage.com', port=443): Max retries exceeded with url: /robots.txt (Caused by SSLError(SSLCertVerificationError(1, \"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.beyondselfstorage.com'. (_ssl.c:1081)\")))",
+      "name": "Beyond Self Storage",
+      "operator_id": "beyond_self_storage",
+      "representative_url": "https://www.beyondselfstorage.com/",
+      "robots_url": "https://www.beyondselfstorage.com/robots.txt",
+      "status": "unavailable"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:22.176185+00:00",
+      "domain": "columbiastoragegroup.com",
+      "error": "ConnectTimeout: HTTPSConnectionPool(host='www.columbiastoragegroup.com', port=443): Max retries exceeded with url: /robots.txt (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.columbiastoragegroup.com', port=443) at 0x2748f960910>, 'Connection to www.columbiastoragegroup.com timed out. (connect timeout=45)'))",
+      "name": "Columbia Storage Group",
+      "operator_id": "columbia_storage_group",
+      "representative_url": "https://www.columbiastoragegroup.com/",
+      "robots_url": "https://www.columbiastoragegroup.com/robots.txt",
+      "status": "unavailable"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:37.203237+00:00",
+      "crawl_delay": null,
+      "domain": "compassselfstorage.com",
+      "http_status": 200,
+      "name": "Compass Self Storage",
+      "operator_id": "compass_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.compassselfstorage.com/",
+      "robots_sha256": "8e6de54656ce698aa24b73f507be419b7c39df48ef7ffddfd94a522746f9ebf5",
+      "robots_url": "https://www.compassselfstorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.compassselfstorage.com/sitemap_index.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:39.588224+00:00",
+      "domain": "coppersafestorage.com",
+      "http_status": 301,
+      "location": "https://www.coppersafestorage.com/robots.txt",
+      "name": "Copper Storage Management",
+      "operator_id": "copper_storage_management",
+      "representative_url": "https://coppersafestorage.com/",
+      "robots_url": "https://coppersafestorage.com/robots.txt",
+      "status": "redirect_review"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:29.327446+00:00",
+      "domain": "evergreen-self-storage.com",
+      "error": "SSLError: HTTPSConnectionPool(host='www.evergreen-self-storage.com', port=443): Max retries exceeded with url: /robots.txt (Caused by SSLError(SSLError(1, '[SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)')))",
+      "name": "Evergreen Self Storage",
+      "operator_id": "evergreen_self_storage",
+      "representative_url": "https://www.evergreen-self-storage.com/",
+      "robots_url": "https://www.evergreen-self-storage.com/robots.txt",
+      "status": "unavailable"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:17.594780+00:00",
+      "crawl_delay": null,
+      "domain": "expstorage.com",
+      "http_status": 200,
+      "name": "Express Storage",
+      "operator_id": "express_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.expstorage.com/",
+      "robots_sha256": "0c8799599d498bb36230b1de0783c77f59b04492620adb94e0e9f2cf912d1129",
+      "robots_url": "https://www.expstorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.expstorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:46.471426+00:00",
+      "crawl_delay": null,
+      "domain": "hometownselfstoragetexas.com",
+      "http_status": 200,
+      "name": "Hometown Self Storage",
+      "operator_id": "hometown_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.hometownselfstoragetexas.com/",
+      "robots_sha256": "c56219d6d89793b26621af019f365fc53454ab50fbb7b3fb57f3e356f24ae8e2",
+      "robots_url": "https://www.hometownselfstoragetexas.com/robots.txt",
+      "sitemaps": [
+        "https://www.hometownselfstoragetexas.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:43.395856+00:00",
+      "crawl_delay": null,
+      "domain": "innovationselfstorage.com",
+      "http_status": 200,
+      "name": "Innovation Self Storage",
+      "operator_id": "innovation_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.innovationselfstorage.com/",
+      "robots_sha256": "67116c307d45d4615f884d846a09ddfaab9745c99c1be2664b874a721b642607",
+      "robots_url": "https://www.innovationselfstorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.innovationselfstorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:44.216030+00:00",
+      "crawl_delay": null,
+      "domain": "interstateself-storage.com",
+      "http_status": 200,
+      "name": "Interstate Self Storage",
+      "operator_id": "interstate_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.interstateself-storage.com/",
+      "robots_sha256": "dfd3fccd29fb8501f5c4285b46df5c800049eb84b36825bc63138226a357dedd",
+      "robots_url": "https://www.interstateself-storage.com/robots.txt",
+      "sitemaps": [
+        "https://www.interstateself-storage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:12.762081+00:00",
+      "crawl_delay": null,
+      "domain": "kostorage.com",
+      "http_status": 200,
+      "name": "KO Storage",
+      "operator_id": "ko_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.kostorage.com/",
+      "robots_sha256": "29638d25e100c11d71dea1635ed2944aafcf2ce77a295e9edae08a189cfeac60",
+      "robots_url": "https://www.kostorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.kostorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:31.250640+00:00",
+      "domain": "lockitandleaveit.com",
+      "http_status": 404,
+      "name": "Lock It and Leave It Storage",
+      "operator_id": "lock_it_and_leave_it_storage",
+      "representative_url": "https://www.lockitandleaveit.com/",
+      "robots_url": "https://www.lockitandleaveit.com/robots.txt",
+      "status": "unavailable"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:19.080217+00:00",
+      "crawl_delay": null,
+      "domain": "lockitupstorage.com",
+      "http_status": 200,
+      "name": "Lock-It-Up Self Storage",
+      "operator_id": "lock_it_up_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.lockitupstorage.com/",
+      "robots_sha256": "f5580ba5f08b39a2c3a4cd0b7755c3e95ba4848be6e41712ac3fa438e5634057",
+      "robots_url": "https://www.lockitupstorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.lockitupstorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:40.483077+00:00",
+      "crawl_delay": null,
+      "domain": "midgardselfstorage.com",
+      "http_status": 200,
+      "name": "Midgard Self Storage",
+      "operator_id": "midgard_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.midgardselfstorage.com/",
+      "robots_sha256": "df29d93e0ceac17d602efbf8f6b5b08ac32d14846e4e53ec36d8eae6dbccd00c",
+      "robots_url": "https://www.midgardselfstorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.midgardselfstorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:34.245815+00:00",
+      "domain": "platinumstorage.com",
+      "http_status": 301,
+      "location": "https://platinumstorage.com/robots.txt",
+      "name": "Platinum Storage Group",
+      "operator_id": "platinum_storage_group",
+      "representative_url": "https://www.platinumstorage.com/",
+      "robots_url": "https://www.platinumstorage.com/robots.txt",
+      "status": "redirect_review"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:36.381103+00:00",
+      "crawl_delay": null,
+      "domain": "primestorage.com",
+      "http_status": 200,
+      "name": "Prime Storage",
+      "operator_id": "prime_storage",
+      "representative_allowed": true,
+      "representative_url": "https://primestorage.com/",
+      "robots_sha256": "074056bab7ea1245fe9edd36f376e0a83e0c70c526391294158d826392f9fc14",
+      "robots_url": "https://primestorage.com/robots.txt",
+      "sitemaps": [
+        "https://primestorage.com/sitemap_index.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:44.754179+00:00",
+      "domain": "rhrebelstorage.com",
+      "http_status": 404,
+      "name": "RH Rebel Storage",
+      "operator_id": "rh_rebel_storage",
+      "representative_url": "https://www.rhrebelstorage.com/",
+      "robots_url": "https://www.rhrebelstorage.com/robots.txt",
+      "status": "unavailable"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:35.093550+00:00",
+      "crawl_delay": 10,
+      "domain": "securespace.com",
+      "http_status": 200,
+      "name": "SecureSpace",
+      "operator_id": "securespace",
+      "representative_allowed": true,
+      "representative_url": "https://securespace.com/",
+      "robots_sha256": "c37030ceb78aa4e6f61907113db4f1fe043c6801b66b46bde51bff5d3c51360f",
+      "robots_url": "https://securespace.com/robots.txt",
+      "sitemaps": [],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:42.753828+00:00",
+      "crawl_delay": null,
+      "domain": "smartselfstorage.com",
+      "http_status": 200,
+      "name": "Smart Self Storage",
+      "operator_id": "smart_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.smartselfstorage.com/",
+      "robots_sha256": "d02bd049cff2ef5a610f28cf1d841c6db7af8aeefe39a02227ba71a9054242d6",
+      "robots_url": "https://www.smartselfstorage.com/robots.txt",
+      "sitemaps": [
+        "https://www.smartselfstorage.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:56:13.746046+00:00",
+      "crawl_delay": null,
+      "domain": "storagestar.com",
+      "http_status": 200,
+      "name": "Storage Star",
+      "operator_id": "storage_star",
+      "representative_allowed": true,
+      "representative_url": "https://www.storagestar.com/",
+      "robots_sha256": "b52d81b80f723f3e5f0e33795ca089bada28db58d35b29f4659b004718215f8a",
+      "robots_url": "https://www.storagestar.com/robots.txt",
+      "sitemaps": [
+        "https://www.storagestar.com/public/sitemaps/storage-star_sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:32.319468+00:00",
+      "crawl_delay": null,
+      "domain": "storagepro.com",
+      "http_status": 200,
+      "name": "StoragePRO",
+      "operator_id": "storagepro",
+      "representative_allowed": true,
+      "representative_url": "https://www.storagepro.com/",
+      "robots_sha256": "2bfc27e0dc2a1fb5cfe480e961979de56070e255fb09b2ba8085ef482b53460e",
+      "robots_url": "https://www.storagepro.com/robots.txt",
+      "sitemaps": [
+        "https://www.storagepro.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:33.323510+00:00",
+      "crawl_delay": null,
+      "domain": "storelocal.com",
+      "http_status": 200,
+      "name": "Storelocal Storage",
+      "operator_id": "storelocal_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.storelocal.com/",
+      "robots_sha256": "6c16a72215d665fee84a587cfb384f315bd0e8e05290c823099add72ed165d31",
+      "robots_url": "https://www.storelocal.com/robots.txt",
+      "sitemaps": [
+        "https://www.storelocal.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    },
+    {
+      "checked_at": "2026-09-14T00:57:38.715739+00:00",
+      "crawl_delay": null,
+      "domain": "storquest.com",
+      "http_status": 200,
+      "name": "StorQuest Self Storage",
+      "operator_id": "storquest_self_storage",
+      "representative_allowed": true,
+      "representative_url": "https://www.storquest.com/",
+      "robots_sha256": "e8f00390899e7432476414ef56d7cac173e3c29147268c777bf942e48df70593",
+      "robots_url": "https://www.storquest.com/robots.txt",
+      "sitemaps": [
+        "https://www.storquest.com/sitemap.xml"
+      ],
+      "status": "reviewed"
+    }
+  ]
+}

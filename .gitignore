@@ -5,6 +5,7 @@
 storage.db
 enriched_locations_backup.json
 scrape_run.log
+.scrape-checkpoints/
 
 # Python
 __pycache__/

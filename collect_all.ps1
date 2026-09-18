@@ -1,6 +1,6 @@
 ﻿# collect_all.ps1 — run every local collector at once, then assemble the day.
 #
-#   .\collect_all.ps1                         all four local brands, then daily + audit
+#   .\collect_all.ps1                         all six local brands, then daily + audit
 #   .\collect_all.ps1 -Brands cubesmart,storagemart
 #   .\collect_all.ps1 -IncludePublicStorage   also run daily_scraper.py (CI does this already)
 #   .\collect_all.ps1 -NoAssemble             just collect; run `daily` yourself later
@@ -17,13 +17,14 @@
 # report behind and simply is not in today's merge; the others still are.
 
 param(
-    [string[]]$Brands = @("cubesmart", "storagesense", "uhaul", "storagemart"),
+    [string[]]$Brands = @("cubesmart", "storagesense", "uhaul", "storagemart", "smartstop", "independent"),
     [switch]$IncludePublicStorage,
     [switch]$NoAssemble,
     [switch]$Serve
 )
 
 $ErrorActionPreference = "Stop"
+$env:PYTHONUTF8 = "1"       # inherited by every collector window; prevents redirected-console Unicode failures
 $env:PYTHONUNBUFFERED = "1"   # Windows fully buffers Python stdout when piped (as Tee-Object does below);
                                # without this a quiet collector (storagesense) can run 10+ minutes with
                                # zero visible output and look hung, tempting a close that kills real progress.

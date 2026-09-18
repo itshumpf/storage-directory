@@ -1,0 +1,53 @@
+{
+  "date": "2026-09-13",
+  "max_pages_per_operator": 1,
+  "publication_enabled": false,
+  "results": [
+    {
+      "completed_at": "2026-09-14T01:19:56.290712+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities",
+        "unitGroups"
+      ],
+      "name": "Express Storage",
+      "operator_id": "express_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 1,
+        "payload_facilities": 1,
+        "unit_groups": 4
+      },
+      "platform": "storable",
+      "platform_hint": "unknown",
+      "robots_status": 200,
+      "started_at": "2026-09-14T01:19:43.905093+00:00",
+      "status": "classified",
+      "url": "https://www.expstorage.com/1105-ne-columbia-way-quincy-wa-98848"
+    },
+    {
+      "completed_at": "2026-09-14T01:20:12.753914+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        "static.storagely.link",
+        "storagely-prod-public-assets",
+        "storagely"
+      ],
+      "name": "Storage Star",
+      "operator_id": "storage_star",
+      "page_status": 200,
+      "parse_error": "ValueError: Storagely facility has no advertised unit cards or sold-out message",
+      "platform": "storagely",
+      "platform_hint": "unknown",
+      "robots_status": 200,
+      "started_at": "2026-09-14T01:19:56.294646+00:00",
+      "status": "classified",
+      "url": "https://www.storagestar.com/storage-units/alaska/anchorage/arctic-blvd"
+    }
+  ]
+}

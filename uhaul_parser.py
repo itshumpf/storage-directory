@@ -251,7 +251,10 @@ def parse_facility_html(html_text: str, catalog_store: dict) -> dict:
         units.append({
             "size": size,
             "price": price,
-            "street_price": price,
+            # The page publishes one advertised monthly rate. Recording that same
+            # number as a second "street" rate creates duplicate change events and
+            # falsely implies a web discount.
+            "street_price": None,
             "available": True,
             "count": count,
             "promo": "; ".join(promos),
@@ -264,7 +267,7 @@ def parse_facility_html(html_text: str, catalog_store: dict) -> dict:
             "height": height,
             "rent_now": rent_now,
             "reserve": reserve,
-            "rates": {"web": price, "street": price},
+            "rates": {"web": price},
         })
 
     # Some live corporate pages render the intact #roomTypes container with no

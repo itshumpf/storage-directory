@@ -1,0 +1,290 @@
+{
+  "date": "2026-09-10",
+  "publication_enabled": false,
+  "request_budget": 28,
+  "results": [
+    {
+      "completed_at": "2026-09-10T14:10:11.279882+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "Argus Professional Storage Management",
+      "operator_id": "argus_professional_storage_management",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:09:59.156541+00:00",
+      "status": "classified",
+      "url": "https://www.innerspaceselfstorageaz.com/self-storage-calculator"
+    },
+    {
+      "completed_at": "2026-09-10T14:10:22.279298+00:00",
+      "confidence": "possible",
+      "crawl_delay": 10.0,
+      "evidence": [
+        "allFacilities"
+      ],
+      "name": "Atlantic Self Storage",
+      "operator_id": "atlantic_self_storage",
+      "page_status": 200,
+      "parse_error": "KeyError: 'Missing Storable facilities.allFacilities payload'",
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:10:11.281256+00:00",
+      "status": "classified",
+      "url": "https://www.atlanticselfstorage.com/"
+    },
+    {
+      "completed_at": "2026-09-10T14:10:34.673432+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "Creekside Self Storage of Hammond",
+      "operator_id": "creekside_self_storage_hammond",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:10:22.280137+00:00",
+      "status": "classified",
+      "url": "https://www.creeksideselfstorage.com/self-storage-calculator"
+    },
+    {
+      "completed_at": "2026-09-10T14:10:47.501035+00:00",
+      "error": "ConnectionError: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))",
+      "name": "Fort Knox Storage",
+      "operator_id": "fort_knox_storage",
+      "platform_hint": "sitelink",
+      "started_at": "2026-09-10T14:10:34.675011+00:00",
+      "status": "failed",
+      "url": "https://fortknoxstorageunits.com/locations/fort-knox-old-jefferson-hawthorne-ave-athens-ga/"
+    },
+    {
+      "completed_at": "2026-09-10T14:10:59.216656+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "Grand Island Secure Storage",
+      "operator_id": "grand_island_secure_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:10:47.501080+00:00",
+      "status": "classified",
+      "url": "https://www.grandislandsecurestorage.com/self-storage-calculator"
+    },
+    {
+      "completed_at": "2026-09-10T14:11:10.333233+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Hornet Storage II",
+      "operator_id": "hornet_storage_ii",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:10:59.217662+00:00",
+      "status": "classified",
+      "url": "https://hornetstorage.wixsite.com/hornetstorage"
+    },
+    {
+      "completed_at": "2026-09-10T14:11:21.646935+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "Infinite Self Storage",
+      "operator_id": "infinite_self_storage_joliet",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:11:10.334190+00:00",
+      "status": "classified",
+      "url": "https://www.selfstoragejoliet.com/"
+    },
+    {
+      "completed_at": "2026-09-10T14:11:35.445955+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "1-800 Self Storage",
+      "operator_id": "one_800_self_storage",
+      "page_status": 200,
+      "parse_error": "KeyError: 'Missing Storable facilities.allFacilities payload'",
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:11:21.647876+00:00",
+      "status": "classified",
+      "url": "https://www.1800selfstorage.com/size-guide"
+    },
+    {
+      "completed_at": "2026-09-10T14:11:47.780954+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Price Self Storage",
+      "operator_id": "price_self_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:11:35.447797+00:00",
+      "status": "classified",
+      "url": "https://www.priceselfstorage.com/"
+    },
+    {
+      "completed_at": "2026-09-10T14:11:59.552691+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "Right Move Storage",
+      "operator_id": "right_move_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:11:47.782526+00:00",
+      "status": "classified",
+      "url": "https://www.rightmovestorage.com/"
+    },
+    {
+      "completed_at": "2026-09-10T14:12:10.765880+00:00",
+      "confidence": "none",
+      "crawl_delay": 10.0,
+      "evidence": [],
+      "name": "San Diego Self Storage",
+      "operator_id": "san_diego_self_storage",
+      "page_status": 200,
+      "platform": "unknown",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:11:59.554419+00:00",
+      "status": "classified",
+      "url": "https://www.sandiegoselfstorage.com/"
+    },
+    {
+      "completed_at": "2026-09-10T14:12:22.622252+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "Space Saver Self Storage",
+      "operator_id": "space_saver_self_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:12:10.767691+00:00",
+      "status": "classified",
+      "url": "https://www.fortwaltonselfstorage.com/self-storage-calculator"
+    },
+    {
+      "completed_at": "2026-09-10T14:12:35.186997+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "Thomas Avenue Self Storage",
+      "operator_id": "thomas_avenue_self_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:12:22.623966+00:00",
+      "status": "classified",
+      "url": "https://www.thomasavenueselfstorage.com/size-guide"
+    },
+    {
+      "completed_at": "2026-09-10T14:12:47.512548+00:00",
+      "confidence": "high",
+      "crawl_delay": 10.0,
+      "evidence": [
+        ".website.storedge.com",
+        "uploads.website.storedge.com",
+        "allFacilities"
+      ],
+      "name": "Thompson Lane Self-Storage",
+      "operator_id": "thompson_lane_self_storage",
+      "page_status": 200,
+      "parse": {
+        "facilities_needing_own_page": 0,
+        "parsed_facilities": 0,
+        "payload_facilities": 0,
+        "unit_groups": 0
+      },
+      "platform": "storable",
+      "platform_hint": "storable",
+      "robots_status": 200,
+      "started_at": "2026-09-10T14:12:35.189743+00:00",
+      "status": "classified",
+      "url": "https://www.thompsonlane-storage.com/"
+    }
+  ]
+}
