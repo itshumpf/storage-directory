@@ -623,7 +623,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 </div></div></header>
 <main class="wrap">{secs}</main>
 <footer><div class="wrap">Data collected from publicly advertised rates. Part of
-<a href="https://findstorage.netlify.app">FindStorage</a> — an independent self-storage directory.
+<a href="https://braedenkeena.pages.dev/storage/">Storage Price Observatory</a> — an independent record of advertised self-storage prices.
 Built with Python + SQLite.</div></footer>
 </body></html>"""
 

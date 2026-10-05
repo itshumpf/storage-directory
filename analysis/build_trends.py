@@ -1235,7 +1235,7 @@ footer a{{color:var(--acc);text-decoration:none}}
 </div></div></header>
 <main class="wrap">{sections}</main>
 <footer><div class="wrap">History begins April 29, 2026; snapshots accumulate daily. Part of
-<a href="https://findstorage.netlify.app">FindStorage</a> — an independent self-storage directory.
+<a href="https://braedenkeena.pages.dev/storage/">Storage Price Observatory</a> — an independent record of advertised self-storage prices.
 Built with Python + SQLite.</div></footer>
 <script>
 function pickSize(sel){{

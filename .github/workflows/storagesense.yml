@@ -1,3 +1,11 @@
+# RETIRED 2026-10-04 — NOT THE LIVE SYSTEM.
+#
+# Collection moved off GitHub Actions when this repository went private and
+# Actions minutes metered out. It now runs locally from collect_all.ps1 in the
+# repository root. This file is kept for reference only.
+#
+# Do not diagnose the pipeline from this file. See README.md, "How this got here".
+
 name: Storage Sense Conservative Refresh
 
 on:

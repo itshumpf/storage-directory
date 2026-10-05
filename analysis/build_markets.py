@@ -562,7 +562,7 @@ daily snapshot. <b>Select a row</b> — or search below — for a full readout o
 }})();
 </script>
 <footer><div class="wrap">Data collected from publicly advertised rates. Part of
-<a href="https://findstorage.netlify.app">FindStorage</a> — an independent self-storage directory.
+<a href="https://braedenkeena.pages.dev/storage/">Storage Price Observatory</a> — an independent record of advertised self-storage prices.
 Built with Python + SQLite.</div></footer>
 </body></html>"""
 

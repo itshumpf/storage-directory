@@ -1,17 +1,132 @@
-# FindStorage
+# Storage Price Observatory
 
-A self-storage directory and pricing-analysis project covering **3,500+ U.S. Public Storage facilities** — every operating store the publicstorage.com platform exposes (the company reports 3,546 including third-party-managed sites) — with unit-level pricing, updated daily by an automated pipeline.
+A daily advertised-price record for U.S. self-storage. Seven operator
+collections, snapshotted every day and kept — not summarised, not overwritten.
 
-A defining goal: the directory lists **every** store with its 5-digit site number, *including sold-out locations*. Public Storage removes full stores from its own sitemaps (~900 stores are missing from them), so the pipeline recovers those through city-page map markers, per-store page fetches, a carry-forward check against the previous dataset, and a weekly exhaustive probe of the numeric store-ID space.
+**This repository is large on purpose.** `history/` is roughly 2.0 GB of raw
+daily snapshots. That is the point of the project: every figure published from
+this data can be re-derived from the files in this repo, by you, without
+trusting a number printed in a README.
 
-**Live site:** https://findstorage.netlify.app
-**Pricing analysis:** https://findstorage.netlify.app/insights.html
-**Daily trends:** https://findstorage.netlify.app/trends.html
+If you only want to read the code, don't pull the whole pack:
+
+```
+git clone --depth 1 https://github.com/itshumpf/storage-directory
+```
+
+**Published write-up:** https://braedenkeena.pages.dev/storage/
+**Dashboard:** https://braedenkeena.pages.dev/storage/dashboard
+
+(Two earlier homes are dead ends: `findstorage.netlify.app` is gone, and
+`findstorage.pages.dev` is the retired directory, frozen with a sunset notice
+at 25 August 2026.)
+
+### Verify a claim yourself
+
+`verify_day.py` reads two raw snapshots and diffs them on `(store_id, sku)`.
+No database, no pipeline, nothing cached:
+
+```
+$ python verify_day.py publicstorage 2026-09-22 2026-09-23
+publicstorage  2026-09-22 -> 2026-09-23
+  stores              4,608 -> 4,611
+  SKUs in both days  55,008
+  price changes      46,023  (83.67% of panel)
+    up               23,282
+    down             22,741
+  unchanged           8,985
+  SKUs added          2,718
+  SKUs dropped        2,742
+```
+
+Now run the same command on the most recent pair:
+
+```
+$ python verify_day.py publicstorage 2026-10-03 2026-10-04
+  SKUs in both days  62,873
+  price changes           0  (0.00% of panel)
+  unchanged          62,873
+  SKUs added            726
+  SKUs dropped          900
+```
+
+That contrast is the central finding and you just reproduced it from raw files.
+Advertised rates do not drift. They sit perfectly still for days or weeks and
+then the portfolio is rewritten in a single day — while inventory churns
+underneath the whole time, hundreds of SKUs appearing and disappearing on a day
+with zero price movement. A weekly or monthly sampler records the levels and
+misses the event entirely. That is why the snapshots are kept.
+
+## How this got here
+
+- **2026-04-29 → 2026-08-25 — FindStorage.** Started as a store-ID finder,
+  because a five-digit site number that staff needed daily was not published
+  anywhere. It grew into a consumer directory of Public Storage locations with
+  unit-level pricing. **That product is retired.** Its site is an archive frozen
+  at 25 August 2026; its headline figures are frozen at that date and reported
+  separately from anything here.
+- **September 2026 — one brand became seven.** The collection generalised to
+  U-Haul, CubeSmart, Storage Sense, StorageMart, SmartStop and an independent
+  set. The rate log is keyed on `(brand, sku)`, the database carries a composite
+  primary key, and each operator's own field names are stored untranslated
+  rather than mapped into a lowest-common-denominator schema.
+- **2026-10 — collection moved off GitHub Actions.** The repository went private
+  and Actions minutes metered out immediately. Collection now runs locally from
+  `collect_all.ps1`. The workflow files under `.github/workflows/` are retired
+  and kept only for reference — **do not diagnose from them.**
+
+The directory did not survive. The measurement did, and this repository is the
+measurement.
+
+## What is collected
+
+| brand | snapshots | first | most recent | days captured |
+|---|---|---|---|---:|
+| Public Storage | `history/publicstorage/<date>.json` | 2026-09-01 | 2026-10-04 | 34 |
+| U-Haul | `history/uhaul/<date>.json` | 2026-09-04 | 2026-10-04 | 31 |
+| CubeSmart | `history/cubesmart/<date>.json` | 2026-09-01 | 2026-10-04 | 34 |
+| Storage Sense | `history/storagesense/<date>.json` | 2026-09-02 | 2026-10-04 | 33 |
+| StorageMart | `history/storagemart/<date>.json` | 2026-09-04 | 2026-10-04 | 31 |
+| SmartStop | `history/smartstop/<date>.json` | 2026-09-09 | 2026-10-04 | 26 |
+| Independent | `history/independent/<date>.json` | 2026-09-10 | 2026-10-04 | 23 |
+
+Six of the seven have captured **every calendar day** since they started. The
+independent set is missing 2026-09-11 and 2026-09-26, and those two gaps are
+left visible in the directory listing rather than interpolated away — a missing
+file is a missing day, which is exactly what you want when the question is
+whether a price moved. Pre-September history for Public
+Storage lives in the monthly aggregates `history/2026-0*.csv` and in this
+repository's own commit history, not as raw JSON.
+
+A defining goal of the original directory, still true of the collection: it
+lists **every** store with its 5-digit site number, *including sold-out
+locations*. Public Storage removes full stores from its own sitemaps (~900
+stores are missing from them), so the pipeline recovers those through city-page
+map markers, per-store page fetches, a carry-forward check against the previous
+dataset, and a weekly exhaustive probe of the numeric store-ID space.
+
+## How collection runs
+
+One process per brand, in parallel, launched by hand:
+
+```powershell
+PS C:\dev\storagedir> .\collect_all.ps1 -IncludePublicStorage
+```
+
+Each host is hit by exactly one process, so parallel is no less polite than
+serial, and wall-clock is the slowest collector rather than the sum of seven.
+A collector that fails leaves its partial file behind and is simply absent from
+that day's merge; the others still land. Every crawler resumes from a checkpoint
+on retry.
+
+**Retry is deliberately manual.** Automatically re-hammering a host that just
+failed you is the one behaviour that turns a polite crawler impolite without
+anyone deciding to.
 
 ## What it does
 
 - **Directory** — searchable, filterable card/map views of every facility: address, phone, site number, and current advertised unit prices with promotions. Location-aware search (city/state/zip/radius) plus free-text search, built with vanilla JavaScript and Leaflet marker clustering.
-- **Daily data pipeline** — a scheduled GitHub Actions job re-scrapes the full dataset every morning, rebuilds the SQLite analysis database, regenerates the insights report, and commits the results. Netlify redeploys automatically on push.
+- **Daily data pipeline** — `collect_all.ps1` re-scrapes every brand, rebuilds the SQLite analysis database, regenerates the insights report, and writes the results. (Through roughly September 2026 this ran as a scheduled GitHub Actions job; see "How this got here".)
 - **Market analysis** — a SQL analysis suite over the dataset: state-by-state 10x10 pricing, price per square foot, in-city price variance, live inventory and scarcity, true promotional move-in cost, store clustering, per-capita saturation, and the vehicle-storage market. Results are published as a self-contained report page.
 - **Time series** — every daily run appends per-store aggregates (advertised availability, cheapest 10x10, median price) to an append-only history log, and regenerates a trends page: national inventory and price charts, the fastest-renting stores, and the biggest price hikes and cuts. History was backfilled from git snapshots of the dataset, so the series starts April 29, 2026.
 - **Pricing-model analysis** — the scraper captures each unit's physical attributes (climate control, floor, drive-up access) and advertised price range from store-page structured data. Pairing same-size units at the same store isolates what each attribute costs, and bucketing prices by remaining inventory exposes the scarcity gradient. One negative result worth reading: the advertised min-max "range" turned out to be mechanically price ±20% on every unit — a disclaimer construct, not a pricing envelope — so it is documented as such rather than tracked. Existing-tenant rate increases (ECRI) are not public and are explicitly out of scope; this models new-customer street rates only.
@@ -24,7 +139,7 @@ publicstorage.com (city pages + XML sitemaps + pricing API)
         │
         ▼
 daily_scraper.py ──────────► enriched_locations.json
-  (GitHub Actions, daily)          │
+  (collect_all.ps1, daily)         │
         │                          ├──► index.html (client-side directory)
         ▼                          │
 analysis/load_storage.py ──► storage.db
@@ -49,8 +164,10 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 
 | Path | Purpose |
 |---|---|
+| `verify_day.py` | **Start here.** Re-derives one day's price changes from two raw snapshots — no database, no pipeline, no cached numbers |
+| `collect_all.ps1` | The orchestrator: one process per brand, parallel, checkpointed, manual retry |
 | `index.html` | The directory frontend (single file, no build step) |
-| `daily_scraper.py` | Production scraper run daily by GitHub Actions |
+| `daily_scraper.py` | Production Public Storage scraper, run daily by collect_all.ps1 |
 | `uhaul_scraper.py` | Slow, resumable, all-or-nothing U.S. U-Haul owned/managed daily snapshot collector |
 | `uhaul_parser.py` | U-Haul sitemap and server-rendered room parser |
 | `enriched_locations.json` | The dataset: ~3,500 facilities with unit-level pricing |
@@ -60,10 +177,11 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 | `analysis/update_history.py` | Appends per-store daily aggregates + state-size demand aggregates |
 | `analysis/update_rate_log.py` | Appends per-SKU price/promo change events to `history/rate_changes.csv` |
 | `analysis/build_trends.py` | Generates the daily trends page from the history log |
-| `history/` | Append-only time series: store aggregates, size demand, rate-change events, and the coming-soon store pipeline |
+| `history/<brand>/<date>.json` | The raw daily snapshots — the evidence every published figure is derived from |
+| `history/*.csv` | Append-only aggregates: store-level daily series, size demand, rate-change events |
 | `data/zip_income.csv` | IRS SOI 2022 average income per tax return, for the affordability analysis |
 | `legacy/` | One-off Colab scripts used to bootstrap the original dataset |
-| `daily_update.bat`, `setup_task.ps1` | Optional local Windows Task Scheduler alternative to CI |
+| `.github/workflows/` | **Retired.** Kept for reference; not the live system |
 
 ## Running it locally
 
@@ -89,7 +207,7 @@ python -m http.server
 
 ## Tech
 
-Python (requests, BeautifulSoup), SQLite, vanilla JavaScript, Leaflet, GitHub Actions, Netlify.
+Python (requests, BeautifulSoup), SQLite, vanilla JavaScript, Leaflet, PowerShell, Cloudflare Pages.
 
 ## Data & fair-use note
 
@@ -106,15 +224,16 @@ brand; `storage_pipeline.py` is the seam that joins them.
 
 | Brand | Collector | Snapshot lands in |
 |---|---|---|
-| Public Storage | `daily_scraper.py` (Actions, `daily.yml`) | `enriched_locations.json` → `history/publicstorage/<date>.json` |
-| CubeSmart | `cubesmart_scraper.py` (Actions, `cubesmart.yml`) | `history/cubesmart/<date>.json` |
-| Storage Sense | `storagesense_scraper.py` (Actions, `storagesense.yml`) | `history/storagesense/<date>.json` |
-| U-Haul | `uhaul_scraper.py` (Actions, `uhaul.yml`) | `history/uhaul/<date>.json` |
-| StorageMart | `storagemart_scraper.py` (Actions, `storagemart.yml`) | `history/storagemart/<date>.json` |
-| SmartStop | `smartstop_scraper.py` (Actions, `smartstop.yml`) | `history/smartstop/<date>.json` |
+| Public Storage | `daily_scraper.py` via `storage_pipeline.py run` | `enriched_locations.json` → `history/publicstorage/<date>.json` |
+| CubeSmart | `cubesmart_scraper.py` via `storage_pipeline.py run` | `history/cubesmart/<date>.json` |
+| Storage Sense | `storagesense_scraper.py` via `storage_pipeline.py run` | `history/storagesense/<date>.json` |
+| U-Haul | `uhaul_scraper.py` via `storage_pipeline.py run` | `history/uhaul/<date>.json` |
+| StorageMart | `storagemart_scraper.py` via `storage_pipeline.py run` | `history/storagemart/<date>.json` |
+| SmartStop | `smartstop_scraper.py` via `storage_pipeline.py run` | `history/smartstop/<date>.json` |
+| Independent | `independent_scraper.py` via `storage_pipeline.py run` | `history/independent/<date>.json` |
 
-All six emit the same record shape, so one immutable dated snapshot per brand per day is the
-whole contract. `assemble.yml` runs after any collector finishes and does:
+All seven emit the same record shape, so one immutable dated snapshot per brand per day is
+the whole contract. After the collectors finish, `collect_all.ps1` runs:
 
 ```bash
 python storage_pipeline.py daily      # import -> merge -> record -> build-dashboard

@@ -6,7 +6,7 @@
 
 Writes private/preview/. That directory is gitignored, is not in the workflow's
 `git add` list, and is not assembled into ./dist by the Cloudflare build — so
-this page cannot reach findstorage.pages.dev by any path. **The published
+this page cannot reach the published site by any path. **The published
 index.html is never modified by this script.**
 
 WHY THIS EXISTS

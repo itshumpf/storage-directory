@@ -2,7 +2,7 @@
 #
 #   .\collect_all.ps1                         all six local brands, then daily + audit
 #   .\collect_all.ps1 -Brands cubesmart,storagemart
-#   .\collect_all.ps1 -IncludePublicStorage   also run daily_scraper.py (CI does this already)
+#   .\collect_all.ps1 -IncludePublicStorage   also run daily_scraper.py (now required; CI retired)
 #   .\collect_all.ps1 -NoAssemble             just collect; run `daily` yourself later
 #   .\collect_all.ps1 -Serve                  when done, serve the repo and open the dashboard
 #
