@@ -9,12 +9,11 @@
 name: U-Haul Complete Daily Snapshot
 
 on:
+  # SCHEDULE REMOVED 2026-10-04. Collection runs only from Braeden's PC via
+  # collect_all.ps1. This workflow is manual-only so it can never run itself
+  # and race the local collector for the same host or the same branch.
   # Deliberately away from the Public Storage and Storage Sense jobs. At the
   # five-second floor, ~2,100 serial facility requests take at least 3 hours.
-  schedule:
-    # Starts around 00:29 CST / 01:29 CDT so the long serial crawl finishes
-    # near the existing Public Storage morning observation window.
-    - cron: '29 6 * * *'
   workflow_dispatch:
     inputs:
       delay:

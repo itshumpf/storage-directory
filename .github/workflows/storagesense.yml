@@ -9,10 +9,11 @@
 name: Storage Sense Conservative Refresh
 
 on:
+  # SCHEDULE REMOVED 2026-10-04. Collection runs only from Braeden's PC via
+  # collect_all.ps1. This workflow is manual-only so it can never run itself
+  # and race the local collector for the same host or the same branch.
   # Deliberately off the hour. One complete, slow snapshot per day captures
   # every advertised rate without treating the public website like an API.
-  schedule:
-    - cron: '43 17 * * *'
   workflow_dispatch:
     inputs:
       budget:

@@ -9,6 +9,9 @@
 name: Daily Storage Scraper
 
 on:
+  # SCHEDULE REMOVED 2026-10-04. Collection runs only from Braeden's PC via
+  # collect_all.ps1. This workflow is manual-only so it can never run itself
+  # and race the local collector for the same host or the same branch.
   # Minute 17, not 00. GitHub's own docs: "The schedule event can be delayed
   # during periods of high loads... high load times include the start of every
   # hour. If the load is sufficiently high enough, some queued jobs may be
@@ -20,9 +23,6 @@ on:
   # start time shifts an hour at each DST boundary; the next is 2026-11-01.
   # Nothing depends on the local hour, but a snapshot series that changes its
   # sampling time by an hour twice a year should say so somewhere.
-  schedule:
-    - cron: '17 11 * * 1-6'  # Mon-Sat
-    - cron: '17 11 * * 0'    # Sundays: adds the exhaustive store-ID probe
   workflow_dispatch:         # allows manual trigger from GitHub UI
     inputs:
       deep:

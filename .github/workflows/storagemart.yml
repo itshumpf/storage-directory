@@ -9,11 +9,12 @@
 name: StorageMart Daily Snapshot
 
 on:
+  # SCHEDULE REMOVED 2026-10-04. Collection runs only from Braeden's PC via
+  # collect_all.ps1. This workflow is manual-only so it can never run itself
+  # and race the local collector for the same host or the same branch.
   # Off the hour, away from the others:
   #   U-Haul 06:29 · Public Storage 11:17 · CubeSmart 13:37 · Storage Sense 17:43 (UTC)
   # A few hundred facilities at a five-second floor is under an hour.
-  schedule:
-    - cron: '11 15 * * *'
   workflow_dispatch:
     inputs:
       delay:

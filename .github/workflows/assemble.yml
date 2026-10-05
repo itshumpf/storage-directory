@@ -20,17 +20,9 @@ name: Assemble combined dataset
 # complete snapshot (or excludes it once it is older than --max-age-days).
 
 on:
-  workflow_run:
-    workflows:
-      - Daily Storage Scraper
-      - CubeSmart Daily Snapshot
-      - Storage Sense Conservative Refresh
-      - U-Haul Complete Daily Snapshot
-      - StorageMart Daily Snapshot
-      - SmartStop Daily Snapshot
-    types: [completed]
-  schedule:
-    - cron: '53 19 * * *'   # 14:53 CDT — after every collector's usual finish
+  # SCHEDULE REMOVED 2026-10-04. Collection runs only from Braeden's PC via
+  # collect_all.ps1. This workflow is manual-only so it can never run itself
+  # and race the local collector for the same host or the same branch.
   workflow_dispatch:
 
 permissions:

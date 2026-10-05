@@ -170,7 +170,8 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 | `daily_scraper.py` | Production Public Storage scraper, run daily by collect_all.ps1 |
 | `uhaul_scraper.py` | Slow, resumable, all-or-nothing U.S. U-Haul owned/managed daily snapshot collector |
 | `uhaul_parser.py` | U-Haul sitemap and server-rendered room parser |
-| `enriched_locations.json` | The dataset: ~3,500 facilities with unit-level pricing |
+| `all_locations.json` | The combined dataset: every operator, unit-level pricing |
+| `enriched_locations.json` | The Public Storage slice of it (4,618 stores on 2026-10-04) |
 | `analysis/load_storage.py` | Loads the dataset into a normalized SQLite database |
 | `analysis/run_queries.py` | Core analysis query set (run all, or one by number) |
 | `analysis/analyze_storage.py` | Data-quality audit + full analysis + report generator |
@@ -186,6 +187,11 @@ The scraper has safety rails: it aborts without writing if it finds fewer than a
 ## Running it locally
 
 ```bash
+# Check a published figure against the raw snapshots.
+# Standard library only — no install, no network, no database.
+python verify_day.py publicstorage 2026-09-22 2026-09-23
+
+# Everything below needs the dependencies:
 pip install -r requirements.txt
 
 # Scrape a fresh dataset (~25-30 min, rate-limited)
@@ -219,7 +225,7 @@ Built by Braeden Keena.
 
 ## Multi-operator pipeline (September 2026)
 
-Collection now covers six operators. Each collector still owns its own
+Collection now covers seven operators. Each collector still owns its own
 brand; `storage_pipeline.py` is the seam that joins them.
 
 | Brand | Collector | Snapshot lands in |
@@ -242,7 +248,7 @@ python storage_pipeline.py status     # freshness of every brand at a glance
 
 which maintains `history/combined/` (cross-brand daily store aggregates, state × size
 aggregates, and a per-SKU rate-change log — all brand-tagged, all idempotent) and writes
-`dashboard-data.json` for the private dashboard:
+`dashboard-data.json` for the dashboard:
 
 ```bash
 python -m http.server 8777      # then open http://localhost:8777/dashboard.html
@@ -251,9 +257,10 @@ python -m http.server 8777      # then open http://localhost:8777/dashboard.html
 The dashboard is the replacement for the sunset FindStorage site: overview tiles per brand,
 size-by-size price comparison, state table, store search with map and per-size detail,
 trends, and a rate-change feed. It is a single file with no build step, reads only
-`dashboard-data.json`, and is not published anywhere.
+`dashboard-data.json`, and is published at
+https://braedenkeena.pages.dev/storage/dashboard
 
-### FindStorage, six operators (2026-09-09)
+### The directory and reports on the combined dataset (2026-09-09)
 
 The original directory and reports now run on the combined dataset:
 

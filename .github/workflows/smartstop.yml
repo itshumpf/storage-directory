@@ -9,9 +9,10 @@
 name: SmartStop Daily Snapshot
 
 on:
+  # SCHEDULE REMOVED 2026-10-04. Collection runs only from Braeden's PC via
+  # collect_all.ps1. This workflow is manual-only so it can never run itself
+  # and race the local collector for the same host or the same branch.
   # 213 U.S. facilities at SmartStop's required ten-second floor takes about 36 minutes.
-  schedule:
-    - cron: '17 20 * * *'
   workflow_dispatch:
     inputs:
       delay:

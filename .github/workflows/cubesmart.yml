@@ -9,11 +9,12 @@
 name: CubeSmart Daily Snapshot
 
 on:
+  # SCHEDULE REMOVED 2026-10-04. Collection runs only from Braeden's PC via
+  # collect_all.ps1. This workflow is manual-only so it can never run itself
+  # and race the local collector for the same host or the same branch.
   # Off the hour, and away from the other three collectors:
   #   Public Storage 11:17 UTC · Storage Sense 17:43 UTC · U-Haul 06:29 UTC
   # ~1,520 facilities at a 3s base delay + jitter is roughly 90 minutes.
-  schedule:
-    - cron: '37 13 * * *'
   workflow_dispatch:
     inputs:
       delay:
