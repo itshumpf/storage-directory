@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-21",
+  "facility_urls": [
+    "https://www.thompsonlane-storage.com/2801-landers-ave-nashville-tn-37211"
+  ],
+  "operator_id": "thompson_lane_self_storage",
+  "robots_allowed": true,
+  "robots_sha256": "4dc16016eabce9c2e21b788e5a80758d58010962e7284788788119ca649f8292",
+  "robots_url": "https://www.thompsonlane-storage.com/robots.txt",
+  "sitemap_files": [
+    "https://www.thompsonlane-storage.com/sitemap.xml"
+  ],
+  "url_count": 9
+}

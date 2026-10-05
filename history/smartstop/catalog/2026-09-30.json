@@ -1,0 +1,1351 @@
+{
+  "date": "2026-09-30",
+  "facilities": [
+    {
+      "brand": "smartstop",
+      "city": "Foley",
+      "state": "AL",
+      "url": "https://smartstopselfstorage.com/find-storage/al/foley/8141-al-59"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Conway",
+      "state": "AR",
+      "url": "https://smartstopselfstorage.com/find-storage/ar/conway/2505-salem-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Chandler",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/chandler/12220-e-riggs-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Gilbert",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/gilbert/2845-e-riggs-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Glendale",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/glendale/13551-w-glendale-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Phoenix",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/phoenix/1500-e-baseline-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Phoenix",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/phoenix/1740-w-happy-valley-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Phoenix",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/phoenix/4715-e-baseline-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Phoenix",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/phoenix/4730-e-baseline-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Phoenix",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/phoenix/4860-n-83rd-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Surprise",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/surprise/11658-west-bell-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Surprise",
+      "state": "AZ",
+      "url": "https://smartstopselfstorage.com/find-storage/az/surprise/13788-w-greenway-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Azusa",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/azusa/1111-w-gladstone"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Chico",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/chico/3860-benatar-way"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Chula Vista",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/chula-vista/2380-fenton-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Chula Vista",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/chula-vista/970-industrial-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Concord",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/concord/1597-market-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Escondido",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/escondido/852-metcalf-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Fairfield",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/fairfield/2998-rockville-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Garden Grove",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/garden-grove/12321-western-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Goleta",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/goleta/10-s-kellogg-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Huntington Beach",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/huntington-beach/7611-talbert-avenue"
+    },
+    {
+      "brand": "smartstop",
+      "city": "La Habra",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/la-habra/580-e-lambert-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "La Verne",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/la-verne/2234-arrow-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Ladera Ranch",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/ladera-ranch/30-terrace-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lancaster",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/lancaster/43707-sierra-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lancaster",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/lancaster/43745-sierra-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lompoc",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/lompoc/517-n-8th-street"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Monterey Park",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/monterey-park/404-potrero-grande"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Oakland",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/oakland/5200-coliseum-way"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Rancho Mission Viejo",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/rancho-mission-viejo/28322-airoso"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Riverside",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/riverside/3167-van-buren-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Riverside",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/riverside/6637-van-buren-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Riverside",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/riverside/6667-van-buren-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Riverside",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/riverside/7211-arlington-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Sacramento",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/sacramento/3970-pell-circle"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Sacramento",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/sacramento/660-garden-highway"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Sacramento",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/sacramento/9950-mills-station-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "San Gabriel",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/san-gabriel/5216-walnut-grove-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "San Jose",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/san-jose/2487-alum-rock-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Santa Ana",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/santa-ana/4200-westminster-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Santa Rosa",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/santa-rosa/3937-santa-rosa-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Sonoma",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/sonoma/19240-highway-12"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Stockton",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/stockton/7760-lorraine-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Upland",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/upland/1571-w-foothill-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Vallejo",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/vallejo/1401-enterprise-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Whittier",
+      "state": "CA",
+      "url": "https://smartstopselfstorage.com/find-storage/ca/whittier/10231-colima-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Aurora",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/aurora/3633-n-walden-cir"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Aurora",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/aurora/435-airport-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Aurora",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/aurora/500-laredo-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Aurora",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/aurora/6950-s-gartrell-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Aurora",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/aurora/7411-s-gartrell-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Bennett",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/bennett/915-sharis-ct"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Centennial",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/centennial/6800-s-holly-circle"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Centennial",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/centennial/7326-s-yosemite-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Colorado Springs",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/colorado-springs/3150-boychuk-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Colorado Springs",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/colorado-springs/3850-airport-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Denver",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/denver/1208-w-evans-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Denver",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/denver/1699-s-broadway"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Denver",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/denver/3270-blake-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Denver",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/denver/3800-n-monaco-pkwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Denver",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/denver/8881-e-florida-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Federal Heights",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/federal-heights/8920-federal-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lakewood",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/lakewood/12750-w-alameda-pkwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lakewood",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/lakewood/5885-w-colfax-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Littleton",
+      "state": "CO",
+      "url": "https://smartstopselfstorage.com/find-storage/co/littleton/3757-norwood-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Washington",
+      "state": "DC",
+      "url": "https://smartstopselfstorage.com/find-storage/dc/washington/1401-22nd-st-se"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Newark",
+      "state": "DE",
+      "url": "https://smartstopselfstorage.com/find-storage/de/newark/401-bellevue-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Apopka",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/apopka/2200-coral-hills-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Boynton Beach",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/boynton-beach/3101-s-federal-highway"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Bradenton",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/bradenton/6424-14th-st-w"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Delray Beach",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/delray-beach/189-linton-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Doral",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/doral/10451-nw-33rd-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Fort Pierce",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/fort-pierce/3252-us-1"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Homestead",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/homestead/1235-ne-12th-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Jensen Beach",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/jensen-beach/1105-ne-industrial-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Jupiter",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/jupiter/2581-jupiter-park-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lady Lake",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/lady-lake/175-rolling-acres-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lake Worth",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/lake-worth/8135-lake-worth-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Longwood",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/longwood/460-florida-central-pkwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lutz",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/lutz/16900-state-road-54"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Miami",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/miami/250-ne-135th-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Naples",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/naples/275-goodlette-frank-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Naples",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/naples/7755-preserve-ln"
+    },
+    {
+      "brand": "smartstop",
+      "city": "North Fort Myers",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/north-fort-myers/18301-n-tamiami-trail"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Ocoee",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/ocoee/1071-marshall-farms-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Orlando",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/orlando/6707-narcoossee-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Oxford",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/oxford/11203-us-301"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Pembroke Pines",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/pembroke-pines/18804-pines-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Plant City",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/plant-city/1610-jim-johnson-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Plantation",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/plantation/10325-w-broward-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Pompano Beach",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/pompano-beach/2320-ne-5th-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Port St Lucie",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/port-st-lucie/501-nw-business-center-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Port St Lucie",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/port-st-lucie/525-sw-s-macedo-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Punta Gorda",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/punta-gorda/3811-tamiami-trail"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Riverview",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/riverview/9811-progress-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Royal Palm Beach",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/royal-palm-beach/10719-southern-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Sarasota",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/sarasota/1027-n-washington-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "St Johns",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/st-johns/10030-ew-pappy-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "St Johns",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/st-johns/124-st-johns-commons-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "St Petersburg",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/st-petersburg/289-34th-st-n"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Tamarac",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/tamarac/8251-w-mcnab-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Tampa",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/tampa/9823-w-hillsborough-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Wellington",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/wellington/1341-state-rd-7"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Wildwood",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/wildwood/5688-fl-44"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Winter Garden",
+      "state": "FL",
+      "url": "https://smartstopselfstorage.com/find-storage/fl/winter-garden/1650-avalon-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Carrollton",
+      "state": "GA",
+      "url": "https://smartstopselfstorage.com/find-storage/ga/carrollton/970-hays-mill-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Lithonia",
+      "state": "GA",
+      "url": "https://smartstopselfstorage.com/find-storage/ga/lithonia/2590-panola-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Riverdale",
+      "state": "GA",
+      "url": "https://smartstopselfstorage.com/find-storage/ga/riverdale/635-poplar-springs-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Algonquin",
+      "state": "IL",
+      "url": "https://smartstopselfstorage.com/find-storage/il/algonquin/1910-e-algonquin-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Bloomingdale",
+      "state": "IL",
+      "url": "https://smartstopselfstorage.com/find-storage/il/bloomingdale/240-army-trail-road"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Crestwood",
+      "state": "IL",
+      "url": "https://smartstopselfstorage.com/find-storage/il/crestwood/4747-cal-sag-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Elgin",
+      "state": "IL",
+      "url": "https://smartstopselfstorage.com/find-storage/il/elgin/1001-tollgate-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Elk Grove Village",
+      "state": "IL",
+      "url": "https://smartstopselfstorage.com/find-storage/il/elk-grove-village/1600-busse-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Romeoville",
+      "state": "IL",
+      "url": "https://smartstopselfstorage.com/find-storage/il/romeoville/1302-marquette-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Connersville",
+      "state": "IN",
+      "url": "https://smartstopselfstorage.com/find-storage/in/connersville/4950-western-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Richmond",
+      "state": "IN",
+      "url": "https://smartstopselfstorage.com/find-storage/in/richmond/1880-williamsburg-pike"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Nantucket",
+      "state": "MA",
+      "url": "https://smartstopselfstorage.com/find-storage/ma/nantucket/10-davkim-ln"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Nantucket",
+      "state": "MA",
+      "url": "https://smartstopselfstorage.com/find-storage/ma/nantucket/54-old-south-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Nantucket",
+      "state": "MA",
+      "url": "https://smartstopselfstorage.com/find-storage/ma/nantucket/6-sun-island-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Forestville",
+      "state": "MD",
+      "url": "https://smartstopselfstorage.com/find-storage/md/forestville/4100-forestville-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Nottingham",
+      "state": "MD",
+      "url": "https://smartstopselfstorage.com/find-storage/md/nottingham/7989-rossville-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Sterling Heights",
+      "state": "MI",
+      "url": "https://smartstopselfstorage.com/find-storage/mi/sterling-heights/42557-van-dyke-avenue"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Troy",
+      "state": "MI",
+      "url": "https://smartstopselfstorage.com/find-storage/mi/troy/262-e-maple-road"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Warren",
+      "state": "MI",
+      "url": "https://smartstopselfstorage.com/find-storage/mi/warren/24623-ryan-road"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Warren",
+      "state": "MI",
+      "url": "https://smartstopselfstorage.com/find-storage/mi/warren/27203-groesbeck-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Billings",
+      "state": "MT",
+      "url": "https://smartstopselfstorage.com/find-storage/mt/billings/4740-underpass-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Billings",
+      "state": "MT",
+      "url": "https://smartstopselfstorage.com/find-storage/mt/billings/6837-neibauer-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Billings",
+      "state": "MT",
+      "url": "https://smartstopselfstorage.com/find-storage/mt/billings/991-s-29th-street-west"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Laurel",
+      "state": "MT",
+      "url": "https://smartstopselfstorage.com/find-storage/mt/laurel/1548-old-us-10"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Red Lodge",
+      "state": "MT",
+      "url": "https://smartstopselfstorage.com/find-storage/mt/red-lodge/7359-us-highway-212"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Arden",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/arden/3909-sweeten-creek-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Arden",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/arden/6-long-shoals-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/1130-sweeten-creek-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/127-sweeten-creek-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/197-deaverview-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/21-sardis-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/2594-sweeten-creek-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/3173-sweeten-creek-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/40-wilmington-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/550-swannanoa-river-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/600-patton-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/75-highland-center-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Asheville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/asheville/90-highland-center-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Cary",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/cary/120-centrewest-ct"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Charlotte",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/charlotte/7307-university-city-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Charlotte",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/charlotte/9800-ardrey-kell-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Hendersonville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/hendersonville/102-glover-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Hendersonville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/hendersonville/1931-spartanburg-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Morrisville",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/morrisville/150-airport-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Raleigh",
+      "state": "NC",
+      "url": "https://smartstopselfstorage.com/find-storage/nc/raleigh/5012-new-bern-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Beverly",
+      "state": "NJ",
+      "url": "https://smartstopselfstorage.com/find-storage/nj/beverly/4233-route-130-south"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Clifton",
+      "state": "NJ",
+      "url": "https://smartstopselfstorage.com/find-storage/nj/clifton/1204-broad-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Eatontown",
+      "state": "NJ",
+      "url": "https://smartstopselfstorage.com/find-storage/nj/eatontown/97-state-route-35"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Hillside",
+      "state": "NJ",
+      "url": "https://smartstopselfstorage.com/find-storage/nj/hillside/591-n-union-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Newark",
+      "state": "NJ",
+      "url": "https://smartstopselfstorage.com/find-storage/nj/newark/99-evergreen-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Rahway",
+      "state": "NJ",
+      "url": "https://smartstopselfstorage.com/find-storage/nj/rahway/2255-elizabeth-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Albuquerque",
+      "state": "NM",
+      "url": "https://smartstopselfstorage.com/find-storage/nm/albuquerque/720-candelaria-rd-ne"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/4349-s-jones-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/4866-e-russell-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/5210-w-robindale-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/5730-s-durango-drive"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/590-e-silverado-ranch-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/6318-w-sahara-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/6888-n-hualapai-way"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/7475-s-decatur-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/8020-s-las-vegas-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/8570-s-durango-drive"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/las-vegas/9890-pollock-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "North Las Vegas",
+      "state": "NV",
+      "url": "https://smartstopselfstorage.com/find-storage/nv/north-las-vegas/2555-w-centennial-pkwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Greenville",
+      "state": "OH",
+      "url": "https://smartstopselfstorage.com/find-storage/oh/greenville/1325-benden-way"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Sidney",
+      "state": "OH",
+      "url": "https://smartstopselfstorage.com/find-storage/oh/sidney/700-w-russell-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Troy",
+      "state": "OH",
+      "url": "https://smartstopselfstorage.com/find-storage/oh/troy/21-kings-chapel-dr-n"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Washington Court House",
+      "state": "OH",
+      "url": "https://smartstopselfstorage.com/find-storage/oh/washington-court-house/1840-victoria-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Xenia",
+      "state": "OH",
+      "url": "https://smartstopselfstorage.com/find-storage/oh/xenia/1900-bellbrook-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Edmond",
+      "state": "OK",
+      "url": "https://smartstopselfstorage.com/find-storage/ok/edmond/3925-nw-178th-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Mustang",
+      "state": "OK",
+      "url": "https://smartstopselfstorage.com/find-storage/ok/mustang/721-n-clear-springs-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Portland",
+      "state": "OR",
+      "url": "https://smartstopselfstorage.com/find-storage/or/portland/4836-se-powell-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Levittown",
+      "state": "PA",
+      "url": "https://smartstopselfstorage.com/find-storage/pa/levittown/1723-woodbourne-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Boiling Springs",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/boiling-springs/112-mccullugh-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Indian Land",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/indian-land/972-fort-mill-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Mt Pleasant",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/mt-pleasant/701-wando-park-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Myrtle Beach",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/myrtle-beach/338-jesse-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Myrtle Beach",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/myrtle-beach/4630-dick-pond-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Spartanburg",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/spartanburg/1640-john-b-white-sr-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Spartanburg",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/spartanburg/2119-e-main-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Spartanburg",
+      "state": "SC",
+      "url": "https://smartstopselfstorage.com/find-storage/sc/spartanburg/899-e-main-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Knoxville",
+      "state": "TN",
+      "url": "https://smartstopselfstorage.com/find-storage/tn/knoxville/1641-downtown-w-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Murfreesboro",
+      "state": "TN",
+      "url": "https://smartstopselfstorage.com/find-storage/tn/murfreesboro/1323-nw-broad-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "College Station",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/college-station/3101-texas-avenue-south"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Conroe",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/conroe/3750-fm-1488-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Corinth",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/corinth/3701-fm-2181"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Cypress",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/cypress/27236-us-290"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Dallas",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/dallas/8110-s-cockrell-hill-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Houston",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/houston/10830-west-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Houston",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/houston/2412-w-holcombe-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Houston",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/houston/3130-southwest-fwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Houston",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/houston/8415-queenston-blvd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Humble",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/humble/20535-w-lake-houston-pkwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Katy",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/katy/23250-westheimer-pkwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Kingwood",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/kingwood/1671-northpark-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Magnolia",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/magnolia/32620-fm-2978"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Mckinney",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/mckinney/2280-n-custer-road"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Pasadena",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/pasadena/7905-spencer-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "San Antonio",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/san-antonio/8239-broadway-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Shenandoah",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/shenandoah/18250-interstate-45-s"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Spring",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/spring/21836-holzwarth-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Spring",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/spring/9040-louetta-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Texas City",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/texas-city/3730-emmett-f-lowry-expy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "The Woodlands",
+      "state": "TX",
+      "url": "https://smartstopselfstorage.com/find-storage/tx/the-woodlands/7474-gosling-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Charlottesville",
+      "state": "VA",
+      "url": "https://smartstopselfstorage.com/find-storage/va/charlottesville/2307-hydraulic-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Richmond",
+      "state": "VA",
+      "url": "https://smartstopselfstorage.com/find-storage/va/richmond/1716-e-cary-st"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Everett",
+      "state": "WA",
+      "url": "https://smartstopselfstorage.com/find-storage/wa/everett/10919-evergreen-way"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Mill Creek",
+      "state": "WA",
+      "url": "https://smartstopselfstorage.com/find-storage/wa/mill-creek/16618-bothell-everett-hwy"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Olympia",
+      "state": "WA",
+      "url": "https://smartstopselfstorage.com/find-storage/wa/olympia/2900-93rd-ave-sw"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Puyallup",
+      "state": "WA",
+      "url": "https://smartstopselfstorage.com/find-storage/wa/puyallup/1401-n-meridian-ave"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Redmond",
+      "state": "WA",
+      "url": "https://smartstopselfstorage.com/find-storage/wa/redmond/23316-redmond-fall-city-rd-ne"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Spokane Valley",
+      "state": "WA",
+      "url": "https://smartstopselfstorage.com/find-storage/wa/spokane-valley/4426-n-sullivan-rd"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Vancouver",
+      "state": "WA",
+      "url": "https://smartstopselfstorage.com/find-storage/wa/vancouver/16600-se-18th-street"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Hudson",
+      "state": "WI",
+      "url": "https://smartstopselfstorage.com/find-storage/wi/hudson/614-brakke-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Milwaukee",
+      "state": "WI",
+      "url": "https://smartstopselfstorage.com/find-storage/wi/milwaukee/3420-w-capitol-drive"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Cheyenne",
+      "state": "WY",
+      "url": "https://smartstopselfstorage.com/find-storage/wy/cheyenne/1500-southwest-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Cheyenne",
+      "state": "WY",
+      "url": "https://smartstopselfstorage.com/find-storage/wy/cheyenne/200-s-college-dr"
+    },
+    {
+      "brand": "smartstop",
+      "city": "Laramie",
+      "state": "WY",
+      "url": "https://smartstopselfstorage.com/find-storage/wy/laramie/1161-evans-st"
+    }
+  ],
+  "fetched_at": "2026-09-30T12:52:17.679391+00:00",
+  "source": "https://smartstopselfstorage.com/xml-sitemap"
+}

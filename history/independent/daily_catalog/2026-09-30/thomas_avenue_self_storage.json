@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-30",
+  "facility_urls": [
+    "https://www.thomasavenueselfstorage.com/1210-thomas-ave-leesburg-fl-34748"
+  ],
+  "operator_id": "thomas_avenue_self_storage",
+  "robots_allowed": true,
+  "robots_sha256": "482110c59c2b36f664e063465ec144ed55a6887fc1277d13839ae1457b1d8568",
+  "robots_url": "https://www.thomasavenueselfstorage.com/robots.txt",
+  "sitemap_files": [
+    "https://www.thomasavenueselfstorage.com/sitemap.xml"
+  ],
+  "url_count": 14
+}

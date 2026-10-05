@@ -1,14 +1,12 @@
 {
-  "catalog_pages": 74,
-  "completed_at": "2026-09-18T13:48:59.062023+00:00",
-  "completed_pages": 0,
+  "completed_at": "2026-10-04T13:24:14.389061+00:00",
+  "completed_pages": 50,
   "current_operator": "right_move_storage",
-  "current_url": "https://www.rightmovestorage.com/storage-units/texas/wylie/fm-544",
-  "date": "2026-09-18",
-  "facility_count": 74,
+  "current_url": "https://www.rightmovestorage.com/storage-units/texas/longview/lakeport-annex",
+  "date": "2026-10-04",
+  "error": "ValueError: Storagely facility has no advertised unit cards or sold-out message",
   "phase": "collection",
   "publication_enabled": true,
-  "started_at": "2026-09-18T13:35:04.835434+00:00",
-  "status": "complete",
-  "unit_group_count": 8074
+  "started_at": "2026-10-04T13:14:29.547203+00:00",
+  "status": "failed"
 }

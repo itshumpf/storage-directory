@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-21",
+  "facility_urls": [
+    "https://www.selfstoragejoliet.com/1397-n-larkin-ave-joliet-il-60435"
+  ],
+  "operator_id": "infinite_self_storage_joliet",
+  "robots_allowed": true,
+  "robots_sha256": "9d2a56fcd7edf2f146d6d9fc22a5a2fcb47b90263674e31fd8e9b9387d2ebae0",
+  "robots_url": "https://www.selfstoragejoliet.com/robots.txt",
+  "sitemap_files": [
+    "https://www.selfstoragejoliet.com/sitemap.xml"
+  ],
+  "url_count": 10
+}

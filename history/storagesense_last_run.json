@@ -1,35 +1,35 @@
 {
-  "availability_transitions": 552,
-  "catalog_facilities": 311,
-  "changes_logged": 135,
+  "availability_transitions": 120,
+  "catalog_facilities": 310,
+  "changes_logged": 17,
   "coverage": {
-    "catalog_facilities": 311,
+    "catalog_facilities": 310,
     "cycle_closes": true,
     "daily_budget": "all",
     "days_for_one_full_pass": 1.0,
     "refresh_window_days": 1.0,
-    "refreshes_per_window": 311
+    "refreshes_per_window": 310
   },
-  "due_total": 311,
+  "due_total": 310,
   "failures": [],
-  "finished_at": "2026-09-18T14:27:37.328029+00:00",
-  "planned_facilities": 311,
+  "finished_at": "2026-10-04T14:06:13.713487+00:00",
+  "planned_facilities": 310,
   "policy": {
     "daily_facility_budget": 0,
     "min_seconds_between_requests": 5.0,
     "refresh_hours": 0
   },
   "robots": {
-    "checked_at": "2026-09-18T13:34:57.274821+00:00",
+    "checked_at": "2026-10-04T13:14:22.418088+00:00",
     "crawl_delay": null,
     "robots_url": "https://www.storagesense.com/robots.txt"
   },
   "snapshot": {
-    "facilities_in_file": 311,
-    "observed_this_run": 311,
-    "path": "history\\storagesense\\2026-09-18.json"
+    "facilities_in_file": 310,
+    "observed_this_run": 310,
+    "path": "history\\storagesense\\2026-10-04.json"
   },
-  "started_at": "2026-09-18T13:34:56.665179+00:00",
+  "started_at": "2026-10-04T13:14:21.619881+00:00",
   "stored_facilities": 311,
   "succeeded": [
     "164254",
@@ -64,7 +64,6 @@
     "164052",
     "164053",
     "164054",
-    "164057",
     "164067",
     "164069",
     "164070",

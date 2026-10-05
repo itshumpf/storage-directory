@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-02",
+  "facility_urls": [
+    "https://www.1800selfstorage.com/1003-n-saginaw-st-durand-mi-48429",
+    "https://www.1800selfstorage.com/1227-rochester-rd-troy-mi-48083",
+    "https://www.1800selfstorage.com/13631-w-10-mile-rd-oak-park-mi-48237",
+    "https://www.1800selfstorage.com/14935-w-eleven-mile-rd-oak-park-mi-48237",
+    "https://www.1800selfstorage.com/15160-w-8-mile-rd-oak-park-mi-48237",
+    "https://www.1800selfstorage.com/20900-hall-rd-clinton-township-mi-48038",
+    "https://www.1800selfstorage.com/21170-w-eight-mile-rd-southfield-mi-48075",
+    "https://www.1800selfstorage.com/26640-harding-oak-park-mi-48237",
+    "https://www.1800selfstorage.com/26660-greenfield-rd-oak-park-mi-48237",
+    "https://www.1800selfstorage.com/29200-southfield-road-southfield-mi-48076",
+    "https://www.1800selfstorage.com/47020-west-road-novi-mi-48377",
+    "https://www.1800selfstorage.com/7282-fenton-rd-grand-blanc-mi-48439",
+    "https://www.1800selfstorage.com/8134-embury-rd-grand-blanc-mi-48439"
+  ],
+  "operator_id": "one_800_self_storage",
+  "robots_allowed": true,
+  "robots_sha256": "1daaeb4f7c1b022822ba44a3491b774e9e6cd910a04f526a2459ab2004812206",
+  "robots_url": "https://www.1800selfstorage.com/robots.txt",
+  "sitemap_files": [
+    "https://www.1800selfstorage.com/sitemap.xml"
+  ],
+  "url_count": 27
+}

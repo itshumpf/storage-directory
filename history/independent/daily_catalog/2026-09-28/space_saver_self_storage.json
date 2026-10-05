@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-28",
+  "facility_urls": [
+    "https://www.fortwaltonselfstorage.com/self-storage-fort-walton-beach-fl-f1234"
+  ],
+  "operator_id": "space_saver_self_storage",
+  "robots_allowed": true,
+  "robots_sha256": "c5557892c0ee8b5a1354318700555ab276c33384e73ea9ea36e3a7582f9a54ad",
+  "robots_url": "https://www.fortwaltonselfstorage.com/robots.txt",
+  "sitemap_files": [
+    "https://www.fortwaltonselfstorage.com/sitemap.xml"
+  ],
+  "url_count": 8
+}

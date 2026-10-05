@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-30",
+  "facility_urls": [
+    "https://www.grandislandsecurestorage.com/self-storage-grand-island-ny-f6311"
+  ],
+  "operator_id": "grand_island_secure_storage",
+  "robots_allowed": true,
+  "robots_sha256": "efa515c7d3ec115a0663469d74ad07d4db8519d153703c85aa220c420c79e4c0",
+  "robots_url": "https://www.grandislandsecurestorage.com/robots.txt",
+  "sitemap_files": [
+    "https://www.grandislandsecurestorage.com/sitemap.xml"
+  ],
+  "url_count": 9
+}

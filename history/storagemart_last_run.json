@@ -1,10 +1,10 @@
 {
-  "catalog_count": 205,
-  "completed_at": "2026-09-18T14:01:10.465393+00:00",
-  "completed_count": 198,
-  "current_index": 205,
-  "current_url": "https://www.storage-mart.com/2198-new-jersey-34-wall-township-07719",
-  "date": "2026-09-18",
+  "catalog_count": 204,
+  "completed_at": "2026-10-04T13:39:32.084145+00:00",
+  "completed_count": 197,
+  "current_index": 204,
+  "current_url": "https://www.storage-mart.com/milwaukee/waukesha/0484-sunset-dr-53189",
+  "date": "2026-10-04",
   "excluded_non_us": {
     "https://www.storage-mart.com/calgary/okotoks/338-avenue": "facility is in CA, not the U.S.",
     "https://www.storage-mart.com/edmonton/127-street-northwest": "facility is in CA, not the U.S.",
@@ -14,13 +14,13 @@
     "https://www.storage-mart.com/toronto/scarborough/3019-danforth-rd": "facility is in CA, not the U.S.",
     "https://www.storage-mart.com/toronto/woodbridge/3017-weston-rd": "facility is in CA, not the U.S."
   },
-  "facility_count": 198,
-  "priced_facility_count": 198,
+  "facility_count": 197,
+  "priced_facility_count": 197,
   "resumed_count": 0,
   "skipped": {},
-  "snapshot": "history\\storagemart\\2026-09-18.json",
-  "started_at": "2026-09-18T13:35:00.685169+00:00",
+  "snapshot": "history\\storagemart\\2026-10-04.json",
+  "started_at": "2026-10-04T13:14:25.425879+00:00",
   "status": "complete",
-  "unit_group_count": 4131,
+  "unit_group_count": 4114,
   "warnings": []
 }
