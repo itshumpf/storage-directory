@@ -5,8 +5,8 @@ WHAT THIS ANSWERS
 -----------------
 Aggregate figures describe a population; they do not let a reader check
 anything. This prints the full observed history of a single SKU -- list price,
-promotion, the first month a new customer would pay, and the saving the page
-advertises -- so that any claim about the mechanism can be verified one unit at
+promotion, the first month a new customer would pay, and the saving implied by
+that promotion -- so that any claim about the mechanism can be verified one unit at
 a time against a store page anyone can load.
 
 Run:
@@ -49,7 +49,7 @@ PROMO_MODEL = {
     "40% off For 4 Month": lambda P, m: 0.6 * P if m <= 4 else P,
     "":                    lambda P, m: P,
 }
-PROMO_MONTHS = 12   # horizon for the "advertised saving" column
+PROMO_MONTHS = 12   # horizon for the "implied saving" column
 
 
 def num(x):
@@ -60,7 +60,14 @@ def num(x):
 
 
 def saving(P, promo, months=PROMO_MONTHS):
-    """What the page would advertise as total savings over `months`."""
+    """Saving over `months` IMPLIED by the promotion and the list price.
+
+    This is computed from PROMO_MODEL, not read from the page. The scraper
+    schema has never retained a savings field. The model was verified against
+    one live page on 24 August 2026 (see analysis/promo_cost_model.py); every
+    other row is the model applied to that day's rate and promotion. Do not
+    describe this column as what the operator advertised.
+    """
     fn = PROMO_MODEL.get(promo)
     if fn is None:
         return None
@@ -114,7 +121,7 @@ def main():
 
         fee = args.admin + args.insurance
         hdr = (f"  {'date':12}{'list':>8}{'promotion':>24}{'month 1':>10}"
-               f"{'advertised 12-mo saving':>26}")
+               f"{'implied 12-mo saving':>26}")
         print(hdr)
         print("  " + "-" * (len(hdr) - 2))
 
@@ -144,7 +151,7 @@ def main():
         if fee:
             print(f"\n  month 1 includes ${args.admin:,.0f} at signing "
                   f"+ ${args.insurance:,.0f} insurance")
-        print("\n  The advertised saving is a fixed fraction of the list price, so it")
+        print("\n  The implied saving is a fixed fraction of the list price, so it")
         print("  rises when the list price rises. A larger saving on the page does not")
         print("  imply a lower price; both columns move together.")
     return 0

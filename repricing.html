@@ -152,7 +152,7 @@ from this site's own change log; the discount column applies the operator's publ
 terms.</div>
 <div class="tablewrap"><table><thead><tr>
 <th>date</th><th>advertised list rate</th><th>promotion</th><th>first month</th>
-<th>advertised 12-month saving</th></tr></thead><tbody>
+<th>implied 12-month saving</th></tr></thead><tbody>
 <tr><td>2026-07-16</td><td>$133</td><td>First month 50% off</td><td>$66</td><td>$66</td></tr>
 <tr><td>2026-07-19</td><td>$133</td><td class="empty">none</td><td>$133</td><td>$0</td></tr>
 <tr><td>2026-07-21</td><td>$133</td><td>First month 50% off</td><td>$66</td><td>$66</td></tr>
@@ -168,10 +168,14 @@ terms.</div>
 <div class="method" style="margin-top:16px">
 <p><b>The discount percentage never changed. The number it is a percentage of changed eight times in
 six weeks.</b></p>
-<p style="margin-top:10px">Between 20 and 22 August the advertised saving rose from <b>$123 to $176</b>
+<p style="margin-top:10px">Between 20 and 22 August the implied saving rose from <b>$123 to $176</b>
 while the first month rose from <b>$46 to $66</b>. Both are consequences of the same list-price move:
 a saving expressed as a fixed fraction grows when the base grows. <b>A larger saving on the page does
 not imply a lower price.</b></p>
+<p style="margin-top:10px"><b>On the saving column:</b> it is computed from the list price and the
+promotion, not scraped — the snapshot schema has never retained a savings field. The model was
+verified against one live store page on 24 August 2026; every other row is that model applied to the
+day's observed rate and promotion. List prices and promotions are observed; the saving is implied.</p>
 <p style="margin-top:10px"><b>This unit is not unusual.</b> Across the 4,904 units that took the
 four-month promotion on 1 August, the median unit saw <b>7</b> list-price changes in 44 days; this one
 saw 8, placing it at the 74th percentile. The 20 August fall followed by a 22 August rise occurred in
