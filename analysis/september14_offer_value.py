@@ -48,16 +48,12 @@ def money(value: float) -> str:
     return f"${value:,.0f}"
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--before", default="2026-09-13")
-    parser.add_argument("--after", default="2026-09-14")
-    args = parser.parse_args()
-
-    old, new = load(args.before), load(args.after)
+def analyze(before_day: str = "2026-09-13", after_day: str = "2026-09-14") -> dict:
+    """Shared model result for CLI reporting and figures; no duplicated formulas."""
+    old, new = load(before_day), load(after_day)
     rows = []
     transitions = Counter()
-    for key in set(old) & set(new):
+    for key in sorted(set(old) & set(new)):
         before, after = old[key], new[key]
         p0, p1 = float(before["price"]), float(after["price"])
         m0, m1 = promotion(before), promotion(after)
@@ -81,6 +77,24 @@ def main() -> None:
     savings0, savings1 = base0 - cost0, base1 - cost1
     price_effect = sum(row["price_effect"] for row in rows)
     promo_effect = sum(row["promo_effect"] for row in rows)
+    return dict(rows=rows, transitions=transitions, base0=base0, base1=base1,
+                cost0=cost0, cost1=cost1, savings0=savings0, savings1=savings1,
+                price_effect=price_effect, promo_effect=promo_effect,
+                before=before_day, after=after_day,
+                excluded=len(set(old) & set(new))-len(rows))
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--before", default="2026-09-13")
+    parser.add_argument("--after", default="2026-09-14")
+    args = parser.parse_args()
+    result = analyze(args.before, args.after)
+    rows, transitions = result['rows'], result['transitions']
+    base0, base1 = result['base0'], result['base1']
+    cost0, cost1 = result['cost0'], result['cost1']
+    savings0, savings1 = result['savings0'], result['savings1']
+    price_effect, promo_effect = result['price_effect'], result['promo_effect']
 
     print(f"comparison: {args.before} -> {args.after}")
     print(f"matched offers modeled: {len(rows):,}")

@@ -1,0 +1,2005 @@
+{
+  "sources": {
+    "2026-09-05": {
+      "path": "history/storagemart/2026-09-05.json",
+      "sha256": "63b71f8cdeb279ac08aacd903569c6406cce3a4ad06cdd165395d70225ed055a",
+      "stores": 198,
+      "rows": 4126,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-06": {
+      "path": "history/storagemart/2026-09-06.json",
+      "sha256": "26821c60fda0b0f536cef663e4709180294203a0c0b643d34b6981a7b499d400",
+      "stores": 198,
+      "rows": 4126,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-07": {
+      "path": "history/storagemart/2026-09-07.json",
+      "sha256": "fcaff75a21c430061c98dde1f039e3ea738408590951dca2364c4357332a0973",
+      "stores": 198,
+      "rows": 4126,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-08": {
+      "path": "history/storagemart/2026-09-08.json",
+      "sha256": "a5f1ca2f7caa3284c9970186f2452b01ed406223304d08dd5288bfd35f334e5c",
+      "stores": 198,
+      "rows": 4126,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-09": {
+      "path": "history/storagemart/2026-09-09.json",
+      "sha256": "4aed940fa89a37754dcff9284c8162c2719a666535e48c6f1831691ca6de0ae4",
+      "stores": 198,
+      "rows": 4127,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-10": {
+      "path": "history/storagemart/2026-09-10.json",
+      "sha256": "9602c3af05499802d55ebdad66b21b29d75f4a22dc994ec0a1d6e6f24d74928c",
+      "stores": 198,
+      "rows": 4127,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-11": {
+      "path": "history/storagemart/2026-09-11.json",
+      "sha256": "fbd21ae0c497f2c08184f69525316d3c0d9661e377e780ec56555651b3bace85",
+      "stores": 198,
+      "rows": 4127,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-12": {
+      "path": "history/storagemart/2026-09-12.json",
+      "sha256": "939cafb3d26a22d13ec00ef8355ed22dfc414dbcddb1e418c15dc525a30357ee",
+      "stores": 198,
+      "rows": 4127,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-13": {
+      "path": "history/storagemart/2026-09-13.json",
+      "sha256": "bb772716771fc5370882e7f8f94d790c264d9cb033f023cb9a39c144cfcbc16f",
+      "stores": 198,
+      "rows": 4127,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-14": {
+      "path": "history/storagemart/2026-09-14.json",
+      "sha256": "d6bb60ae0d271c36d1bf959e4669e19a93302d1cab2da6a9dea48a073f70ba7d",
+      "stores": 198,
+      "rows": 4127,
+      "duplicateKeysExcluded": 42
+    },
+    "2026-09-15": {
+      "path": "history/storagemart/2026-09-15.json",
+      "sha256": "c6f03434d92a56089d99d3af8b62cba86f449dd31d622deb451ddfea8edceebb",
+      "stores": 198,
+      "rows": 4131,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-16": {
+      "path": "history/storagemart/2026-09-16.json",
+      "sha256": "65770bcdb87b8a7695e7eefe181be8ef00a6f789f611622a6f007b8f7ff23b40",
+      "stores": 198,
+      "rows": 4131,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-17": {
+      "path": "history/storagemart/2026-09-17.json",
+      "sha256": "4f64e48be52676791cc4a43c74df9a61ba1e87d0a7838a6f16ac0369de9e3357",
+      "stores": 198,
+      "rows": 4131,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-18": {
+      "path": "history/storagemart/2026-09-18.json",
+      "sha256": "9c9ed49787779aa17558de2e8119ac536d79adb20143874656a23a168ab97f32",
+      "stores": 198,
+      "rows": 4131,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-19": {
+      "path": "history/storagemart/2026-09-19.json",
+      "sha256": "6c068ca3f21e87f184283cc3fae7c02dd45130de64f6587f706252bc4fe3bd40",
+      "stores": 198,
+      "rows": 4132,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-20": {
+      "path": "history/storagemart/2026-09-20.json",
+      "sha256": "c51e238b314ad4fc92d1490347169efc2e046c51caf34db22e9c422ab85a6924",
+      "stores": 198,
+      "rows": 4132,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-21": {
+      "path": "history/storagemart/2026-09-21.json",
+      "sha256": "7c6d532e8c9c1b98a534df7a697b2977ffd4fba8a8a121e3f3ebd62812d8fc27",
+      "stores": 198,
+      "rows": 4132,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-22": {
+      "path": "history/storagemart/2026-09-22.json",
+      "sha256": "3f87b47e8ee16e3795deafde1ebb3283fd2fde19dcd29093fc81dd6a0f356f7c",
+      "stores": 198,
+      "rows": 4132,
+      "duplicateKeysExcluded": 43
+    },
+    "2026-09-23": {
+      "path": "history/storagemart/2026-09-23.json",
+      "sha256": "498a5b1f084d5c53711c295a9c08640a0e0047b950e8b2e70dbf830cdc88ae70",
+      "stores": 198,
+      "rows": 4129,
+      "duplicateKeysExcluded": 40
+    },
+    "2026-09-24": {
+      "path": "history/storagemart/2026-09-24.json",
+      "sha256": "3b99d9c3383f08d76400475a6c6a8d2cce37e7d34db632f7943e00aa2729333f",
+      "stores": 198,
+      "rows": 4126,
+      "duplicateKeysExcluded": 38
+    },
+    "2026-09-25": {
+      "path": "history/storagemart/2026-09-25.json",
+      "sha256": "b85eedfb99084896319a21d68a789713947b6679086fb12f6b7cb048b585c09a",
+      "stores": 198,
+      "rows": 4128,
+      "duplicateKeysExcluded": 38
+    },
+    "2026-09-26": {
+      "path": "history/storagemart/2026-09-26.json",
+      "sha256": "0fbad42bddfb38a67a17cdcc6fa886d953dfd28b987318af8c2a1f3b2e487810",
+      "stores": 197,
+      "rows": 4109,
+      "duplicateKeysExcluded": 37
+    },
+    "2026-09-27": {
+      "path": "history/storagemart/2026-09-27.json",
+      "sha256": "b1767b5855abfaa56440baf5915dc86f398040a213ffa01ea24087b28acd0c8c",
+      "stores": 197,
+      "rows": 4109,
+      "duplicateKeysExcluded": 37
+    },
+    "2026-09-28": {
+      "path": "history/storagemart/2026-09-28.json",
+      "sha256": "188ba90a0f77a50ca455480fbe5d1df88a503333d5062e7387854fc66af3d318",
+      "stores": 197,
+      "rows": 4109,
+      "duplicateKeysExcluded": 37
+    },
+    "2026-09-29": {
+      "path": "history/storagemart/2026-09-29.json",
+      "sha256": "51f7cbc6ce70fdb8621518ba572c358fb48fc8374ddd8519be6eed99cb3fd5d3",
+      "stores": 197,
+      "rows": 4112,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-09-30": {
+      "path": "history/storagemart/2026-09-30.json",
+      "sha256": "fd8ea65cf45f94c6ce69ac774b1edfcf0a9c38cf428bd297a61e62ca7ea3aaa0",
+      "stores": 197,
+      "rows": 4112,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-01": {
+      "path": "history/storagemart/2026-10-01.json",
+      "sha256": "bbc88ed1b50c5257623ad8857448c10a8dcf625be0f27efacde65e6b56077941",
+      "stores": 197,
+      "rows": 4112,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-02": {
+      "path": "history/storagemart/2026-10-02.json",
+      "sha256": "da83c25871525941b2f67bde03e3c01c1cd2e200500de1af089b54d2739609a5",
+      "stores": 197,
+      "rows": 4114,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-03": {
+      "path": "history/storagemart/2026-10-03.json",
+      "sha256": "89e61c604fbeb0bde89ee8bc92625bf168922a8cfdde802493644f64ee1c486b",
+      "stores": 197,
+      "rows": 4114,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-04": {
+      "path": "history/storagemart/2026-10-04.json",
+      "sha256": "ce14e6c136ad71fb4d82af418951cfdec3f90cf4fbbcadbe6b02445485cef72a",
+      "stores": 197,
+      "rows": 4114,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-05": {
+      "path": "history/storagemart/2026-10-05.json",
+      "sha256": "0007bba1a3f677fab703f1bfdb0d4456a19ca182b2cae0f01ec81e34e5fbb731",
+      "stores": 197,
+      "rows": 4114,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-06": {
+      "path": "history/storagemart/2026-10-06.json",
+      "sha256": "8fa67b7946083c2b8ecdb65c9d4ea8fffe2f6b8607287da357ed87849c3ed4df",
+      "stores": 197,
+      "rows": 4114,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-07": {
+      "path": "history/storagemart/2026-10-07.json",
+      "sha256": "360787f1c51b915a7c935a661fe15f9e001cf7188ae6b009450f43b0f63c50e8",
+      "stores": 197,
+      "rows": 4115,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-08": {
+      "path": "history/storagemart/2026-10-08.json",
+      "sha256": "7da7c4297013012d71bf62ebd0f5d98b5f5ba2b50f335bd47ccaf28050467a1c",
+      "stores": 197,
+      "rows": 4117,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-09": {
+      "path": "history/storagemart/2026-10-09.json",
+      "sha256": "e04ba04541e33f349c250129a72dcf4c4713deb5c1746576ab27bddbed643bd1",
+      "stores": 197,
+      "rows": 4117,
+      "duplicateKeysExcluded": 35
+    },
+    "2026-10-10": {
+      "path": "history/storagemart/2026-10-10.json",
+      "sha256": "9a8c6cc252e54a8e92f4cc28055f7db11c72a760439e20d30e07766c26a78757",
+      "stores": 197,
+      "rows": 4122,
+      "duplicateKeysExcluded": 36
+    },
+    "2026-10-11": {
+      "path": "history/storagemart/2026-10-11.json",
+      "sha256": "bc996ec0a35fdf5ab0dd45decb657c0c2b2f524c36aea656a4e1cb9f7b56659c",
+      "stores": 197,
+      "rows": 4122,
+      "duplicateKeysExcluded": 36
+    },
+    "2026-10-12": {
+      "path": "history/storagemart/2026-10-12.json",
+      "sha256": "ac5f590c5af79eb39d8ffada9e1dc091793c1215b286bae9276b935b179848f8",
+      "stores": 197,
+      "rows": 4122,
+      "duplicateKeysExcluded": 36
+    },
+    "2026-10-13": {
+      "path": "history/storagemart/2026-10-13.json",
+      "sha256": "3f5a9e8259776e53aeed327f89cf15ddd791aeab682374f6d77ab2056805788d",
+      "stores": 197,
+      "rows": 4125,
+      "duplicateKeysExcluded": 37
+    },
+    "2026-10-14": {
+      "path": "history/storagemart/2026-10-14.json",
+      "sha256": "4205912926c02583f799e52228c738c49f7b91a1d41693e363e2bd4ba62208ca",
+      "stores": 197,
+      "rows": 4125,
+      "duplicateKeysExcluded": 37
+    },
+    "2026-10-15": {
+      "path": "history/storagemart/2026-10-15.json",
+      "sha256": "19f9976ea5b4a043816fcfbd29fe2de7521ae1682c11a41563a867a4f8c36d2d",
+      "stores": 197,
+      "rows": 4126,
+      "duplicateKeysExcluded": 37
+    },
+    "2026-10-16": {
+      "path": "history/storagemart/2026-10-16.json",
+      "sha256": "f0fb239d8adbb6c5cd8faeeb0d7afdaf4bab573b733b41a6869865318cb6ca59",
+      "stores": 197,
+      "rows": 4126,
+      "duplicateKeysExcluded": 37
+    },
+    "2026-10-17": {
+      "path": "history/storagemart/2026-10-17.json",
+      "sha256": "a6168c077a6004c6abf20bdc9872f6345c5a2e879f78bf25bb8d03bab83d72c5",
+      "stores": 197,
+      "rows": 4124,
+      "duplicateKeysExcluded": 36
+    }
+  },
+  "daily": [
+    {
+      "date": "2026-09-05",
+      "stores": 198,
+      "availableGroups": 2625,
+      "advertisedCount": 21362,
+      "medianStorePrice": 104.75,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1967,
+        "25% Off for 3 Months": 525,
+        "None": 133
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-06",
+      "stores": 198,
+      "availableGroups": 2603,
+      "advertisedCount": 21296,
+      "medianStorePrice": 104,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1937,
+        "25% Off for 3 Months": 532,
+        "None": 134
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-07",
+      "stores": 198,
+      "availableGroups": 2602,
+      "advertisedCount": 21265,
+      "medianStorePrice": 104,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1930,
+        "25% Off for 3 Months": 536,
+        "None": 136
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-08",
+      "stores": 198,
+      "availableGroups": 2592,
+      "advertisedCount": 21185,
+      "medianStorePrice": 104,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1917,
+        "25% Off for 3 Months": 537,
+        "None": 138
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-09",
+      "stores": 198,
+      "availableGroups": 2588,
+      "advertisedCount": 21192,
+      "medianStorePrice": 103.25,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1926,
+        "25% Off for 3 Months": 522,
+        "None": 140
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-10",
+      "stores": 198,
+      "availableGroups": 2579,
+      "advertisedCount": 21127,
+      "medianStorePrice": 103.25,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1914,
+        "25% Off for 3 Months": 521,
+        "None": 144
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-11",
+      "stores": 198,
+      "availableGroups": 2574,
+      "advertisedCount": 21109,
+      "medianStorePrice": 105.25,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1902,
+        "25% Off for 3 Months": 522,
+        "None": 150
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-12",
+      "stores": 198,
+      "availableGroups": 2560,
+      "advertisedCount": 21053,
+      "medianStorePrice": 107.5,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1882,
+        "25% Off for 3 Months": 534,
+        "None": 144
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-13",
+      "stores": 198,
+      "availableGroups": 2545,
+      "advertisedCount": 20958,
+      "medianStorePrice": 105.5,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1868,
+        "25% Off for 3 Months": 537,
+        "None": 140
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-14",
+      "stores": 198,
+      "availableGroups": 2543,
+      "advertisedCount": 20901,
+      "medianStorePrice": 104,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1860,
+        "25% Off for 3 Months": 543,
+        "None": 140
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-15",
+      "stores": 198,
+      "availableGroups": 2553,
+      "advertisedCount": 20893,
+      "medianStorePrice": 103,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1872,
+        "25% Off for 3 Months": 553,
+        "None": 128
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-16",
+      "stores": 198,
+      "availableGroups": 2546,
+      "advertisedCount": 20878,
+      "medianStorePrice": 103.75,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1867,
+        "25% Off for 3 Months": 551,
+        "None": 128
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-17",
+      "stores": 198,
+      "availableGroups": 2544,
+      "advertisedCount": 20851,
+      "medianStorePrice": 103,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1850,
+        "25% Off for 3 Months": 564,
+        "None": 130
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-18",
+      "stores": 198,
+      "availableGroups": 2540,
+      "advertisedCount": 20812,
+      "medianStorePrice": 102.25,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1838,
+        "25% Off for 3 Months": 571,
+        "None": 131
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-19",
+      "stores": 198,
+      "availableGroups": 2542,
+      "advertisedCount": 20749,
+      "medianStorePrice": 100.5,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "50% Off for 3 Months": 1828,
+        "25% Off for 3 Months": 578,
+        "None": 136
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-20",
+      "stores": 198,
+      "availableGroups": 2544,
+      "advertisedCount": 20726,
+      "medianStorePrice": 100,
+      "medianCheapest10x10": 88.5,
+      "promos": {
+        "50% Off for 3 Months": 1817,
+        "25% Off for 3 Months": 592,
+        "None": 135
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-21",
+      "stores": 198,
+      "availableGroups": 2538,
+      "advertisedCount": 20670,
+      "medianStorePrice": 100.25,
+      "medianCheapest10x10": 88.5,
+      "promos": {
+        "50% Off for 3 Months": 1814,
+        "25% Off for 3 Months": 592,
+        "None": 132
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-22",
+      "stores": 198,
+      "availableGroups": 2544,
+      "advertisedCount": 20712,
+      "medianStorePrice": 100,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "50% Off for 3 Months": 1831,
+        "25% Off for 3 Months": 573,
+        "None": 140
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-23",
+      "stores": 198,
+      "availableGroups": 2553,
+      "advertisedCount": 20750,
+      "medianStorePrice": 100.25,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "50% Off for 3 Months": 1847,
+        "25% Off for 3 Months": 562,
+        "None": 144
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-24",
+      "stores": 198,
+      "availableGroups": 2546,
+      "advertisedCount": 20707,
+      "medianStorePrice": 101.25,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "50% Off for 3 Months": 1829,
+        "25% Off for 3 Months": 570,
+        "None": 147
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-25",
+      "stores": 198,
+      "availableGroups": 2540,
+      "advertisedCount": 20639,
+      "medianStorePrice": 102.25,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "50% Off for 3 Months": 1815,
+        "25% Off for 3 Months": 586,
+        "None": 139
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-26",
+      "stores": 197,
+      "availableGroups": 2526,
+      "advertisedCount": 20232,
+      "medianStorePrice": 104,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "50% Off for 3 Months": 1791,
+        "25% Off for 3 Months": 595,
+        "None": 140
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-27",
+      "stores": 197,
+      "availableGroups": 2521,
+      "advertisedCount": 20321,
+      "medianStorePrice": 104,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "50% Off for 3 Months": 1800,
+        "25% Off for 3 Months": 574,
+        "None": 147
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-28",
+      "stores": 197,
+      "availableGroups": 2516,
+      "advertisedCount": 20225,
+      "medianStorePrice": 104,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "50% Off for 3 Months": 1789,
+        "25% Off for 3 Months": 579,
+        "None": 148
+      },
+      "stores75": 0,
+      "storeCount75": 0
+    },
+    {
+      "date": "2026-09-29",
+      "stores": 197,
+      "availableGroups": 2536,
+      "advertisedCount": 20440,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 403,
+        "50% Off for 3 Months": 1433,
+        "25% Off for 3 Months": 562,
+        "None": 138
+      },
+      "stores75": 403,
+      "storeCount75": 53
+    },
+    {
+      "date": "2026-09-30",
+      "stores": 197,
+      "availableGroups": 2553,
+      "advertisedCount": 20701,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 87,
+      "promos": {
+        "75% Off for 3 Months": 410,
+        "50% Off for 3 Months": 1464,
+        "25% Off for 3 Months": 552,
+        "None": 127
+      },
+      "stores75": 410,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-01",
+      "stores": 197,
+      "availableGroups": 2609,
+      "advertisedCount": 21315,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 87.5,
+      "promos": {
+        "75% Off for 3 Months": 425,
+        "50% Off for 3 Months": 1519,
+        "25% Off for 3 Months": 536,
+        "None": 129
+      },
+      "stores75": 425,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-02",
+      "stores": 197,
+      "availableGroups": 2622,
+      "advertisedCount": 21479,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 87.5,
+      "promos": {
+        "75% Off for 3 Months": 420,
+        "50% Off for 3 Months": 1539,
+        "25% Off for 3 Months": 529,
+        "None": 134
+      },
+      "stores75": 420,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-03",
+      "stores": 197,
+      "availableGroups": 2616,
+      "advertisedCount": 21451,
+      "medianStorePrice": 110,
+      "medianCheapest10x10": 87,
+      "promos": {
+        "75% Off for 3 Months": 415,
+        "50% Off for 3 Months": 1539,
+        "25% Off for 3 Months": 528,
+        "None": 134
+      },
+      "stores75": 415,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-04",
+      "stores": 197,
+      "availableGroups": 2619,
+      "advertisedCount": 21436,
+      "medianStorePrice": 110,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 412,
+        "50% Off for 3 Months": 1539,
+        "25% Off for 3 Months": 531,
+        "None": 137
+      },
+      "stores75": 412,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-05",
+      "stores": 197,
+      "availableGroups": 2614,
+      "advertisedCount": 21373,
+      "medianStorePrice": 110,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 410,
+        "50% Off for 3 Months": 1531,
+        "25% Off for 3 Months": 532,
+        "None": 141
+      },
+      "stores75": 410,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-06",
+      "stores": 197,
+      "availableGroups": 2615,
+      "advertisedCount": 21418,
+      "medianStorePrice": 109.5,
+      "medianCheapest10x10": 87.5,
+      "promos": {
+        "75% Off for 3 Months": 412,
+        "50% Off for 3 Months": 1524,
+        "25% Off for 3 Months": 543,
+        "None": 136
+      },
+      "stores75": 412,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-07",
+      "stores": 197,
+      "availableGroups": 2604,
+      "advertisedCount": 21419,
+      "medianStorePrice": 109.5,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 411,
+        "50% Off for 3 Months": 1517,
+        "25% Off for 3 Months": 547,
+        "None": 129
+      },
+      "stores75": 411,
+      "storeCount75": 54
+    },
+    {
+      "date": "2026-10-08",
+      "stores": 197,
+      "availableGroups": 2599,
+      "advertisedCount": 21347,
+      "medianStorePrice": 109.5,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 409,
+        "50% Off for 3 Months": 1512,
+        "25% Off for 3 Months": 547,
+        "None": 131
+      },
+      "stores75": 409,
+      "storeCount75": 53
+    },
+    {
+      "date": "2026-10-09",
+      "stores": 197,
+      "availableGroups": 2592,
+      "advertisedCount": 21278,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 404,
+        "50% Off for 3 Months": 1495,
+        "25% Off for 3 Months": 562,
+        "None": 131
+      },
+      "stores75": 404,
+      "storeCount75": 53
+    },
+    {
+      "date": "2026-10-10",
+      "stores": 197,
+      "availableGroups": 2585,
+      "advertisedCount": 21246,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 87,
+      "promos": {
+        "75% Off for 3 Months": 403,
+        "50% Off for 3 Months": 1482,
+        "25% Off for 3 Months": 567,
+        "None": 133
+      },
+      "stores75": 403,
+      "storeCount75": 53
+    },
+    {
+      "date": "2026-10-11",
+      "stores": 197,
+      "availableGroups": 2581,
+      "advertisedCount": 21227,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 399,
+        "50% Off for 3 Months": 1490,
+        "25% Off for 3 Months": 555,
+        "None": 137
+      },
+      "stores75": 399,
+      "storeCount75": 53
+    },
+    {
+      "date": "2026-10-12",
+      "stores": 197,
+      "availableGroups": 2573,
+      "advertisedCount": 21140,
+      "medianStorePrice": 109.5,
+      "medianCheapest10x10": 88,
+      "promos": {
+        "75% Off for 3 Months": 394,
+        "50% Off for 3 Months": 1481,
+        "25% Off for 3 Months": 560,
+        "None": 138
+      },
+      "stores75": 394,
+      "storeCount75": 53
+    },
+    {
+      "date": "2026-10-13",
+      "stores": 197,
+      "availableGroups": 2574,
+      "advertisedCount": 21120,
+      "medianStorePrice": 109,
+      "medianCheapest10x10": 87,
+      "promos": {
+        "75% Off for 3 Months": 398,
+        "50% Off for 3 Months": 1474,
+        "25% Off for 3 Months": 572,
+        "None": 130
+      },
+      "stores75": 398,
+      "storeCount75": 53
+    },
+    {
+      "date": "2026-10-14",
+      "stores": 197,
+      "availableGroups": 2582,
+      "advertisedCount": 21127,
+      "medianStorePrice": 110.5,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "75% Off for 3 Months": 1059,
+        "50% Off for 3 Months": 820,
+        "25% Off for 3 Months": 567,
+        "None": 136
+      },
+      "stores75": 1059,
+      "storeCount75": 190
+    },
+    {
+      "date": "2026-10-15",
+      "stores": 197,
+      "availableGroups": 2567,
+      "advertisedCount": 21010,
+      "medianStorePrice": 110.5,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "75% Off for 3 Months": 1043,
+        "50% Off for 3 Months": 823,
+        "25% Off for 3 Months": 568,
+        "None": 133
+      },
+      "stores75": 1043,
+      "storeCount75": 188
+    },
+    {
+      "date": "2026-10-16",
+      "stores": 197,
+      "availableGroups": 2560,
+      "advertisedCount": 20911,
+      "medianStorePrice": 111.5,
+      "medianCheapest10x10": 89,
+      "promos": {
+        "75% Off for 3 Months": 1023,
+        "50% Off for 3 Months": 829,
+        "25% Off for 3 Months": 571,
+        "None": 137
+      },
+      "stores75": 1023,
+      "storeCount75": 188
+    },
+    {
+      "date": "2026-10-17",
+      "stores": 197,
+      "availableGroups": 2549,
+      "advertisedCount": 20834,
+      "medianStorePrice": 110.5,
+      "medianCheapest10x10": 90,
+      "promos": {
+        "75% Off for 3 Months": 1005,
+        "50% Off for 3 Months": 831,
+        "25% Off for 3 Months": 574,
+        "None": 139
+      },
+      "stores75": 1005,
+      "storeCount75": 187
+    }
+  ],
+  "transitions": [
+    {
+      "a": "2026-09-28",
+      "b": "2026-09-29",
+      "deeper": 394
+    },
+    {
+      "a": "2026-09-29",
+      "b": "2026-09-30",
+      "deeper": 8
+    },
+    {
+      "a": "2026-09-30",
+      "b": "2026-10-01",
+      "deeper": 18
+    },
+    {
+      "a": "2026-10-01",
+      "b": "2026-10-02",
+      "deeper": 7
+    },
+    {
+      "a": "2026-10-02",
+      "b": "2026-10-03",
+      "deeper": 3
+    },
+    {
+      "a": "2026-10-05",
+      "b": "2026-10-06",
+      "deeper": 4
+    },
+    {
+      "a": "2026-10-06",
+      "b": "2026-10-07",
+      "deeper": 1
+    },
+    {
+      "a": "2026-10-07",
+      "b": "2026-10-08",
+      "deeper": 1
+    },
+    {
+      "a": "2026-10-08",
+      "b": "2026-10-09",
+      "deeper": 1
+    },
+    {
+      "a": "2026-10-09",
+      "b": "2026-10-10",
+      "deeper": 1
+    },
+    {
+      "a": "2026-10-12",
+      "b": "2026-10-13",
+      "deeper": 4
+    },
+    {
+      "a": "2026-10-13",
+      "b": "2026-10-14",
+      "deeper": 652
+    },
+    {
+      "a": "2026-10-14",
+      "b": "2026-10-15",
+      "deeper": 4
+    },
+    {
+      "a": "2026-10-15",
+      "b": "2026-10-16",
+      "deeper": 1
+    },
+    {
+      "a": "2026-10-16",
+      "b": "2026-10-17",
+      "deeper": 7
+    }
+  ],
+  "comparisons": [
+    {
+      "a": "2026-09-28",
+      "b": "2026-09-29",
+      "identityExcluded": 60,
+      "availableBoth": {
+        "n": 2375,
+        "stores": 197,
+        "up": 47,
+        "down": 59,
+        "unchanged": 2269,
+        "medianRateChangePct": 0,
+        "medianIncreasePct": 9.090909090909083,
+        "aggregateRateChangePct": -0.04112749826871154,
+        "horizons": {
+          "1": {
+            "n": 2373,
+            "before": 195866,
+            "after": 182126.75,
+            "aggregateChangePct": -7.01461713620537,
+            "medianChangePct": 0,
+            "more": 66
+          },
+          "3": {
+            "n": 2373,
+            "before": 587598,
+            "after": 546380.25,
+            "aggregateChangePct": -7.01461713620537,
+            "medianChangePct": 0,
+            "more": 66
+          },
+          "6": {
+            "n": 2373,
+            "before": 1578915,
+            "after": 1537289.25,
+            "aggregateChangePct": -2.636351545206672,
+            "medianChangePct": 0,
+            "more": 68
+          },
+          "9": {
+            "n": 2373,
+            "before": 2570232,
+            "after": 2528198.25,
+            "aggregateChangePct": -1.6354068426507773,
+            "medianChangePct": 0,
+            "more": 69
+          },
+          "12": {
+            "n": 2373,
+            "before": 3561549,
+            "after": 3519107.25,
+            "aggregateChangePct": -1.1916654803850846,
+            "medianChangePct": 0,
+            "more": 69
+          }
+        }
+      },
+      "deeper50to75": {
+        "n": 394,
+        "stores": 53,
+        "up": 1,
+        "down": 7,
+        "unchanged": 386,
+        "medianRateChangePct": 0,
+        "medianIncreasePct": 5.319148936170204,
+        "aggregateRateChangePct": -0.15063659437485333,
+        "horizons": {
+          "1": {
+            "n": 394,
+            "before": 24230.5,
+            "after": 12097,
+            "aggregateChangePct": -50.07531829718743,
+            "medianChangePct": -50,
+            "more": 0
+          },
+          "3": {
+            "n": 394,
+            "before": 72691.5,
+            "after": 36291,
+            "aggregateChangePct": -50.07531829718743,
+            "medianChangePct": -50,
+            "more": 0
+          },
+          "6": {
+            "n": 394,
+            "before": 218074.5,
+            "after": 181455,
+            "aggregateChangePct": -16.79219716197905,
+            "medianChangePct": -16.666666666666664,
+            "more": 0
+          },
+          "9": {
+            "n": 394,
+            "before": 363457.5,
+            "after": 326619,
+            "aggregateChangePct": -10.135572934937375,
+            "medianChangePct": -9.999999999999998,
+            "more": 0
+          },
+          "12": {
+            "n": 394,
+            "before": 508840.5,
+            "after": 471783,
+            "aggregateChangePct": -7.28273398049094,
+            "medianChangePct": -7.14285714285714,
+            "more": 0
+          }
+        }
+      },
+      "deeperStates": {
+        "MO": {
+          "groups": 96,
+          "stores": 12
+        },
+        "ID": {
+          "groups": 20,
+          "stores": 1
+        },
+        "IN": {
+          "groups": 13,
+          "stores": 2
+        },
+        "WI": {
+          "groups": 16,
+          "stores": 3
+        },
+        "FL": {
+          "groups": 24,
+          "stores": 4
+        },
+        "TX": {
+          "groups": 22,
+          "stores": 4
+        },
+        "MN": {
+          "groups": 9,
+          "stores": 2
+        },
+        "IA": {
+          "groups": 41,
+          "stores": 5
+        },
+        "LA": {
+          "groups": 6,
+          "stores": 1
+        },
+        "NE": {
+          "groups": 37,
+          "stores": 4
+        },
+        "CO": {
+          "groups": 11,
+          "stores": 2
+        },
+        "KS": {
+          "groups": 24,
+          "stores": 3
+        },
+        "MD": {
+          "groups": 22,
+          "stores": 3
+        },
+        "VA": {
+          "groups": 39,
+          "stores": 4
+        },
+        "WA": {
+          "groups": 5,
+          "stores": 1
+        },
+        "CA": {
+          "groups": 9,
+          "stores": 2
+        }
+      }
+    },
+    {
+      "a": "2026-09-30",
+      "b": "2026-10-17",
+      "identityExcluded": 165,
+      "availableBoth": {
+        "n": 2198,
+        "stores": 197,
+        "up": 974,
+        "down": 660,
+        "unchanged": 564,
+        "medianRateChangePct": 0,
+        "medianIncreasePct": 9.944975690451685,
+        "aggregateRateChangePct": 1.77879840284767,
+        "horizons": {
+          "1": {
+            "n": 2196,
+            "before": 164612.5,
+            "after": 146807.25,
+            "aggregateChangePct": -10.816462905307922,
+            "medianChangePct": -1.326297273526822,
+            "more": 644
+          },
+          "3": {
+            "n": 2196,
+            "before": 493837.5,
+            "after": 440421.75,
+            "aggregateChangePct": -10.816462905307922,
+            "medianChangePct": -1.326297273526822,
+            "more": 644
+          },
+          "6": {
+            "n": 2196,
+            "before": 1393219.5,
+            "after": 1355814.75,
+            "aggregateChangePct": -2.6847707773254736,
+            "medianChangePct": 0,
+            "more": 668
+          },
+          "9": {
+            "n": 2196,
+            "before": 2292601.5,
+            "after": 2271207.75,
+            "aggregateChangePct": -0.9331647911771879,
+            "medianChangePct": 0,
+            "more": 725
+          },
+          "12": {
+            "n": 2196,
+            "before": 3191983.5,
+            "after": 3186600.75,
+            "aggregateChangePct": -0.16863339049214554,
+            "medianChangePct": 0,
+            "more": 930
+          }
+        }
+      },
+      "deeper50to75": {
+        "n": 558,
+        "stores": 146,
+        "up": 409,
+        "down": 121,
+        "unchanged": 28,
+        "medianRateChangePct": 9.090909090909083,
+        "medianIncreasePct": 10.000000000000009,
+        "aggregateRateChangePct": 5.846134070313003,
+        "horizons": {
+          "1": {
+            "n": 558,
+            "before": 38897.5,
+            "after": 20585.75,
+            "aggregateChangePct": -47.0769329648435,
+            "medianChangePct": -45.45454545454546,
+            "more": 0
+          },
+          "3": {
+            "n": 558,
+            "before": 116692.5,
+            "after": 61757.25,
+            "aggregateChangePct": -47.0769329648435,
+            "medianChangePct": -45.45454545454546,
+            "more": 0
+          },
+          "6": {
+            "n": 558,
+            "before": 350077.5,
+            "after": 308786.25,
+            "aggregateChangePct": -11.794888274739169,
+            "medianChangePct": -9.090909090909093,
+            "more": 28
+          },
+          "9": {
+            "n": 558,
+            "before": 583462.5,
+            "after": 555815.25,
+            "aggregateChangePct": -4.738479336718293,
+            "medianChangePct": -1.8181818181818188,
+            "more": 96
+          },
+          "12": {
+            "n": 558,
+            "before": 816847.5,
+            "after": 802844.25,
+            "aggregateChangePct": -1.7143040775664975,
+            "medianChangePct": 1.298701298701288,
+            "more": 301
+          }
+        }
+      },
+      "deeperStates": {
+        "MO": {
+          "groups": 115,
+          "stores": 29
+        },
+        "ID": {
+          "groups": 9,
+          "stores": 4
+        },
+        "IN": {
+          "groups": 29,
+          "stores": 7
+        },
+        "WI": {
+          "groups": 39,
+          "stores": 11
+        },
+        "FL": {
+          "groups": 36,
+          "stores": 10
+        },
+        "TX": {
+          "groups": 17,
+          "stores": 3
+        },
+        "GA": {
+          "groups": 26,
+          "stores": 3
+        },
+        "IL": {
+          "groups": 66,
+          "stores": 14
+        },
+        "MN": {
+          "groups": 24,
+          "stores": 6
+        },
+        "IA": {
+          "groups": 71,
+          "stores": 21
+        },
+        "LA": {
+          "groups": 8,
+          "stores": 1
+        },
+        "KY": {
+          "groups": 7,
+          "stores": 2
+        },
+        "NE": {
+          "groups": 33,
+          "stores": 9
+        },
+        "CO": {
+          "groups": 1,
+          "stores": 1
+        },
+        "KS": {
+          "groups": 42,
+          "stores": 13
+        },
+        "VA": {
+          "groups": 5,
+          "stores": 4
+        },
+        "NJ": {
+          "groups": 22,
+          "stores": 3
+        },
+        "WA": {
+          "groups": 2,
+          "stores": 1
+        },
+        "CA": {
+          "groups": 1,
+          "stores": 1
+        },
+        "PA": {
+          "groups": 5,
+          "stores": 3
+        }
+      }
+    },
+    {
+      "a": "2026-10-13",
+      "b": "2026-10-14",
+      "identityExcluded": 23,
+      "availableBoth": {
+        "n": 2489,
+        "stores": 197,
+        "up": 705,
+        "down": 94,
+        "unchanged": 1690,
+        "medianRateChangePct": 0,
+        "medianIncreasePct": 10.000000000000009,
+        "aggregateRateChangePct": 2.746180232524953,
+        "horizons": {
+          "1": {
+            "n": 2487,
+            "before": 194247.5,
+            "after": 171707.75,
+            "aggregateChangePct": -11.60362424226824,
+            "medianChangePct": 0,
+            "more": 95
+          },
+          "3": {
+            "n": 2487,
+            "before": 582742.5,
+            "after": 515123.25,
+            "aggregateChangePct": -11.60362424226824,
+            "medianChangePct": 0,
+            "more": 95
+          },
+          "6": {
+            "n": 2487,
+            "before": 1633264.5,
+            "after": 1594514.25,
+            "aggregateChangePct": -2.372564272351474,
+            "medianChangePct": 0,
+            "more": 95
+          },
+          "9": {
+            "n": 2487,
+            "before": 2683786.5,
+            "after": 2673905.25,
+            "aggregateChangePct": -0.36818316211070234,
+            "medianChangePct": 0,
+            "more": 114
+          },
+          "12": {
+            "n": 2487,
+            "before": 3734308.5,
+            "after": 3753296.25,
+            "aggregateChangePct": 0.5084676319591752,
+            "medianChangePct": 0,
+            "more": 695
+          }
+        }
+      },
+      "deeper50to75": {
+        "n": 652,
+        "stores": 139,
+        "up": 622,
+        "down": 11,
+        "unchanged": 19,
+        "medianRateChangePct": 10.020681020890398,
+        "medianIncreasePct": 10.033444816053505,
+        "aggregateRateChangePct": 9.488617485073348,
+        "horizons": {
+          "1": {
+            "n": 652,
+            "before": 49659.5,
+            "after": 27185.75,
+            "aggregateChangePct": -45.255691257463326,
+            "medianChangePct": -44.989659489554796,
+            "more": 0
+          },
+          "3": {
+            "n": 652,
+            "before": 148978.5,
+            "after": 81557.25,
+            "aggregateChangePct": -45.255691257463326,
+            "medianChangePct": -44.989659489554796,
+            "more": 0
+          },
+          "6": {
+            "n": 652,
+            "before": 446935.5,
+            "after": 407786.25,
+            "aggregateChangePct": -8.75948542910554,
+            "medianChangePct": -8.316099149258005,
+            "more": 0
+          },
+          "9": {
+            "n": 652,
+            "before": 744892.5,
+            "after": 734015.25,
+            "aggregateChangePct": -1.4602442634339852,
+            "medianChangePct": -0.9813870811986425,
+            "more": 19
+          },
+          "12": {
+            "n": 652,
+            "before": 1042849.5,
+            "after": 1060244.25,
+            "aggregateChangePct": 1.6680019504252463,
+            "medianChangePct": 2.162060947969646,
+            "more": 601
+          }
+        }
+      },
+      "deeperStates": {
+        "MO": {
+          "groups": 133,
+          "stores": 32
+        },
+        "ID": {
+          "groups": 12,
+          "stores": 4
+        },
+        "IN": {
+          "groups": 28,
+          "stores": 6
+        },
+        "WI": {
+          "groups": 50,
+          "stores": 10
+        },
+        "FL": {
+          "groups": 38,
+          "stores": 6
+        },
+        "TX": {
+          "groups": 20,
+          "stores": 3
+        },
+        "GA": {
+          "groups": 28,
+          "stores": 3
+        },
+        "IL": {
+          "groups": 77,
+          "stores": 14
+        },
+        "MN": {
+          "groups": 28,
+          "stores": 6
+        },
+        "IA": {
+          "groups": 86,
+          "stores": 21
+        },
+        "LA": {
+          "groups": 8,
+          "stores": 1
+        },
+        "KY": {
+          "groups": 8,
+          "stores": 2
+        },
+        "NE": {
+          "groups": 41,
+          "stores": 8
+        },
+        "CO": {
+          "groups": 1,
+          "stores": 1
+        },
+        "KS": {
+          "groups": 57,
+          "stores": 14
+        },
+        "VA": {
+          "groups": 6,
+          "stores": 2
+        },
+        "NJ": {
+          "groups": 24,
+          "stores": 3
+        },
+        "PA": {
+          "groups": 7,
+          "stores": 3
+        }
+      }
+    },
+    {
+      "a": "2026-10-13",
+      "b": "2026-10-17",
+      "identityExcluded": 71,
+      "availableBoth": {
+        "n": 2394,
+        "stores": 197,
+        "up": 1066,
+        "down": 207,
+        "unchanged": 1121,
+        "medianRateChangePct": 0,
+        "medianIncreasePct": 10.013908980670415,
+        "aggregateRateChangePct": 3.933482280711309,
+        "horizons": {
+          "1": {
+            "n": 2392,
+            "before": 182706.25,
+            "after": 165158.5,
+            "aggregateChangePct": -9.60435124687853,
+            "medianChangePct": 0,
+            "more": 577
+          },
+          "3": {
+            "n": 2392,
+            "before": 548118.75,
+            "after": 495475.5,
+            "aggregateChangePct": -9.60435124687853,
+            "medianChangePct": 0,
+            "more": 577
+          },
+          "6": {
+            "n": 2392,
+            "before": 1538352.75,
+            "after": 1524688.5,
+            "aggregateChangePct": -0.8882390596045009,
+            "medianChangePct": 0,
+            "more": 582
+          },
+          "9": {
+            "n": 2392,
+            "before": 2528586.75,
+            "after": 2553901.5,
+            "aggregateChangePct": 1.0011422388415125,
+            "medianChangePct": 0,
+            "more": 602
+          },
+          "12": {
+            "n": 2392,
+            "before": 3518820.75,
+            "after": 3583114.5,
+            "aggregateChangePct": 1.8271391061906117,
+            "medianChangePct": 0,
+            "more": 1084
+          }
+        }
+      },
+      "deeper50to75": {
+        "n": 599,
+        "stores": 135,
+        "up": 534,
+        "down": 42,
+        "unchanged": 23,
+        "medianRateChangePct": 10.000000000000009,
+        "medianIncreasePct": 10.000000000000009,
+        "aggregateRateChangePct": 8.850921043621174,
+        "horizons": {
+          "1": {
+            "n": 599,
+            "before": 43809,
+            "after": 23843.25,
+            "aggregateChangePct": -45.574539478189415,
+            "medianChangePct": -44.99999999999999,
+            "more": 0
+          },
+          "3": {
+            "n": 599,
+            "before": 131427,
+            "after": 71529.75,
+            "aggregateChangePct": -45.574539478189415,
+            "medianChangePct": -44.99999999999999,
+            "more": 0
+          },
+          "6": {
+            "n": 599,
+            "before": 394281,
+            "after": 357648.75,
+            "aggregateChangePct": -9.290899130315688,
+            "medianChangePct": -8.333333333333337,
+            "more": 6
+          },
+          "9": {
+            "n": 599,
+            "before": 657135,
+            "after": 643767.75,
+            "aggregateChangePct": -2.0341710607409413,
+            "medianChangePct": -1.0000000000000009,
+            "more": 25
+          },
+          "12": {
+            "n": 599,
+            "before": 919989,
+            "after": 929886.75,
+            "aggregateChangePct": 1.0758552547910805,
+            "medianChangePct": 2.1428571428571352,
+            "more": 508
+          }
+        }
+      },
+      "deeperStates": {
+        "MO": {
+          "groups": 122,
+          "stores": 29
+        },
+        "ID": {
+          "groups": 10,
+          "stores": 4
+        },
+        "IN": {
+          "groups": 28,
+          "stores": 6
+        },
+        "WI": {
+          "groups": 43,
+          "stores": 10
+        },
+        "FL": {
+          "groups": 37,
+          "stores": 6
+        },
+        "TX": {
+          "groups": 18,
+          "stores": 3
+        },
+        "GA": {
+          "groups": 27,
+          "stores": 3
+        },
+        "IL": {
+          "groups": 71,
+          "stores": 14
+        },
+        "MN": {
+          "groups": 26,
+          "stores": 6
+        },
+        "IA": {
+          "groups": 83,
+          "stores": 21
+        },
+        "LA": {
+          "groups": 8,
+          "stores": 1
+        },
+        "KY": {
+          "groups": 8,
+          "stores": 2
+        },
+        "NE": {
+          "groups": 38,
+          "stores": 8
+        },
+        "KS": {
+          "groups": 45,
+          "stores": 13
+        },
+        "VA": {
+          "groups": 4,
+          "stores": 3
+        },
+        "NJ": {
+          "groups": 24,
+          "stores": 3
+        },
+        "PA": {
+          "groups": 7,
+          "stores": 3
+        }
+      }
+    }
+  ],
+  "example": [
+    {
+      "date": "2026-10-13",
+      "attrs": "Drive-Up, Non-CC",
+      "available": true,
+      "category": "small",
+      "count": 19,
+      "depth": 10,
+      "height": 8,
+      "price": 49,
+      "promo": "50% Off for 3 Months",
+      "promo2": "",
+      "promo_price": 24.5,
+      "promo_terms": [
+        {
+          "amount": 50,
+          "month": 1,
+          "type": "percent"
+        },
+        {
+          "amount": 50,
+          "month": 2,
+          "type": "percent"
+        },
+        {
+          "amount": 50,
+          "month": 3,
+          "type": "percent"
+        }
+      ],
+      "rates": {
+        "street": 59,
+        "web": 49
+      },
+      "size": "5x10",
+      "sku": "smart_acb27f90-db0a-4f34-af8b-564669bd3749",
+      "sqft": 50,
+      "standard_rate": 59,
+      "street_price": 59,
+      "total": 66,
+      "width": 5,
+      "store_id": "smart_0106",
+      "state": "MO",
+      "city": "Columbia",
+      "url": "https://www.storage-mart.com/columbia-missouri/65202-paris-rd"
+    },
+    {
+      "date": "2026-10-14",
+      "attrs": "Drive-Up, Non-CC",
+      "available": true,
+      "category": "small",
+      "count": 19,
+      "depth": 10,
+      "height": 8,
+      "price": 54,
+      "promo": "75% Off for 3 Months",
+      "promo2": "",
+      "promo_price": 13.5,
+      "promo_terms": [
+        {
+          "amount": 75,
+          "month": 1,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 2,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 3,
+          "type": "percent"
+        }
+      ],
+      "rates": {
+        "street": 64,
+        "web": 54
+      },
+      "size": "5x10",
+      "sku": "smart_acb27f90-db0a-4f34-af8b-564669bd3749",
+      "sqft": 50,
+      "standard_rate": 64,
+      "street_price": 64,
+      "total": 66,
+      "width": 5,
+      "store_id": "smart_0106",
+      "state": "MO",
+      "city": "Columbia",
+      "url": "https://www.storage-mart.com/columbia-missouri/65202-paris-rd"
+    },
+    {
+      "date": "2026-10-15",
+      "attrs": "Drive-Up, Non-CC",
+      "available": true,
+      "category": "small",
+      "count": 20,
+      "depth": 10,
+      "height": 8,
+      "price": 54,
+      "promo": "75% Off for 3 Months",
+      "promo2": "",
+      "promo_price": 13.5,
+      "promo_terms": [
+        {
+          "amount": 75,
+          "month": 1,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 2,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 3,
+          "type": "percent"
+        }
+      ],
+      "rates": {
+        "street": 64,
+        "web": 54
+      },
+      "size": "5x10",
+      "sku": "smart_acb27f90-db0a-4f34-af8b-564669bd3749",
+      "sqft": 50,
+      "standard_rate": 64,
+      "street_price": 64,
+      "total": 66,
+      "width": 5,
+      "store_id": "smart_0106",
+      "state": "MO",
+      "city": "Columbia",
+      "url": "https://www.storage-mart.com/columbia-missouri/65202-paris-rd"
+    },
+    {
+      "date": "2026-10-16",
+      "attrs": "Drive-Up, Non-CC",
+      "available": true,
+      "category": "small",
+      "count": 21,
+      "depth": 10,
+      "height": 8,
+      "price": 54,
+      "promo": "75% Off for 3 Months",
+      "promo2": "",
+      "promo_price": 13.5,
+      "promo_terms": [
+        {
+          "amount": 75,
+          "month": 1,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 2,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 3,
+          "type": "percent"
+        }
+      ],
+      "rates": {
+        "street": 64,
+        "web": 54
+      },
+      "size": "5x10",
+      "sku": "smart_acb27f90-db0a-4f34-af8b-564669bd3749",
+      "sqft": 50,
+      "standard_rate": 64,
+      "street_price": 64,
+      "total": 66,
+      "width": 5,
+      "store_id": "smart_0106",
+      "state": "MO",
+      "city": "Columbia",
+      "url": "https://www.storage-mart.com/columbia-missouri/65202-paris-rd"
+    },
+    {
+      "date": "2026-10-17",
+      "attrs": "Drive-Up, Non-CC",
+      "available": true,
+      "category": "small",
+      "count": 20,
+      "depth": 10,
+      "height": 8,
+      "price": 54,
+      "promo": "75% Off for 3 Months",
+      "promo2": "",
+      "promo_price": 13.5,
+      "promo_terms": [
+        {
+          "amount": 75,
+          "month": 1,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 2,
+          "type": "percent"
+        },
+        {
+          "amount": 75,
+          "month": 3,
+          "type": "percent"
+        }
+      ],
+      "rates": {
+        "street": 64,
+        "web": 54
+      },
+      "size": "5x10",
+      "sku": "smart_acb27f90-db0a-4f34-af8b-564669bd3749",
+      "sqft": 50,
+      "standard_rate": 64,
+      "street_price": 64,
+      "total": 66,
+      "width": 5,
+      "store_id": "smart_0106",
+      "state": "MO",
+      "city": "Columbia",
+      "url": "https://www.storage-mart.com/columbia-missouri/65202-paris-rd"
+    }
+  ]
+}

@@ -1,16 +1,16 @@
 # Storage Price Observatory
 
-A daily advertised-price record for U.S. self-storage. Seven operator
-collections, snapshotted every day and kept — not summarised, not overwritten.
+A dated record of advertised U.S. self-storage offers across six national operators
+and an independent-operator pilot. Completed snapshots are retained so pricing
+and promotion findings can be checked against their source observations.
 
-**This repository is large on purpose.** `history/` is roughly 2.0 GB of raw
-daily snapshots. That is the point of the project: every figure published from
-this data can be re-derived from the files in this repo, by you, without
-trusting a number printed in a README.
+**[Read the research](#latest-research) · [Explore the dashboard](https://braedenkeena.pages.dev/storage/dashboard) · [Check coverage](#what-is-collected)**
 
-If you only want to read the code, don't pull the whole pack:
+**This repository retains the raw daily history.** The snapshots are large;
+use GitHub's file browser to inspect individual studies without downloading everything.
+A shallow clone reduces Git history but still downloads all tracked snapshot files:
 
-```
+```bash
 git clone --depth 1 https://github.com/itshumpf/storage-directory
 ```
 
@@ -21,10 +21,55 @@ git clone --depth 1 https://github.com/itshumpf/storage-directory
 `findstorage.pages.dev` is the retired directory, frozen with a sunset notice
 at 25 August 2026.)
 
-### Verify a claim yourself
+## Latest research
+
+### Ten Days of Storage — October 6–16, 2026
+
+![Ten Days of Storage](media_exports/ten_days_of_storage.png)
+
+The national price lines conceal different changes in online rates, comparison
+prices and introductory discounts. These are offers for prospective new renters,
+not observations of changes to existing rental agreements.
+
+| Study | Finding | Evidence and method |
+|---|---|---|
+| CubeSmart | At a Topeka 5×5, online rent stayed around $43 while the in-store comparison rose from $71 to $86 and the advertised discount grew from 40% to 50%. First Month Free remained attached. | [Discount mechanics](analysis/cubesmart_discount_mechanics_2026-10-17/README.md) |
+| StorageMart | On October 14, 622 of 652 comparable available offers gaining 75% off the first three months also raised their recurring web rate. | [Matched-offer study](analysis/storagemart_deep_dive_2026-10-17/README.md) |
+| Cross-operator | Public Storage's Halloween offers show opposing captured-rate moves; SmartStop and Storage Sense show cuts; U-Haul's matched rates are mostly steady. | [Comparison and capture limitations](analysis/cross_brand_hidden_2026-10-17/README.md) |
+
+The image uses October 6–16 endpoints and event-specific panels inside that window.
+The supporting reports also include broader context through October 17; their
+dates and denominators are stated separately. CubeSmart's three-day panel of
+6,480 offers differs from the earlier four-day panel of 6,250 offers.
+
+Historical CubeSmart prices are rounded to whole dollars. Its percentage discount
+is already reflected in the online price and compares it with the in-store price;
+First Month Free is a separate component. The comparison price is not established
+as an automatic future tenant rate. StorageMart's percentage terms instead specify
+the first three months. SmartStop's blank promotion fields reflect a capture gap.
+These observations do not establish realized tenant spending, occupancy, intent,
+or coordination between operators.
+
+**Reproduce offline from the repository root** (Node.js 22; built-in modules only):
+
+```bash
+node analysis/cubesmart_discount_mechanics_2026-10-17.cjs
+node analysis/storagemart_deep_dive_2026-10-17.cjs
+node --max-old-space-size=4096 analysis/cross_brand_hidden_2026-10-17.cjs
+node analysis/cross_brand_hidden_2026-10-17/events.cjs
+```
+
+These commands read existing snapshots and write derived results; they do not
+collect live data. Each study includes source hashes, eligibility rules and
+offer-level output. The cross-operator scan requires snapshots through October 17.
+[Editable graphic](media_exports/ten_days_of_storage.html).
+
+### Verify a daily price diff
 
 `verify_day.py` reads two raw snapshots and diffs them on `(store_id, sku)`.
-No database, no pipeline, nothing cached:
+No database, no pipeline, nothing cached. This is a basic price diff: it does
+not exclude duplicate identities or changed descriptions and does not compare
+promotions. Use the study scripts above to reproduce the stricter research panels:
 
 ```
 $ python verify_day.py publicstorage 2026-09-22 2026-09-23
@@ -39,7 +84,7 @@ publicstorage  2026-09-22 -> 2026-09-23
   SKUs dropped        2,742
 ```
 
-Now run the same command on the most recent pair:
+For a historical example of a quiet day:
 
 ```
 $ python verify_day.py publicstorage 2026-10-03 2026-10-04
@@ -50,12 +95,35 @@ $ python verify_day.py publicstorage 2026-10-03 2026-10-04
   SKUs dropped          900
 ```
 
-That contrast is the central finding and you just reproduced it from raw files.
-Advertised rates do not drift. They sit perfectly still for days or weeks and
-then the portfolio is rewritten in a single day — while inventory churns
-underneath the whole time, hundreds of SKUs appearing and disappearing on a day
-with zero price movement. A weekly or monthly sampler records the levels and
-misses the event entirely. That is why the snapshots are kept.
+This Public Storage example contrasts a broad repricing day with a quiet day.
+It is not a universal pattern for every operator. Daily observations distinguish
+price events from changing available inventory; weekly or monthly samples can
+miss the intervening changes.
+
+## The sealed prediction
+
+[`2026-09-15-q3-prediction-and-ledger-gap.md`](2026-09-15-q3-prediction-and-ledger-gap.md)
+is a pre-registration, committed to this repository on 18 September 2026 —
+before the quarter closed and before any result existed. It predicts two Public
+Storage Q3 line items and one Q4 line item from the advertised-price record
+alone, and it states its own falsification conditions in advance:
+
+- **P1** — Q3 promotional discounts given will still be up year over year, but
+  below Q2's +16.1% growth. *Falsified at or above +16.1%, or on an outright
+  decline.*
+- **P2** — Q3 new-customer contract rate growth will come in below +1.6% year
+  over year. *Falsified at or above +1.6%.*
+- **P3** — Q4 new-customer contract rates will be flat or negative year over
+  year. *Falsified if positive.* This one contradicts management guidance.
+
+It also writes down, in advance, what a failure would and would not establish,
+which measurement caveats could explain a miss without any defect in the data,
+and two reported metrics that are deliberately **out of scope** because this
+dataset cannot see them.
+
+The git commit date is the point. Anyone can check that the predictions predate
+the results. Section 6 of that file also records the project's terms-of-use
+history and what was stopped, when, and why.
 
 ## How this got here
 
@@ -80,23 +148,28 @@ measurement.
 
 ## What is collected
 
-| brand | snapshots | first | most recent | days captured |
-|---|---|---|---|---:|
-| Public Storage | `history/publicstorage/<date>.json` | 2026-09-01 | 2026-10-04 | 34 |
-| U-Haul | `history/uhaul/<date>.json` | 2026-09-04 | 2026-10-04 | 31 |
-| CubeSmart | `history/cubesmart/<date>.json` | 2026-09-01 | 2026-10-04 | 34 |
-| Storage Sense | `history/storagesense/<date>.json` | 2026-09-02 | 2026-10-04 | 33 |
-| StorageMart | `history/storagemart/<date>.json` | 2026-09-04 | 2026-10-04 | 31 |
-| SmartStop | `history/smartstop/<date>.json` | 2026-09-09 | 2026-10-04 | 26 |
-| Independent | `history/independent/<date>.json` | 2026-09-10 | 2026-10-04 | 23 |
+Coverage checked October 17, 2026. Counts include completed dated JSON files only.
 
-Six of the seven have captured **every calendar day** since they started. The
-independent set is missing 2026-09-11 and 2026-09-26, and those two gaps are
-left visible in the directory listing rather than interpolated away — a missing
-file is a missing day, which is exactly what you want when the question is
-whether a price moved. Pre-September history for Public
-Storage lives in the monthly aggregates `history/2026-0*.csv` and in this
-repository's own commit history, not as raw JSON.
+| Collection | Snapshots | First | Most recent | Days captured |
+|---|---|---|---|---:|
+| Public Storage | `history/publicstorage/<date>.json` | 2026-09-01 | 2026-10-17 | 47 |
+| U-Haul | `history/uhaul/<date>.json` | 2026-09-04 | 2026-10-17 | 44 |
+| CubeSmart | `history/cubesmart/<date>.json` | 2026-09-01 | 2026-10-17 | 46 |
+| Storage Sense | `history/storagesense/<date>.json` | 2026-09-02 | 2026-10-17 | 46 |
+| StorageMart | `history/storagemart/<date>.json` | 2026-09-05 | 2026-10-17 | 43 |
+| SmartStop | `history/smartstop/<date>.json` | 2026-09-09 | 2026-10-17 | 39 |
+| Independent pilot | `history/independent/<date>.json` | 2026-09-10 | 2026-10-13 | 27 |
+
+Missing observations remain missing; no daily snapshot is interpolated.
+CubeSmart is missing September 8. The independent pilot is missing September 11,
+26 and 29, plus October 2, 3, 11 and 12 within its observed range; its latest
+complete snapshot is October 13. The other five series have no calendar gaps
+within their listed ranges. Independents are excluded from the October 17
+current-data merge because that snapshot exceeds the three-day freshness limit.
+Daily discovery catalogs are retained separately from completed price snapshots.
+Extra Space has no complete production time series and is excluded from these counts.
+Pre-September Public Storage history is represented by monthly aggregates and
+repository history rather than these dated JSON files.
 
 A defining goal of the original directory, still true of the collection: it
 lists **every** store with its 5-digit site number, *including sold-out
@@ -346,3 +419,10 @@ python independent_full_scraper.py
 
 Full collection remains intentionally unavailable until a probe confirms the adapter and a daily
 facility catalog plus completeness floor have been defined for that operator.
+
+### Extra Space research status
+
+Extra Space is not included in the production snapshot series or current
+comparisons. Limited local pilot observations are incomplete; a subsequent
+collection attempt stopped on an access refusal. Pilot archives and operational
+notes are separate from this research release.

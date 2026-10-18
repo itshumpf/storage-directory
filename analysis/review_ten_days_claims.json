@@ -1,0 +1,58 @@
+{
+  "uhaul": {
+    "dates": [
+      "2026-10-06",
+      "2026-10-07",
+      "2026-10-08",
+      "2026-10-09",
+      "2026-10-10",
+      "2026-10-11",
+      "2026-10-12",
+      "2026-10-13",
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-16"
+    ],
+    "everAvailableEligibleKeys": 30144,
+    "firstAvailableKeys": 26859,
+    "lastAvailableKeys": 27197,
+    "endpointPanel": 24707,
+    "endpointUnchanged": 24446,
+    "endpointUnchangedWithObservedInterimMove": 0,
+    "distinctKeysWithAdjacentPriceMove": 308,
+    "movingKeysOutsideEndpointPanel": 58
+  },
+  "storagesense": {
+    "dates": [
+      "2026-10-06",
+      "2026-10-07",
+      "2026-10-08",
+      "2026-10-09",
+      "2026-10-10",
+      "2026-10-11",
+      "2026-10-12",
+      "2026-10-13",
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-16"
+    ],
+    "everAvailableEligibleKeys": 5291,
+    "firstAvailableKeys": 3457,
+    "lastAvailableKeys": 3506,
+    "endpointPanel": 2296,
+    "endpointUnchanged": 1963,
+    "endpointUnchangedWithObservedInterimMove": 39,
+    "distinctKeysWithAdjacentPriceMove": 584,
+    "movingKeysOutsideEndpointPanel": 237
+  },
+  "smartstop": {
+    "oct8": {
+      "n": 2607,
+      "cut": 1887,
+      "medianPct": -13.636363636363635
+    },
+    "otherDayMedianCutShare": 10.229067930489732,
+    "otherDayMinCutShare": 0,
+    "otherDayMaxCutShare": 15.280541185833664
+  }
+}
