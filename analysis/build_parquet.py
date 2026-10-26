@@ -72,10 +72,18 @@ OUT = HISTORY / "parquet"
 # to run for at least a year, so it has to survive the year rolling over.
 DATED = {
     "rate_changes.csv": "date",
+    "rate_changes-20*.csv": "date",
     "store-sizes-20*.csv": "date",
     "sizes-20*.csv": "date",
+    "daily-20*.csv": "date",
     "20*.csv": "date",
 }
+
+# The September 2026 pipeline move put the multi-brand output in
+# history/combined/. The globs below are non-recursive, so without this the
+# builder kept running against history/ alone and silently produced nothing
+# new from 2026-09-11 onward. It did not fail; it found no new files.
+SUBDIRS = ("combined",)
 # Small files with no useful date partition — copied whole.
 WHOLE = ("pipeline.csv", "psa-stock.csv")
 
@@ -101,7 +109,7 @@ def varchar_columns(con, rel):
     """Column names DuckDB types as VARCHAR, so trim() applies only to them."""
     rows = con.execute(
         f"DESCRIBE SELECT * FROM read_csv('{rel}', strict_mode=false, "
-        f"header=true)").fetchall()
+        f"header=true, sample_size=-1)").fetchall()
     return [r[0] for r in rows if str(r[1]).upper().startswith("VARCHAR")]
 
 
@@ -141,8 +149,10 @@ def main():
     patterns = list(DATED.items())
     seen_files = set()
 
+    roots = [hist] + [hist / d for d in SUBDIRS if (hist / d).is_dir()]
+
     for pattern, datecol in patterns:
-        for src in sorted(hist.glob(pattern)):
+        for src in sorted(f for root in roots for f in root.glob(pattern)):
             if src.name in WHOLE or src in seen_files:
                 continue
             seen_files.add(src)
@@ -161,7 +171,7 @@ def main():
             repl = f" REPLACE ({repl})" if repl else ""
             dates = [r[0] for r in con.execute(
                 f"SELECT DISTINCT trim(CAST({datecol} AS VARCHAR)) FROM "
-                f"read_csv('{rel}', strict_mode=false, header=true) "
+                f"read_csv('{rel}', strict_mode=false, header=true, sample_size=-1) "
                 f"WHERE {datecol} IS NOT NULL ORDER BY 1").fetchall()]
 
             for d in dates:
@@ -173,7 +183,7 @@ def main():
                 con.execute(f"""
                     COPY (
                       SELECT *{repl}, '{we}' AS wrote_with
-                      FROM read_csv('{rel}', strict_mode=false, header=true)
+                      FROM read_csv('{rel}', strict_mode=false, header=true, sample_size=-1)
                       WHERE trim(CAST({datecol} AS VARCHAR)) = '{d}'
                     ) TO '{dest.as_posix()}' (FORMAT PARQUET, COMPRESSION ZSTD)
                 """)
@@ -198,7 +208,7 @@ def main():
             skipped += 1
             continue
         con.execute(f"""COPY (SELECT * FROM read_csv('{src.as_posix()}',
-                      strict_mode=false, header=true, all_varchar=true))
+                      strict_mode=false, header=true, sample_size=-1, all_varchar=true))
                       TO '{dest.as_posix()}' (FORMAT PARQUET, COMPRESSION ZSTD)""")
         written += 1
         print(f"  {name:28s} whole file -> {dest}")
